@@ -7,6 +7,7 @@ import { assertNoSecretFragments } from '../shared/format-chat.js';
 import { loadedSecrets } from '../shared/secrets.js';
 import { ChatStore } from '../store/chat-store.js';
 import { RequestStore } from '../store/request-store.js';
+import { SettingsStore } from '../store/settings-store.js';
 import { LiveSession } from './live-session.js';
 
 export function registerCheckRoutes(app: FastifyInstance, db: DatabaseSync): {
@@ -27,8 +28,9 @@ export function registerCheckRoutes(app: FastifyInstance, db: DatabaseSync): {
     const source = existing ?? chat.put({ id: `dashboard-${id}`, broadcast_id: session.currentStreamId() ?? 'local', user_id: 'dashboard',
       user_login: 'dashboard', display_name: 'Dashboard', body: claim, badges: [], parent_id: null, created_at: now, scope: 'check', removed_reason: null });
     if (!source?.body) return reply.code(409).send({ error: 'The source was removed.' });
+    const context = new SettingsStore(db).get().history_enabled ? chat.recent(source.user_id, now, [source.id]) : [];
     const queued = requests.put({ id, kind: value.kind, body: claim, broadcast_id: source.broadcast_id, author_user_id: source.user_id,
-      original_message_id: source.id, command_message_id: `dashboard-${id}`, context_ids: [], source_message_ids: [source.id],
+      original_message_id: source.id, command_message_id: `dashboard-${id}`, context_ids: context.map((message) => message.id), source_message_ids: [source.id],
       created_at: now, state: 'queued', source: 'dashboard' });
     return reply.code(202).send(checks.enqueue(queued, session.channelContext()));
   });

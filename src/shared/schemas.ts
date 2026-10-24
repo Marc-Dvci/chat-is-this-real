@@ -423,3 +423,7 @@ export const claimRunSummarySchema = z.object({
     failed_items: z.number(), not_attempted: z.number()
   })
 });
+export const engineProbeSummarySchema = z.object({
+  suite: z.literal('engine-probe'), unique_items: z.number(), planned_repetitions: z.number(),
+  working_tree_dirty: z.boolean(), rows: z.array(z.object({ expected: z.string(), output: z.object({ final_verdict: z.string() }) }))
+});

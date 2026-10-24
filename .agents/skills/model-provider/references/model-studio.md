@@ -97,4 +97,4 @@ Source pages: alibabacloud.com/help/en/model-studio/ (qwen-api-via-openai-chat-c
 - **Credits:** coupons apply automatically to pay-as-you-go bills, the soonest-expiring first. Check a coupon's "Applicable Scope" on the Expenses and Costs → Coupons page.
 
 ## Data
-- Inference inputs and outputs are retained for no longer than 30 days by default. State this in `docs/PRIVACY.md`.
+- Ordinary inference inputs and outputs are normally retained for up to 30 days. Legal and security exceptions can extend retention; stateful data remains until deleted. State these limits in `docs/PRIVACY.md`. Verified policy: https://www.alibabacloud.com/help/en/model-studio/data-retention-policy

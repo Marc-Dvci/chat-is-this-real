@@ -1,5 +1,5 @@
 import { readFile, readdir, writeFile } from 'node:fs/promises';
-import { claimRunSummarySchema } from '../src/shared/schemas.js';
+import { claimRunSummarySchema, engineProbeSummarySchema } from '../src/shared/schemas.js';
 
 async function report(): Promise<void> {
   const files = (await readdir('eval/results')).filter((name) => /^claims-dev-.*\.json$/u.test(name)).sort();
@@ -31,10 +31,16 @@ async function report(): Promise<void> {
     'Latency includes non-claims and pre-model instruction guards, using nearest-rank percentiles. It excludes paid search discovery.',
     'The linked reports preserve each output, source metadata, model IDs, commit and working-tree status.', '',
     'Missing qualifications remain a limitation. Literal excerpt verification cannot prove that the model assigned the right stance or interpreted the claim correctly.',
-    'A streamer must review each result before publication. Sensitive checks require a second confirmation in the publishing interface.', '',
+    'A streamer must review each result before publication. Sensitive outcomes are tagged for a second confirmation when publishing is connected.', '',
     'The replay path checks only recorded claims. An unknown claim ends as a private search_replay_miss failure; it does not pretend a web search ran.',
     'The local token ledger stops inference before its configured allowance limit. It cannot establish the provider account balance.', '',
     'Regenerate with `npm run report:claims`.');
+  const probeFile = (await readdir('eval/results')).filter((file) => /^engine-probe-.*\.json$/u.test(file)).sort().at(-1);
+  if (probeFile) {
+    const probe = engineProbeSummarySchema.parse(JSON.parse(await readFile(`eval/results/${probeFile}`, 'utf8')));
+    lines.push('', `The [fixed engine probe](../eval/results/${probeFile}) recorded ${probe.planned_repetitions} repetitions of ${probe.unique_items} dev claims, with ${probe.rows.filter((row) => row.expected === row.output.final_verdict).length}/${probe.rows.length} matching final verdicts.`,
+      `Its working-tree dirty flag is ${probe.working_tree_dirty}; its per-call records identify the actual selected models.`);
+  }
   await writeFile('docs/check-engine.md', `${lines.join('\n')}\n`);
 }
 void report().catch(() => { console.error('Could not generate the check engine report.'); process.exitCode = 1; });

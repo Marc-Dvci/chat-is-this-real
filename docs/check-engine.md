@@ -32,9 +32,12 @@ Latency includes non-claims and pre-model instruction guards, using nearest-rank
 The linked reports preserve each output, source metadata, model IDs, commit and working-tree status.
 
 Missing qualifications remain a limitation. Literal excerpt verification cannot prove that the model assigned the right stance or interpreted the claim correctly.
-A streamer must review each result before publication. Sensitive checks require a second confirmation in the publishing interface.
+A streamer must review each result before publication. Sensitive outcomes are tagged for a second confirmation when publishing is connected.
 
 The replay path checks only recorded claims. An unknown claim ends as a private search_replay_miss failure; it does not pretend a web search ran.
 The local token ledger stops inference before its configured allowance limit. It cannot establish the provider account balance.
 
 Regenerate with `npm run report:claims`.
+
+The [fixed engine probe](../eval/results/engine-probe-2026-10-24T14-28-01-868Z.json) recorded 3 repetitions of 5 dev claims, with 15/15 matching final verdicts.
+Its working-tree dirty flag is true; its per-call records identify the actual selected models.
