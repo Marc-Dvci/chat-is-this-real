@@ -87,3 +87,9 @@ The first reference-assisted run exposed irrelevant source windows and confusion
 verification metadata and the claim date. Passage ranking now weights rare query terms and
 selects several source spans. Judge instructions define verdict labels and separate dates
 from the assertion. The initial diagnostic report is retained rather than discarded.
+The user subsequently requested simulated search and deferred paid search. Search replay
+uses curated URLs from real assistant searches, with live page fetching and model judging.
+The client blocks provider search unless it is explicitly enabled. This revised M2 gate
+keeps provider-search behavior unverified; it allows the build to continue using recorded
+search discovery. Model decisions and the remaining validation limits are documented in
+`docs/model-decisions.md`.

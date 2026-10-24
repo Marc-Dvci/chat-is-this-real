@@ -72,8 +72,9 @@ async function report(): Promise<void> {
     'Latency percentiles use nearest rank on successful requests, including provider retries. Errors remain in task denominators.', '',
     'Regenerate this document with `npm run report:models -- <commit>`.', '', 'Source reports:', '',
     ...runs.map((run) => `- [${run.file}](../eval/results/${run.file})`), '');
-  await writeFile('docs/models.md', lines.join('\n'));
-  console.info('Updated docs/models.md from recorded probe measurements.');
+  const output = process.argv[3] ?? 'docs/models.md';
+  await writeFile(output, lines.join('\n'));
+  console.info(`Updated ${output} from recorded probe measurements.`);
 }
 
 void report().catch(() => { console.error('Model report generation failed. Check the run files and commit argument.'); process.exitCode = 1; });

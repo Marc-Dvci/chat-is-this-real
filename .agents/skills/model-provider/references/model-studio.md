@@ -65,7 +65,7 @@ Source pages: alibabacloud.com/help/en/model-studio/ (qwen-api-via-openai-chat-c
 - Price: USD 10 per 1,000 searches (USD 0.01 per call), plus the retrieved content billed as input tokens.
 
 ## Speech recognition, primary: `qwen-audio-3.1-asr-flash` (native HTTP API)
-- **Endpoint:** `POST https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation` (the origin of `MODELSTUDIO_BASE_URL` plus this path). Headers: `Authorization: Bearer <key>`, `Content-Type: application/json`, `X-DashScope-SSE: disable`. This endpoint is **not** OpenAI-compatible, so call it with `fetch`.
+- **Endpoint:** `POST https://dashscope-intl.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation` (the origin of `MODELSTUDIO_BASE_URL` plus this path). Headers: `Authorization: Bearer <key>`, `Content-Type: application/json`, `X-DashScope-SSE: disable`. This endpoint is **not** OpenAI-compatible. The project uses the configured SDK transport with `sdk.post` and the absolute native endpoint; this was verified in M2.
 - **Body:**
   ```json
   {"model":"qwen-audio-3.1-asr-flash",
@@ -79,7 +79,7 @@ Source pages: alibabacloud.com/help/en/model-studio/ (qwen-api-via-openai-chat-c
 - **Optional parameters:** `speaker_diarization_enabled` (this model only; it returns `output.sentences` with `speaker_id`). The model can also polish the text, which removes fillers and self-corrections. **Do not enable polishing:** quotes must be verbatim.
 - **Response:** `output.text`, `output.sentence.words[]` (`text`, `begin_time`, `end_time` in ms, `punctuation`, `fixed`), and `usage { duration, input_tokens, output_tokens }`.
 - **Observed 23 Oct:** the synthetic "Chat, is this real? I said I would do fifty push ups if we hit one hundred subs." came back as "Chat, is this real? I said I would do 50 push-ups if we hit 100 subs." in 2.2 s, with 85 input and 25 output tokens. Hearing "Chat" correctly did not need the hotword, whereas `qwen3-asr-flash` heard "Chad". Word times arrived, for example "Chat" at 240 ms.
-- **Price (Singapore):** CNY 1.094 per M input and CNY 3.427 per M output tokens, about USD 0.01 per streamed hour. Limit: 600 RPM.
+- **Price (Singapore):** USD 0.15 per M input and USD 0.47 per M output tokens (published Singapore table checked 24 Oct 2026). Limit: 600 RPM.
 - The `-streaming` (realtime WebSocket) and `-message` (WebSocket) variants cost about 6x more per token and only add sub-second captions, which this project does not need.
 
 ## Speech recognition, fallback: `qwen3-asr-flash` (OpenAI-compatible)
