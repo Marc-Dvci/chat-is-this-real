@@ -13,6 +13,10 @@ export function clipWindow(start: number, finish: number): { duration: number; e
   const duration = Math.min(60, Math.max(30, Math.ceil(finish - start + 16)));
   return { duration, end: Math.max(duration, Math.ceil(finish + 8)) };
 }
+export function canonicalClipUrl(id: string): string {
+  if (!/^[a-zA-Z0-9_-]{1,200}$/u.test(id)) throw new Error('Invalid Twitch clip identifier.');
+  return `https://clips.twitch.tv/${id}`;
+}
 
 export async function createVodClip(helix: TwitchHelix, outcome: VodOutcome, options: {
   signal?: AbortSignal; onUpdate?: (value: ClipResult) => void
@@ -59,9 +63,7 @@ export async function createVodClip(helix: TwitchHelix, outcome: VodOutcome, opt
       const clipStart = clip?.vod_offset ?? (createdFromVod ? window.end - window.duration : undefined);
       if (clip && clip.broadcaster_id === broadcaster.user_id && (clip.video_id === video.id || createdFromVod && !clip.video_id) && clipStart !== undefined &&
         clipStart <= outcome.offset_s + 1 && clipStart + clip.duration >= outcome.end_s - 1) {
-        const url = new URL(clip.url);
-        if (url.protocol !== 'https:' || url.hostname !== 'clips.twitch.tv' || url.username || url.password) throw new Error('Unexpected clip address.');
-        const ready: ClipResult = { ...base, state: 'ready', clip_id: clip.id, clip_url: url.href };
+                const ready: ClipResult = { ...base, state: 'ready', clip_id: clip.id, clip_url: canonicalClipUrl(clip.id) };
         options.onUpdate?.(ready); return ready;
       }
     } catch (error) { if (signal.aborted) throw error; }

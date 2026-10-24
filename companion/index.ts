@@ -20,7 +20,7 @@ async function run(): Promise<void> {
   if (options.list) {
     const args = format === 'pulse' ? ['-sources', 'pulse'] : format === 'dshow' ? ['-list_devices', 'true', '-f', format, '-i', 'dummy']
       : ['-f', format, '-list_devices', 'true', '-i', ''];
-    const child = spawn(ffmpegBinary, ['-hide_banner', ...args], { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
+    const child = spawn(ffmpegBinary(), ['-hide_banner', ...args], { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
     let text = '';
     child.stdout.on('data', (chunk: Buffer) => { text = (text + chunk.toString()).slice(-30_000); });
     child.stderr.on('data', (chunk: Buffer) => { text = (text + chunk.toString()).slice(-30_000); });
@@ -44,7 +44,7 @@ async function run(): Promise<void> {
   const directory = await mkdtemp(resolve('data/audio/capture-'));
   const input = options.file ? ['-re', ...mediaInputOptions, '-i', resolve(options.file)]
     : ['-f', format, '-i', format === 'dshow' ? `audio=${config.AUDIO_DEVICE}` : format === 'avfoundation' ? `:${config.AUDIO_DEVICE}` : config.AUDIO_DEVICE];
-  const child = spawn(ffmpegBinary, ['-hide_banner', '-loglevel', 'error', '-nostdin', '-y', ...input,
+  const child = spawn(ffmpegBinary(), ['-hide_banner', '-loglevel', 'error', '-nostdin', '-y', ...input,
     ...(options.seconds ? ['-t', String(options.seconds)] : []), '-vn', '-ar', '16000', '-ac', '1', '-c:a', 'pcm_s16le',
     '-progress', 'pipe:1', '-stats_period', '0.25', '-f', 'segment', '-segment_time', '15', '-segment_list', 'chunks.csv',
     '-segment_list_type', 'csv', '-reset_timestamps', '1', 'chunk-%06d.wav'], { cwd: directory, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });

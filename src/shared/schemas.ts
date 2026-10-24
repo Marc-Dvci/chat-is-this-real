@@ -198,7 +198,8 @@ export const twitchChannelInfoSchema = z.object({ data: z.array(z.object({
 })) });
 export const engineConfigSchema = z.object({
   SEARCH_MODE: z.enum(['replay', 'provider']).default('replay'), SEARCH_REPLAY_PATH: z.string().default('fixtures/search/probe.json'),
-  MODELSTUDIO_TOKEN_LIMIT: z.coerce.number().int().min(1000).max(1_000_000).default(900_000)
+  MODELSTUDIO_TOKEN_LIMIT: z.coerce.number().int().min(1000).max(1_000_000).default(900_000),
+  MODELSTUDIO_ASR_SECONDS_LIMIT: z.coerce.number().min(16).max(36_000).default(30_000)
 });
 
 export const probeOptionsSchema = z.object({
@@ -289,7 +290,8 @@ export const modelUsageSchema = z.object({
   id: z.string(), created_at: z.iso.datetime(), role: modelRoleSchema, model: z.string(),
   latency_ms: z.number().nonnegative(), input_tokens: z.number().nonnegative(), output_tokens: z.number().nonnegative(),
   search_calls: z.number().int().nonnegative(), status: z.enum(['ok', 'error']),
-  error_code: z.string().nullable(), format: z.enum(['json_schema', 'json_object', 'responses', 'native', 'text'])
+  error_code: z.string().nullable(), format: z.enum(['json_schema', 'json_object', 'responses', 'native', 'text']),
+  audio_seconds: z.number().nonnegative().default(0), audio_seconds_estimated: z.boolean().default(false)
 });
 export type ModelUsage = z.infer<typeof modelUsageSchema>;
 export const searchSourceSchema = z.object({ url: z.url(), title: z.string().optional() });
@@ -323,7 +325,7 @@ export type SourceDocument = z.infer<typeof sourceDocumentSchema>;
 export const sourceSummarySchema = sourceDocumentSchema.omit({ text: true });
 export const providerChatSchema = z.object({
   choices: z.array(z.object({ message: z.object({ content: z.string().nullable() }) })).min(1),
-  usage: z.object({ prompt_tokens: z.number(), completion_tokens: z.number() }).optional()
+  usage: z.object({ prompt_tokens: z.number(), completion_tokens: z.number(), seconds: z.number().nonnegative().optional() }).optional()
 });
 export const probeClaimSchema = z.object({
   id: z.string(), message: z.string(), expected_kind: triageSchema.shape.kind,

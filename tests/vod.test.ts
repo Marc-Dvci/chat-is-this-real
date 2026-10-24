@@ -1,12 +1,12 @@
 import { readFile } from 'node:fs/promises';
 import { expect, it } from 'vitest';
-import { transcriptSegmentSchema, type VodProposal } from '../src/shared/schemas.js';
+import { transcriptSegmentSchema, twitchClipsSchema, type VodProposal } from '../src/shared/schemas.js';
 import { openDatabase } from '../src/store/database.js';
 import { SegmentStore } from '../src/store/segment-store.js';
 import { resolveVodAnswer } from '../src/vod/answer.js';
 import { alignChunk, chunkOffset } from '../src/vod/align.js';
 import { queryTerms } from '../src/vod/numbers.js';
-import { clipWindow, vodTimestampUrl } from '../src/vod/clips.js';
+import { canonicalClipUrl, clipWindow, vodTimestampUrl } from '../src/vod/clips.js';
 import { parseSubtitles } from '../src/vod/subtitles.js';
 
 async function transcript() { return (await readFile('eval/vod/transcript.jsonl', 'utf8')).trim().split('\n').map((line) => transcriptSegmentSchema.parse(JSON.parse(line))); }
@@ -52,6 +52,15 @@ it('uses conservative stored clip bounds and validates the timestamp link', () =
   expect(clipWindow(56.2, 70)).toEqual({ duration: 30, end: 78 });
   expect(vodTimestampUrl('2909296715', 56.2)).toBe('https://www.twitch.tv/videos/2909296715?t=0h0m56s');
   expect(() => vodTimestampUrl('foreign/path', 0)).toThrow();
+});
+
+it('builds the canonical clip link from the real response with an account-path URL and missing archive metadata', async () => {
+  const fixture: { response: unknown } = JSON.parse(await readFile('fixtures/twitch/vod-clip.json', 'utf8'));
+  const clip = twitchClipsSchema.parse(fixture.response).data[0]; if (!clip) throw new Error('Missing recorded clip.');
+  expect(new URL(clip.url).hostname).toBe('www.twitch.tv');
+  expect(canonicalClipUrl(clip.id)).toBe(`https://clips.twitch.tv/${clip.id}`);
+  expect(clip.vod_offset).toBeNull();
+  expect(() => canonicalClipUrl('../foreign')).toThrow();
 });
 
 it('parses caption formats and bounds inferred TXT coverage', () => {

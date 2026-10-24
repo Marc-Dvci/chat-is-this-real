@@ -66,6 +66,13 @@ it('does not accept a recorded command while the channel is offline', async () =
   expect(created).toEqual([]);
 });
 
+it('routes the real captured VOD reply with its original question through EventSub', async () => {
+  const { core, created } = setup();
+  await replay(core, 'fixtures/twitch/probe-1792854590515.jsonl');
+  expect(created).toHaveLength(1);
+  expect(created[0]).toMatchObject({ kind: 'vod', body: 'What was the promise about fifty pushups and one hundred subscribers?' });
+});
+
 it('routes the real captured deletion through EventSub and cancels the stored request', async () => {
   const { core, created, chat, requests } = setup();
   await replay(core, 'fixtures/twitch/probe-1792847799669.jsonl');

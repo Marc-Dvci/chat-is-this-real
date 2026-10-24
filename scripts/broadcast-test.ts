@@ -12,6 +12,7 @@ import { TwitchHelix } from '../src/twitch/helix.js';
 import { testStreamScopes } from '../src/twitch/oauth.js';
 import { TwitchTokens } from '../src/twitch/tokens.js';
 import { writeAtomic } from '../src/shared/atomic-file.js';
+import { ffmpegBinary } from '../src/shared/ffmpeg.js';
 
 async function broadcast(): Promise<void> {
   const { values } = parseArgs({ options: { live: { type: 'boolean', default: false }, seconds: { type: 'string', default: '1200' } } });
@@ -53,7 +54,7 @@ async function broadcast(): Promise<void> {
     writes = operation.catch(() => undefined);
     return operation;
   };
-  const encoder = spawn('ffmpeg.exe', [
+  const encoder = spawn(ffmpegBinary(), [
     '-hide_banner', '-loglevel', 'error', '-re', '-i', 'data/test-stream/recording.mp4',
     '-t', String(options.seconds),
     '-c:v', 'copy', '-c:a', 'aac', '-ar', '48000', '-ac', '2', '-b:a', '128k',

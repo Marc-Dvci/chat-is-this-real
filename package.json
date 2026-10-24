@@ -25,6 +25,7 @@
     "probe:core": "tsx scripts/probe-core.ts",
     "probe:engine": "tsx scripts/probe-engine.ts",
     "probe:vod": "tsx scripts/probe-vod.ts",
+    "probe:asr-fallback": "tsx scripts/probe-asr-fallback.ts",
     "purge": "tsx scripts/purge.ts",
     "probe:models": "tsx scripts/probe-models.ts",
     "report:models": "tsx scripts/report-models.ts",

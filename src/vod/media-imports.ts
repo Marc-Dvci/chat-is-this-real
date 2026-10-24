@@ -57,10 +57,10 @@ export class MediaImports {
   }
   private async process(video: z.infer<typeof twitchVideoSchema>, item: MediaImport, directory: string, signal: AbortSignal): Promise<void> {
     const path = join(directory, 'input-media');
-    const probe = await execute(ffprobeBinary, ['-v', 'error', ...mediaInputOptions, '-show_entries', 'format=duration', '-of', 'json', path], { signal, timeout: 15_000, windowsHide: true, maxBuffer: 1_048_576 });
+    const probe = await execute(ffprobeBinary(), ['-v', 'error', ...mediaInputOptions, '-show_entries', 'format=duration', '-of', 'json', path], { signal, timeout: 15_000, windowsHide: true, maxBuffer: 1_048_576 });
     item.total_s = mediaInfoSchema.parse(JSON.parse(probe.stdout)).format.duration;
     item.state = 'transcribing'; this.save(item);
-    await execute(ffmpegBinary, ['-hide_banner', '-loglevel', 'error', '-nostdin', '-y', ...mediaInputOptions, '-i', path,
+    await execute(ffmpegBinary(), ['-hide_banner', '-loglevel', 'error', '-nostdin', '-y', ...mediaInputOptions, '-i', path,
       '-vn', '-threads', '2', '-ar', '16000', '-ac', '1', '-c:a', 'pcm_s16le', '-f', 'segment', '-segment_time', '15',
       '-reset_timestamps', '1', join(directory, 'chunk-%06d.wav')], { signal, timeout: 600_000, windowsHide: true, maxBuffer: 1_048_576 });
     const model = new ModelClient(loadModelConfig()), id = `upload-${video.id}`, captured: TranscriptSegment[] = [];

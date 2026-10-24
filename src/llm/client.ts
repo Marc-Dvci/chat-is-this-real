@@ -14,7 +14,7 @@ import {
   type ModelConfig, type ModelRole, type ModelUsage
 } from '../shared/schemas.js';
 
-type Meter = { input_tokens: number; output_tokens: number; search_calls: number };
+type Meter = { input_tokens: number; output_tokens: number; search_calls: number; audio_seconds: number; audio_seconds_estimated: boolean };
 type Format = ModelUsage['format'];
 
 function providerError(error: unknown): ModelProviderError {
@@ -48,11 +48,11 @@ export class ModelClient {
     await writeFile(join(this.recordDirectory, `${randomUUID()}.json`), text, { mode: 0o600 });
   }
 
-  private async track<T>(role: ModelRole, model: string, format: Format, operation: (meter: Meter) => Promise<T>): Promise<T> {
+  private async track<T>(role: ModelRole, model: string, format: Format, operation: (meter: Meter) => Promise<T>, reserveAudioSeconds = 0): Promise<T> {
     this.safeText(model, 'unsafe_model_identifier');
-    await requireLocalAllowance(model);
+    await requireLocalAllowance(model, reserveAudioSeconds);
     const started = performance.now();
-    const meter: Meter = { input_tokens: 0, output_tokens: 0, search_calls: 0 };
+    const meter: Meter = { input_tokens: 0, output_tokens: 0, search_calls: 0, audio_seconds: reserveAudioSeconds, audio_seconds_estimated: reserveAudioSeconds > 0 };
     let error: ModelProviderError | undefined;
     try { return await operation(meter); }
     catch (caught) { error = providerError(caught); throw error; }
@@ -168,6 +168,8 @@ export class ModelClient {
       if (!response.success) throw new ModelProviderError('invalid_output', 'asr_response_schema');
       meter.input_tokens = response.data.usage?.input_tokens ?? 0;
       meter.output_tokens = response.data.usage?.output_tokens ?? 0;
+      meter.audio_seconds = response.data.usage?.duration ?? wav.length / 32_000;
+      meter.audio_seconds_estimated = response.data.usage?.duration === undefined;
       this.safeText(JSON.stringify(response.data.output), 'unsafe_output');
       return { text: response.data.output.text, words: response.data.output.sentence?.words ?? [] };
     });
@@ -176,7 +178,7 @@ export class ModelClient {
   async fallbackAsr(wav: Buffer, signal?: AbortSignal) {
     const model = this.config.MODEL_ASR_FALLBACK;
     if (wav.length > 8 * 1024 * 1024) throw new Error('Transcription chunks must be under 8 MB.');
-    return this.track('asr', model, 'native', async (meter) => {
+    return this.track('asr', model, 'text', async (meter) => {
       const body = {
         model, messages: [{ role: 'user', content: [{ type: 'input_audio', input_audio: { data: `data:audio/wav;base64,${wav.toString('base64')}` } }] }],
         asr_options: { language: this.config.ASR_LANGUAGE, enable_itn: true }
@@ -187,8 +189,10 @@ export class ModelClient {
       if (!response.success) throw new ModelProviderError('invalid_output', 'asr_fallback_schema');
       meter.input_tokens = response.data.usage?.prompt_tokens ?? 0;
       meter.output_tokens = response.data.usage?.completion_tokens ?? 0;
+      meter.audio_seconds = response.data.usage?.seconds ?? Math.ceil(wav.length / 32_000);
+      meter.audio_seconds_estimated = response.data.usage?.seconds === undefined;
       this.safeText(response.data.choices[0]?.message.content ?? '', 'unsafe_output');
       return { text: response.data.choices[0]?.message.content ?? '', words: [] };
-    });
+    }, Math.ceil(wav.length / 32_000));
   }
 }

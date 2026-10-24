@@ -56,7 +56,10 @@ export class CheckService {
         const engine = this.engine ??= new CheckEngine(new ModelClient(loadModelConfig()), {
           get: (key) => this.store.getCache(key), put: (key, outcome) => this.store.putCache(key, outcome)
         });
-        const vod = () => new VodEngine(engine.model, new SegmentStore(this.store.db)).run(id, input.claim, request?.broadcast_id, { signal });
+        const vod = () => {
+          this.store.state(id, 'reading'); const current = this.store.get(id); if (current) this.changed(current);
+          return new VodEngine(engine.model, new SegmentStore(this.store.db)).run(id, input.claim, request?.broadcast_id, { signal });
+        };
         const outcome = job.kind === 'vod' ? await vod() : await engine.run(input, { signal, onState: (state) => {
           this.store.state(id, state); const current = this.store.get(id); if (current) this.changed(current);
         } });

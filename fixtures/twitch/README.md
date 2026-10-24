@@ -13,3 +13,9 @@ Raw recordings and credentials stay under the ignored `data/` directory.
 created a request, sent its acknowledgement, deleted the scripted source and received the
 real moderation event. Frame structure and badge semantics are retained; account and session
 identifiers are pseudonymized. The regression test enters through `EventSubWs.receive`.
+
+`library-videos.json` records the original test archive from Get Videos.
+`probe-1792854590515.jsonl` records the real M6 question and threaded `!vod` command.
+`vod-clip.json` records the created clip with its account-path URL, empty video ID and null
+VOD offset while the archive was live. Account IDs and URL account paths are pseudonymized.
+The clip downloaded and decoded after the initial URL-host check failed; the failed run is retained.

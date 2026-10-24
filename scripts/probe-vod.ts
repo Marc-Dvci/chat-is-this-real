@@ -84,6 +84,8 @@ async function probe(): Promise<void> {
       return Boolean(outcome?.found);
     }, 50);
     if (!outcome || !requestId || outcome.offset_s === null) throw new Error('No stored VOD moment was returned.');
+    observations.same_broadcast = outcome.broadcast_id === stream.id;
+    if (outcome.broadcast_id !== stream.id) throw new Error('The live check matched a different broadcast.');
     const expected = chunkOffset(new Date(manifest.source_wall_start_ms + 60_000).toISOString(), stream.started_at,
       Number(process.env.VOD_OFFSET_CORRECTION_S ?? 0));
     observations.expected_offset_s = expected; observations.observed_offset_s = outcome.offset_s;
@@ -108,7 +110,13 @@ async function probe(): Promise<void> {
     report.alignment_clip_start_s = bounds.end - bounds.duration;
     await capture.save(report);
     observations.stage = 'playback';
-    const alignment = await alignRecordedProbe(report, tokens);
+    let alignment: Awaited<ReturnType<typeof alignRecordedProbe>> | undefined;
+    const downloadDeadline = Date.now() + 40_000;
+    while (!alignment && Date.now() < downloadDeadline) {
+      try { alignment = await alignRecordedProbe(report, tokens); }
+      catch { await delay(2000, undefined, { signal: abort.signal }); }
+    }
+    if (!alignment) throw new Error('The created clip did not become downloadable and decodable.');
     report.recording_alignment = alignment; report.vod_clip_id = outcome.clip.clip_id; report.vod_clip_playable = true;
     observations.clip_playable = true; observations.recording_alignment = alignment;
     const alignedExpected = 60 + alignment.observed_vod_offset_s - alignment.source_offset_s;

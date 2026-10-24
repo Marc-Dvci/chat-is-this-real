@@ -1,8 +1,7 @@
 import type { ModelClient } from '../llm/client.js';
 import { ModelProviderError } from '../llm/errors.js';
 
-export const ffmpegBinary = process.platform === 'win32' ? 'ffmpeg.exe' : 'ffmpeg';
-export const ffprobeBinary = process.platform === 'win32' ? 'ffprobe.exe' : 'ffprobe';
+export { ffmpegBinary, ffprobeBinary } from '../shared/ffmpeg.js';
 export const mediaInputOptions = ['-protocol_whitelist', 'file,pipe', '-format_whitelist', 'wav,mp3,mov,matroska,webm,ogg,flac,aac,avi'];
 
 export function wavInfo(wav: Buffer): { duration: number; rms: number } {
