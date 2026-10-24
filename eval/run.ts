@@ -2,6 +2,7 @@ import { parseArgs } from 'node:util';
 import { evaluationOptionsSchema } from '../src/shared/schemas.js';
 import { verifyEvaluationLock } from './lock.js';
 import { runClaims } from './claims.js';
+import { runVod } from './vod.js';
 
 async function run(): Promise<void> {
   const { values } = parseArgs({ options: {
@@ -11,8 +12,7 @@ async function run(): Promise<void> {
   await verifyEvaluationLock();
   if (options.verify_lock) { console.info('Evaluation file hashes and committed data match the lock.'); return; }
   if (options.suite === 'claims') { await runClaims(options.split); return; }
-  console.error('The VOD evaluation engine is scheduled for M6. No measurements were produced.');
-  process.exitCode = 1;
+  await runVod();
 }
 
 void run().catch((error: unknown) => {

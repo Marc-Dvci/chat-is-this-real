@@ -5,6 +5,8 @@ import { RequestStore } from '../store/request-store.js';
 import { CheckEngine } from './engine.js';
 import { ModelClient } from '../llm/client.js';
 import { loadModelConfig } from '../llm/config.js';
+import { SegmentStore } from '../store/segment-store.js';
+import { VodEngine } from '../vod/engine.js';
 import { type CheckInput, type CheckJob, type CheckRequest } from '../shared/schemas.js';
 
 export class CheckService {
@@ -27,7 +29,7 @@ export class CheckService {
       context: request.context_ids.flatMap((id) => { const row = this.chat.get(id); return row?.body ? [{ id, text: row.body }] : []; }) };
     const job = this.store.create(input, request.id, request.kind);
     this.changed(job);
-    if (job.state === 'failed' || request.kind === 'vod') return job;
+    if (job.state === 'failed') return job;
     if (this.closed || this.pending.length >= 50) {
       this.store.db.prepare("UPDATE check_jobs SET state='failed',reason='queue_full' WHERE id=?").run(job.id);
       const failed = this.store.get(job.id) ?? job; this.changed(failed); return failed;
@@ -52,10 +54,11 @@ export class CheckService {
         this.engine ??= new CheckEngine(new ModelClient(loadModelConfig()), {
           get: (key) => this.store.getCache(key), put: (key, outcome) => this.store.putCache(key, outcome)
         });
-        const outcome = await this.engine.run(job.input, { signal: this.active.abort.signal, onState: (state) => {
+        const vod = () => new VodEngine(this.engine!.model, new SegmentStore(this.store.db)).run(id, job.input!.claim, request?.broadcast_id, { signal: this.active!.abort.signal });
+        const outcome = job.kind === 'vod' ? await vod() : await this.engine.run(job.input, { signal: this.active.abort.signal, onState: (state) => {
           this.store.state(id, state); const current = this.store.get(id); if (current) this.changed(current);
         } });
-        this.store.finish(id, outcome);
+        this.store.finish(id, outcome.type === 'stream_memory' ? await vod() : outcome);
       } catch {
         this.store.db.prepare("UPDATE check_jobs SET state='failed',reason='model_configuration' WHERE id=? AND reason IS NOT 'source_removed' AND state NOT IN ('dismissed','on_air')").run(id);
       } finally {

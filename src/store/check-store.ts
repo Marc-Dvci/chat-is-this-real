@@ -1,5 +1,5 @@
 import type { DatabaseSync } from 'node:sqlite';
-import { checkJobRowSchema, checkJobSchema, checkOutcomeSchema, type CheckInput, type CheckJob, type CheckOutcome, type CheckState } from '../shared/schemas.js';
+import { checkJobRowSchema, checkJobSchema, checkOutcomeSchema, vodOutcomeSchema, type CheckInput, type CheckJob, type CheckOutcome, type CheckState, type VodOutcome } from '../shared/schemas.js';
 import { transaction } from './database.js';
 
 export class CheckStore {
@@ -40,10 +40,10 @@ export class CheckStore {
   state(id: string, state: CheckState): void {
     this.db.prepare("UPDATE check_jobs SET state=?,updated_at=? WHERE id=? AND reason IS NOT 'source_removed' AND state NOT IN ('dismissed','on_air')").run(state, new Date().toISOString(), id);
   }
-  finish(id: string, outcome: CheckOutcome): void {
+  finish(id: string, outcome: CheckOutcome | VodOutcome): void {
     const job = this.get(id);
     if (!job || job.reason === 'source_removed' || job.state === 'dismissed' || job.state === 'on_air') return;
-    const parsed = checkOutcomeSchema.parse(outcome);
+    const parsed = outcome.type === 'vod' ? vodOutcomeSchema.parse(outcome) : checkOutcomeSchema.parse(outcome);
     const state = parsed.failed ? 'failed' : parsed.type === 'not_a_claim' ? 'not_a_claim' : 'ready';
     this.db.prepare('UPDATE check_jobs SET outcome_json=?,state=?,reason=?,updated_at=? WHERE id=?').run(JSON.stringify(parsed), state, parsed.reason, new Date().toISOString(), id);
   }

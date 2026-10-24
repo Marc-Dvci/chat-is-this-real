@@ -376,6 +376,50 @@ export const transcriptSegmentSchema = z.object({
   words: z.array(asrWordSchema), source: z.enum(['live', 'upload']), created_at: z.iso.datetime()
 });
 export type TranscriptSegment = z.infer<typeof transcriptSegmentSchema>;
+export const broadcastSchema = z.object({
+  id: z.string().min(1).max(100), vod_id: z.string().regex(/^\d+$/u).nullable(), title: z.string().max(300),
+  started_at: z.iso.datetime(), source: z.enum(['live', 'upload']), created_at: z.iso.datetime()
+});
+export type Broadcast = z.infer<typeof broadcastSchema>;
+export const transcriptCoverageSchema = z.object({
+  broadcast_id: z.string(), start_s: z.number().nonnegative(), end_s: z.number().nonnegative(),
+  segment_count: z.number().int().nonnegative(), gaps: z.array(z.object({ start_s: z.number(), end_s: z.number() }))
+});
+export type TranscriptCoverage = z.infer<typeof transcriptCoverageSchema>;
+export const clipResultSchema = z.object({
+  state: z.enum(['pending', 'ready', 'fallback', 'failed']), clip_id: z.string().nullable(),
+  clip_url: z.url().nullable(), vod_url: z.url(), reason: z.string().nullable()
+});
+export type ClipResult = z.infer<typeof clipResultSchema>;
+export const vodOutcomeSchema = z.object({
+  id: z.string(), type: z.literal('vod'), found: z.boolean(),
+  relation: vodProposalSchema.shape.relation, segment_ids: z.array(z.string()), quote: z.string().max(300),
+  offset_s: z.number().nonnegative().nullable(), end_s: z.number().nonnegative().nullable(),
+  broadcast_id: z.string().nullable(), vod_id: z.string().regex(/^\d+$/u).nullable(), broadcast_title: z.string(),
+  broadcast_started_at: z.iso.datetime().nullable(), timing: z.enum(['word', 'segment']).nullable(),
+  coverage: z.array(transcriptCoverageSchema), clip: clipResultSchema.nullable(),
+  reason: z.string().nullable(), created_at: z.iso.datetime(), elapsed_ms: z.number().nonnegative(),
+  calls: z.array(modelUsageSchema), failed: z.boolean().default(false)
+});
+export type VodOutcome = z.infer<typeof vodOutcomeSchema>;
+export const companionConfigSchema = z.object({
+  AUDIO_INPUT_FORMAT: z.enum(['dshow', 'avfoundation', 'pulse']).default(process.platform === 'win32' ? 'dshow' : process.platform === 'darwin' ? 'avfoundation' : 'pulse'),
+  AUDIO_DEVICE: z.string().min(1), VOD_OFFSET_CORRECTION_S: z.coerce.number().min(-120).max(120).default(0),
+  COMPANION_SERVER: z.url().default('http://127.0.0.1:4747')
+});
+export const companionStateSchema = z.object({ broadcast_id: z.string(), started_at: z.iso.datetime({ offset: true }),
+  vod_id: z.string().regex(/^\d+$/u).nullable(), title: z.string(), category: z.string(), channel: z.string(), commands: z.array(z.string()) });
+export const ingestTranscriptSchema = z.object({
+  broadcast_id: z.string().min(1).max(100), chunk_wall_start: z.iso.datetime(), duration_s: z.number().positive().max(16),
+  text: z.string().max(8000), words: z.array(asrWordSchema).max(1000), chunk_id: z.string().uuid()
+});
+export const asrVocabularySchema = z.record(z.string().min(1).max(80), z.number().int().min(1).max(5));
+export const subtitleUploadSchema = z.object({ vod_id: z.string().regex(/^\d+$/u), format: z.enum(['srt', 'vtt', 'txt']), text: z.string().min(1).max(800_000) });
+export const libraryParamsSchema = z.object({ vod_id: z.string().regex(/^\d+$/u) });
+export const librarySearchSchema = z.object({ broadcast_id: z.string().max(100).optional(), q: z.string().max(1000).default('') });
+export const clipApprovalSchema = z.object({ confirmed: z.literal(true) });
+export const recordedBroadcastSchema = z.object({ broadcast_id: z.string(), vod_id: z.string(), stream_started_at: z.iso.datetime({ offset: true }), origin: z.string() });
+export const vodEvaluationSourceSchema = z.object({ broadcast_id: z.string(), vod_id: z.string(), source_duration_s: z.number(), alignment_s: z.number() });
 export const vodEvaluationQuestionSchema = z.object({
   id: z.string(), question: z.string(), expected: z.enum(['found', 'not_found']),
   offset_min_s: z.number().nonnegative().nullable(), offset_max_s: z.number().nonnegative().nullable(), notes: z.string()
@@ -401,7 +445,7 @@ export const checkOutcomeSchema = z.object({
 export type CheckOutcome = z.infer<typeof checkOutcomeSchema>;
 export const checkJobSchema = z.object({
   id: z.string(), request_id: z.string().nullable(), kind: z.enum(['real', 'vod']), state: checkStateSchema,
-  input: checkInputSchema.nullable(), outcome: checkOutcomeSchema.nullable(), reason: z.string().nullable(),
+  input: checkInputSchema.nullable(), outcome: z.union([checkOutcomeSchema, vodOutcomeSchema]).nullable(), reason: z.string().nullable(),
   created_at: z.iso.datetime(), updated_at: z.iso.datetime()
 });
 export type CheckJob = z.infer<typeof checkJobSchema>;
