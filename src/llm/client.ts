@@ -109,6 +109,7 @@ export class ModelClient {
   }
 
   async search(model: string, data: unknown, signal?: AbortSignal) {
+    if (!this.config.MODELSTUDIO_ALLOW_PAID_SEARCH) throw new ModelProviderError('provider', 'paid_search_disabled');
     return this.track('search', model, 'responses', async (meter) => {
       const body = {
         model, stream: false as const, store: false, max_tool_calls: 1,

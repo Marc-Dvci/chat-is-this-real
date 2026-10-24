@@ -14,6 +14,12 @@ Reference mode isolates classification and evidence judging from retrieval. It c
 search quality or end-to-end check latency. After separate search-fee approval, add
 `--search-mode provider` to test the full pipeline. Each run stops at its cost estimate or
 per-model token limit; the provider's Free Quota Only setting controls account-level billing.
+Paid search also requires `MODELSTUDIO_ALLOW_PAID_SEARCH=true` after fee approval.
+
+The user requested simulated search while paid search is deferred. `--search-mode replay`
+uses curated URLs from actual assistant searches in `fixtures/search/probe.json` and fetches
+those pages for real model judging. `--defaults-only` tests just the configured models.
+The report separates replay pipeline latency from live provider-search latency.
 
 The probe checks availability, structured classification, optional source-producing search, evidence
 judging, native speech recognition with and without context, and segment-ID answers.

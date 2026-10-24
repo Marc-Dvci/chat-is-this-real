@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { parseArgs, promisify } from 'node:util';
 import { fetchSource } from '../src/check/fetch-source.js';
 import { sourceWindow, verifyEvidence } from '../src/check/verify.js';
+import { replaySearch } from '../src/check/search-replay.js';
 import { ModelClient, ModelProviderError } from '../src/llm/client.js';
 import { loadModelConfig } from '../src/llm/config.js';
 import { judgeInstructions, triageInstructions, vodInstructions } from '../src/llm/prompts.js';
@@ -17,7 +18,7 @@ import {
 } from '../src/shared/schemas.js';
 
 const execute = promisify(execFile);
-const candidates = {
+const candidateModels = {
   triage: ['qwen3.8-flash', 'qwen3.7-flash'], search: ['qwen3.8-flash', 'qwen3.7-plus'],
   judge: ['qwen3.8-flash', 'qwen3.7-plus', 'qwen3.8-max'], vod: ['qwen3.8-flash', 'qwen3.7-plus']
 };
@@ -50,9 +51,12 @@ function wordErrors(reference: string, actual: string) {
 
 async function probe(): Promise<void> {
   const { values } = parseArgs({ options: { live: { type: 'boolean', default: false }, 'budget-usd': { type: 'string', default: '1' },
-    'search-mode': { type: 'string', default: 'reference' } } });
+    'search-mode': { type: 'string', default: 'reference' }, 'defaults-only': { type: 'boolean', default: false } } });
   const options = modelProbeOptionsSchema.parse({ live: values.live, budget_usd: Number(values['budget-usd']), search_mode: values['search-mode'] });
   const config = loadModelConfig();
+  const candidates = values['defaults-only'] ? {
+    triage: [config.MODEL_TRIAGE], search: [config.MODEL_SEARCH], judge: [config.MODEL_JUDGE], vod: [config.MODEL_VOD]
+  } : candidateModels;
   const claims = probeClaimsSchema.parse(JSON.parse(await readFile('scripts/probe-claims.json', 'utf8')));
   const outline = testStreamOutlineSchema.parse(JSON.parse(await readFile('scripts/test-stream-outline.json', 'utf8')));
   for (const id of [0, 2, 4]) {
@@ -68,6 +72,7 @@ async function probe(): Promise<void> {
     return;
   }
   if (process.env.LIVE !== '1') throw new Error('Set LIVE=1 explicitly for live provider calls.');
+  if (options.search_mode === 'provider' && !config.MODELSTUDIO_ALLOW_PAID_SEARCH) throw new Error('Paid search is disabled.');
   const gitCommit = (await execute('git', ['rev-parse', 'HEAD'])).stdout.trim();
   const workingTreeDirty = Boolean((await execute('git', ['status', '--porcelain'])).stdout.trim());
   const runId = new Date().toISOString().replace(/[:.]/g, '-');
@@ -76,6 +81,7 @@ async function probe(): Promise<void> {
   const client = new ModelClient(config, join(directory, 'wire'));
   const rows: ModelProbeRow[] = [];
   const baselineLatency: number[] = [];
+  const replayLatency: number[] = [];
   const available = new Set<string>();
   const roleTimes = new Map<string, number>();
   const reportPath = join('eval/results', `models-probe-${runId}.json`);
@@ -111,6 +117,7 @@ async function probe(): Promise<void> {
       if (await measure('availability', 'availability', model, () => client.structured('availability', model, availabilitySchema, 'Return the JSON object {"ok":true}.', { test: 'availability' }))) available.add(model);
     }
     for (const claim of claims) {
+      const claimStarted = performance.now();
       let triage: Triage | undefined;
       let triageModel: string | undefined;
       for (const model of candidates.triage.filter((candidate) => available.has(candidate))) {
@@ -133,6 +140,18 @@ async function probe(): Promise<void> {
         const source = await fetchSource(claim.reference_url, `${claim.id}-reference`);
         sources = source.text ? [source] : [];
         await writeFile(join(directory, `${claim.id}-reference-sources.json`), JSON.stringify([source]), { mode: 0o600 });
+      }
+      if (options.search_mode === 'replay') {
+        const searchStarted = performance.now();
+        const result = await measure(claim.id, 'search', 'host-search-replay', () => replaySearch(claim.message),
+          (result) => ({ source_count: result.sources.length }));
+        if (result) {
+          const fetched = await Promise.all(result.sources.map((source, index) => fetchSource(source.url, `${claim.id}-source-${index}`)));
+          sources = fetched.filter((source) => source.text);
+          baselineSearch = performance.now() - searchStarted;
+          searchModel = 'host-search-replay';
+          await writeFile(join(directory, `${claim.id}-replay-sources.json`), JSON.stringify(fetched), { mode: 0o600 });
+        }
       }
       for (const model of options.search_mode === 'provider' ? candidates.search.filter((candidate) => available.has(candidate)) : []) {
         const searchStarted = performance.now();
@@ -169,6 +188,9 @@ async function probe(): Promise<void> {
         }), (result) => ({ expected_verdict: claim.expected_verdict, verdict: result.verdict, returned_excerpts: result.evidence.length, verified_excerpts: verifyEvidence(result.evidence, sources).verified.length }));
         if (judgment && sources.length && model === config.MODEL_JUDGE && triageModel === config.MODEL_TRIAGE && searchModel === config.MODEL_SEARCH) baselineLatency.push(
           (roleTimes.get(`${claim.id}:triage:${config.MODEL_TRIAGE}`) ?? 0) + baselineSearch + (roleTimes.get(`${claim.id}:judge:${model}`) ?? 0)
+        );
+        if (values['defaults-only'] && judgment && sources.length && model === config.MODEL_JUDGE && triageModel === config.MODEL_TRIAGE && searchModel === 'host-search-replay') replayLatency.push(
+          performance.now() - claimStarted
         );
       }
     }
@@ -207,9 +229,12 @@ async function probe(): Promise<void> {
     const report = { suite: 'models-probe', split: 'probe', sample_count: claims.length, created_at: new Date().toISOString(),
       git_commit: gitCommit, working_tree_dirty: workingTreeDirty,
       endpoint: new URL(config.MODELSTUDIO_BASE_URL).hostname, models: candidates, available_models: [...available],
-      search_mode: options.search_mode, source_selection: options.search_mode === 'reference' ? 'Known reference URLs; retrieval and end-to-end performance are not evaluated.' : 'Provider web search',
+      search_mode: options.search_mode, source_selection: options.search_mode === 'provider' ? 'Provider web search'
+        : options.search_mode === 'replay' ? 'Curated URLs from assistant web searches. Search discovery is simulated, not measured.'
+          : 'Known reference URLs; retrieval and end-to-end performance are not evaluated.',
       baseline_configuration: { triage: config.MODEL_TRIAGE, search: config.MODEL_SEARCH, judge: config.MODEL_JUDGE },
       speech_source: 'system speech in the original prerecorded Twitch test', baseline_latency_ms: baselineLatency,
+      replay_latency_ms: replayLatency,
       summary: summarizeProbe(claims, rows, baselineLatency),
       estimated_cost_usd: estimatedCost(client.calls), cost_basis: 'Published list prices; estimates exclude free quota and credit. Provider billing is authoritative.',
       rows, calls: client.calls };

@@ -177,6 +177,7 @@ export const modelConfigSchema = z.object({
   MODEL_TRIAGE: z.string().default('qwen3.8-flash'), MODEL_SEARCH: z.string().default('qwen3.8-flash'),
   MODEL_JUDGE: z.string().default('qwen3.8-flash'), MODEL_VOD: z.string().default('qwen3.8-flash'),
   MODEL_ASR: z.string().default('qwen-audio-3.1-asr-flash'), MODEL_ASR_FALLBACK: z.string().default('qwen3-asr-flash'),
+  MODELSTUDIO_ALLOW_PAID_SEARCH: z.enum(['true', 'false']).default('false').transform((value) => value === 'true'),
   ASR_LANGUAGE: z.string().default('en')
 });
 export type ModelConfig = z.infer<typeof modelConfigSchema>;
@@ -259,6 +260,18 @@ export const modelProbeRowSchema = z.object({
 export type ModelProbeRow = z.infer<typeof modelProbeRowSchema>;
 export const modelProbeOptionsSchema = z.object({
   live: z.boolean(), budget_usd: z.number().positive().max(20).default(1),
-  search_mode: z.enum(['reference', 'provider']).default('reference')
+  search_mode: z.enum(['reference', 'replay', 'provider']).default('reference')
 });
 export const availabilitySchema = z.object({ ok: z.literal(true) });
+export const modelProbeMeasurementsSchema = z.object({
+  suite: z.literal('models-probe'), split: z.literal('probe'), sample_count: z.number().int().positive(),
+  created_at: z.iso.datetime(), git_commit: z.string().regex(/^[0-9a-f]{40}$/),
+  search_mode: z.enum(['reference', 'replay', 'provider']), endpoint: z.string(),
+  rows: z.array(modelProbeRowSchema), calls: z.array(modelUsageSchema),
+  baseline_latency_ms: z.array(z.number().nonnegative()),
+  replay_latency_ms: z.array(z.number().nonnegative()).default([])
+});
+export const searchReplaySchema = z.object({
+  origin: z.literal('host_web_search_curated'), recorded_at: z.iso.datetime(), description: z.string(),
+  items: z.array(z.object({ id: z.string(), claim: z.string(), query: z.string(), sources: z.array(searchSourceSchema).max(6) }))
+});

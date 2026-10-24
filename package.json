@@ -22,6 +22,7 @@
     "setup:twitch": "tsx scripts/setup-twitch.ts",
     "probe:twitch": "tsx scripts/probe-twitch.ts",
     "probe:models": "tsx scripts/probe-models.ts",
+    "report:models": "tsx scripts/report-models.ts",
     "record:test": "tsx scripts/make-test-recording.ts",
     "broadcast:test": "tsx scripts/broadcast-test.ts",
     "companion": "tsx scripts/milestone-command.ts companion"
