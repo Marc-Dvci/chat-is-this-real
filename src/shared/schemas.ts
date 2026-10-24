@@ -188,6 +188,14 @@ export const checkInputSchema = z.object({
     .default({ title: '', category: '', language: 'en' })
 });
 export type CheckInput = z.infer<typeof checkInputSchema>;
+export const createCheckSchema = z.object({
+  claim: z.string().trim().min(1).max(1000).optional(), message_id: z.string().min(1).max(100).optional(),
+  kind: z.enum(['real', 'vod']).default('real')
+}).strict().refine((value) => Boolean(value.claim || value.message_id), 'Choose a message or enter a claim.');
+export const checkIdParamsSchema = z.object({ id: checkInputSchema.shape.id });
+export const twitchChannelInfoSchema = z.object({ data: z.array(z.object({
+  title: z.string(), game_name: z.string(), broadcaster_language: z.string()
+})) });
 export const engineConfigSchema = z.object({
   SEARCH_MODE: z.enum(['replay', 'provider']).default('replay'), SEARCH_REPLAY_PATH: z.string().default('fixtures/search/probe.json'),
   MODELSTUDIO_TOKEN_LIMIT: z.coerce.number().int().min(1000).max(1_000_000).default(900_000)

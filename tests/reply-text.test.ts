@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { buildCheckReply, buildNotFoundReply, buildVodReply, cleanModelExplanation } from '../src/shared/reply-text.js';
+import { buildCheckReply, buildNotFoundReply, buildVodReply } from '../src/shared/reply-text.js';
 
 it('removes model URLs, mentions and command text while keeping the code-owned link intact', () => {
   const reply = buildCheckReply('real', 'Visit https://untrusted.invalid/x @demo_viewer !vod /ban. The document supports this.',
@@ -14,7 +14,8 @@ it('removes model URLs, mentions and command text while keeping the code-owned l
 
 it('blocks a secret before sanitizing or shortening the explanation', () => {
   const secret = 'unused-test-credential-value';
-  expect(() => cleanModelExplanation(`https://example.invalid/${secret}`, [secret])).toThrow('secret fragment');
+  const explanation = `https://example.invalid/${secret} @demo_viewer !vod`;
+  expect(() => buildCheckReply('real', explanation, 'https://science.nasa.gov/moon/facts/', 'result_12345', 'https://receipts.example', [secret])).toThrow('secret fragment');
 });
 
 it('preserves complete result links when explanations are long', () => {

@@ -18,6 +18,7 @@ export class CheckService {
   private drain: Promise<void> | undefined;
   constructor(db: DatabaseSync, private readonly changed: (job: CheckJob) => void = () => undefined) {
     this.store = new CheckStore(db); this.chat = new ChatStore(db); this.requests = new RequestStore(db);
+    db.prepare("UPDATE check_jobs SET state='failed',reason='interrupted' WHERE state IN ('queued','triage','searching','reading','judging')").run();
   }
   enqueue(request: CheckRequest, channel: CheckInput['channel'] = { title: '', category: '', language: 'en' }): CheckJob {
     const existing = this.store.get(request.id);
@@ -29,7 +30,7 @@ export class CheckService {
     if (job.state === 'failed' || request.kind === 'vod') return job;
     if (this.closed || this.pending.length >= 50) {
       this.store.db.prepare("UPDATE check_jobs SET state='failed',reason='queue_full' WHERE id=?").run(job.id);
-      return this.store.get(job.id) ?? job;
+      const failed = this.store.get(job.id) ?? job; this.changed(failed); return failed;
     }
     this.pending.push(job.id);
     this.kick();
