@@ -1,0 +1,18 @@
+# Secrets and local data (never committed)
+.env
+.env.*
+!.env.example
+data/
+footage/
+
+# Build and test output
+node_modules/
+dist/
+e2e/screens/
+test-results/
+playwright-report/
+.cache/
+coverage/
+*.tsbuildinfo
+*.log
+.wrangler/

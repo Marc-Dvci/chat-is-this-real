@@ -1,0 +1,15 @@
+# Project configuration for Codex. Loaded only after the project is marked trusted.
+# Key names follow the Codex config reference (learn.chatgpt.com/docs/config-file/config-reference).
+
+# Write inside the repository; ask before anything outside it.
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+
+# Current docs matter for Twitch and the model provider, which change often.
+web_search = "live"
+
+model_reasoning_effort = "high"
+
+[sandbox_workspace_write]
+# npm, Twitch, the model provider, GitHub and Cloudflare all need the network.
+network_access = true
