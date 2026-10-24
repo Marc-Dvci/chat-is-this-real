@@ -19,9 +19,11 @@
     "lint": "eslint . --max-warnings 0",
     "eval": "tsx scripts/milestone-command.ts eval",
     "demo": "tsx scripts/milestone-command.ts demo",
-    "setup:twitch": "tsx scripts/milestone-command.ts setup:twitch",
-    "probe:twitch": "tsx scripts/milestone-command.ts probe:twitch",
+    "setup:twitch": "tsx scripts/setup-twitch.ts",
+    "probe:twitch": "tsx scripts/probe-twitch.ts",
     "probe:models": "tsx scripts/milestone-command.ts probe:models",
+    "record:test": "tsx scripts/make-test-recording.ts",
+    "broadcast:test": "tsx scripts/broadcast-test.ts",
     "companion": "tsx scripts/milestone-command.ts companion"
   },
   "dependencies": {

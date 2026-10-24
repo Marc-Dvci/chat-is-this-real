@@ -37,6 +37,13 @@ The project instructions are in [AGENTS.md](AGENTS.md).
 |---|---|---|
 | The local server exposes a schema-validated health endpoint. | `src/server/app.ts` | `tests/server.test.ts`, `e2e/server.spec.ts` |
 | Local secrets and stored files have no HTTP routes. | `src/server/app.ts` | `tests/server.test.ts` |
+| Authorization callbacks reject invalid and replayed state. | `src/twitch/oauth.ts` | `tests/oauth.test.ts` |
+| The chat formatter blocks commands and loaded secret fragments, neutralizes mentions and limits message length. | `src/shared/format-chat.ts` | `tests/format-chat.test.ts` |
+
+## Connect Twitch
+
+Follow the [account setup and live probe guide](docs/setup-twitch.md).
+The setup command prints authorization links and stores credentials locally.
 
 ## Layout
 
@@ -47,8 +54,8 @@ The project instructions are in [AGENTS.md](AGENTS.md).
 
 ## Current scope
 
-M0 provides the server foundation and checks. Product commands report their required milestone
-until their implementation passes that milestone's acceptance checks.
+M0 provides the server foundation and checks. M1 adds Twitch authorization and live-probe tooling.
+Other product commands report their required milestone until their implementation passes that milestone's acceptance checks.
 
 ## License
 
