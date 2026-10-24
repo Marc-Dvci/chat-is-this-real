@@ -77,3 +77,6 @@ URL, normalization and excerpt-rejection checks pass locally.
 
 The Model Studio CLI sign-in was verified with `bl auth status`; skill and CLI versions matched.
 The live probe is gated on the requested Model Studio usage approval.
+The offline audit also prevents source-free judge calls and records skipped judgments.
+Probe summaries retain missing results in their denominators and leave unmeasured rates
+and latency percentiles empty. Regression checks cover those reporting cases.

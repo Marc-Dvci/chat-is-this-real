@@ -11,6 +11,10 @@ Remove-Item Env:LIVE
 
 The probe checks availability, structured classification, source-producing search, evidence
 judging, native speech recognition with and without context, and segment-ID answers.
+The judge is skipped when triage rejects a claim or no source text is available. The report
+keeps missing judgments in the expected-item count. It labels verdicts as model proposals;
+the later check engine applies deterministic verdict rules before publishing a result.
+Latency percentiles use the nearest-rank method and include their measured sample count.
 The separate probe set is in `scripts/probe-claims.json`. The formal dev and heldout evaluations
 follow the locking procedure in the evaluation skill.
 

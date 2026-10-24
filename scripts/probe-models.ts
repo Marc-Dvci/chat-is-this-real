@@ -9,6 +9,7 @@ import { loadModelConfig } from '../src/llm/config.js';
 import { judgeInstructions, triageInstructions, vodInstructions } from '../src/llm/prompts.js';
 import { selectSearchSources } from '../src/llm/search-sources.js';
 import { normalizeText } from '../src/shared/text-normalize.js';
+import { summarizeProbe } from './probe-summary.js';
 import {
   availabilitySchema, judgeSchema, modelProbeOptionsSchema, modelProbeRowSchema, probeClaimsSchema,
   testStreamOutlineSchema, triageSchema, vodProposalSchema,
@@ -110,7 +111,13 @@ async function probe(): Promise<void> {
         }), (result) => ({ expected_kind: claim.expected_kind, kind: result.kind, checkable: result.checkable }));
         if (result && (model === config.MODEL_TRIAGE || !triage)) { triage = result; triageModel = model; }
       }
-      if (!triage?.checkable || triage.kind !== 'fact') continue;
+      if (!triage?.checkable || triage.kind !== 'fact') {
+        if (claim.expected_verdict) for (const model of candidates.judge.filter((candidate) => available.has(candidate))) {
+          rows.push(modelProbeRowSchema.parse({ id: claim.id, role: 'judge', model, status: 'skipped', elapsed_ms: 0,
+            expected_verdict: claim.expected_verdict, skipped_reason: 'triage_not_checkable' }));
+        }
+        continue;
+      }
       let sources: SourceDocument[] = [];
       let baselineSearch = 0;
       let searchModel: string | undefined;
@@ -133,6 +140,13 @@ async function probe(): Promise<void> {
           baselineSearch = performance.now() - searchStarted;
           searchModel = model;
         }
+      }
+      if (!sources.length) {
+        for (const model of candidates.judge.filter((candidate) => available.has(candidate))) {
+          rows.push(modelProbeRowSchema.parse({ id: claim.id, role: 'judge', model, status: 'skipped', elapsed_ms: 0,
+            expected_verdict: claim.expected_verdict, skipped_reason: 'no_sources' }));
+        }
+        continue;
       }
       for (const model of candidates.judge.filter((candidate) => available.has(candidate))) {
         const judgment = await measure(claim.id, 'judge', model, () => client.structured('judge', model, judgeSchema, judgeInstructions, {
@@ -181,6 +195,7 @@ async function probe(): Promise<void> {
       endpoint: new URL(config.MODELSTUDIO_BASE_URL).hostname, models: candidates, available_models: [...available],
       baseline_configuration: { triage: config.MODEL_TRIAGE, search: config.MODEL_SEARCH, judge: config.MODEL_JUDGE },
       speech_source: 'system speech in the original prerecorded Twitch test', baseline_latency_ms: baselineLatency,
+      summary: summarizeProbe(claims, rows, baselineLatency),
       estimated_cost_usd: estimatedCost(client.calls), cost_basis: 'Published list prices; estimates exclude free quota and credit. Provider billing is authoritative.',
       rows, calls: client.calls };
     await writeFile(reportPath, JSON.stringify(report, null, 2));

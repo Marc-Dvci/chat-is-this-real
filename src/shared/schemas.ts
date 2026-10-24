@@ -247,14 +247,14 @@ export const probeClaimSchema = z.object({
 });
 export const probeClaimsSchema = z.array(probeClaimSchema).length(10);
 export const modelProbeRowSchema = z.object({
-  id: z.string(), role: modelRoleSchema, model: z.string(), status: z.enum(['ok', 'error']),
+  id: z.string(), role: modelRoleSchema, model: z.string(), status: z.enum(['ok', 'error', 'skipped']),
   elapsed_ms: z.number(), expected_kind: triageSchema.shape.kind.optional(), kind: triageSchema.shape.kind.optional(),
   checkable: z.boolean().optional(), source_fetch_ms: z.number().optional(),
   expected_verdict: verdictSchema.nullable().optional(), verdict: verdictSchema.optional(),
   returned_excerpts: z.number().optional(), verified_excerpts: z.number().optional(), source_count: z.number().optional(),
   found: z.boolean().optional(), valid_segment_ids: z.boolean().optional(),
   word_errors: z.number().optional(), reference_words: z.number().optional(), context: z.boolean().optional(),
-  error: z.string().optional()
+  error: z.string().optional(), skipped_reason: z.enum(['triage_not_checkable', 'no_sources']).optional()
 });
 export type ModelProbeRow = z.infer<typeof modelProbeRowSchema>;
 export const modelProbeOptionsSchema = z.object({ live: z.boolean(), budget_usd: z.number().positive().max(20).default(1) });
