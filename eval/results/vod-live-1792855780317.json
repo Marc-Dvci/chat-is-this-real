@@ -1,0 +1,100 @@
+{
+  "suite": "vod-live",
+  "split": "scripted-live",
+  "source": "Original prerecorded system narration",
+  "run": "1792855780317",
+  "git_commit": "ee88b8149d7d9229c7617abb32e43e0344fc6ab5",
+  "created_at": "2026-10-24T15:29:40.317Z",
+  "passed": true,
+  "stage": "complete",
+  "same_broadcast": true,
+  "expected_offset_s": 55.905,
+  "observed_offset_s": 56.098,
+  "offset_error_s": 0.19299999999999784,
+  "moment_age_s": 311.4563330078125,
+  "clip_playable": true,
+  "recording_alignment": {
+    "source_wall_start_ms": 1792855756305.667,
+    "source_offset_s": 56.9943330078125,
+    "observed_vod_offset_s": 53,
+    "method": "video_timecode_match"
+  },
+  "aligned_expected_offset_s": 56.0056669921875,
+  "aligned_offset_error_s": 0.09233300781249909,
+  "reply_sent": true,
+  "output": {
+    "id": "875db7ab-121a-4ff5-8c9e-e6fe702ca5c7",
+    "type": "vod",
+    "found": true,
+    "relation": "said",
+    "segment_ids": [
+      "9f2cf383-1373-41ad-8f52-59b85fce1ebc"
+    ],
+    "quote": "In this scripted example, I said I would do 50 pushups if we reached 100 subscribers. The promise is 50 pushups for 100 subscribers. This sentence is here so the stream memory tool can find a number expressed as. ",
+    "offset_s": 56.098,
+    "end_s": 70.914,
+    "broadcast_id": "318112017508",
+    "vod_id": "2909537829",
+    "broadcast_title": "Chat Is This Real | prerecorded development test",
+    "broadcast_started_at": "2026-10-24T15:29:17Z",
+    "timing": "word",
+    "coverage": [
+      {
+        "broadcast_id": "318112017508",
+        "start_s": 0,
+        "end_s": 95.90599999999999,
+        "segment_count": 3,
+        "gaps": []
+      },
+      {
+        "broadcast_id": "318096282594",
+        "start_s": 0,
+        "end_s": 95.517,
+        "segment_count": 3,
+        "gaps": []
+      },
+      {
+        "broadcast_id": "318124951651",
+        "start_s": 0,
+        "end_s": 95.42099999999999,
+        "segment_count": 3,
+        "gaps": []
+      },
+      {
+        "broadcast_id": "upload-2909296715",
+        "start_s": 0,
+        "end_s": 45,
+        "segment_count": 1,
+        "gaps": []
+      }
+    ],
+    "clip": {
+      "state": "ready",
+      "clip_id": "CoweringImportantDoveBlargNaut-9Hy84ssXIb0yeh7v",
+      "clip_url": "https://clips.twitch.tv/CoweringImportantDoveBlargNaut-9Hy84ssXIb0yeh7v",
+      "vod_url": "https://www.twitch.tv/videos/2909537829?t=0h0m56s",
+      "reason": null
+    },
+    "reason": null,
+    "created_at": "2026-10-24T15:35:27.351Z",
+    "elapsed_ms": 2051.8649999999907,
+    "calls": [
+      {
+        "id": "daa1b5cc-300a-472e-9fb4-b66acde56420",
+        "created_at": "2026-10-24T15:35:27.348Z",
+        "role": "vod",
+        "model": "qwen3.8-flash",
+        "latency_ms": 2041.9885000000359,
+        "input_tokens": 523,
+        "output_tokens": 69,
+        "search_calls": 0,
+        "status": "ok",
+        "error_code": null,
+        "format": "json_schema",
+        "audio_seconds": 0,
+        "audio_seconds_estimated": false
+      }
+    ],
+    "failed": false
+  }
+}

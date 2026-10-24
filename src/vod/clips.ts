@@ -31,6 +31,9 @@ export async function createVodClip(helix: TwitchHelix, outcome: VodOutcome, opt
   const base: ClipResult = { state: 'pending', clip_id: null, clip_url: null, vod_url: fallback, reason: null };
   options.onUpdate?.(base);
   const window = clipWindow(outcome.offset_s, outcome.end_s);
+  if (window.end - window.duration > outcome.offset_s) {
+    const value: ClipResult = { ...base, state: 'fallback', reason: 'quote_exceeds_clip_window' }; options.onUpdate?.(value); return value;
+  }
   let clipId: string, createdFromVod = true;
   try {
     const query = new URLSearchParams({ editor_id: broadcaster.user_id, broadcaster_id: broadcaster.user_id, vod_id: video.id,
@@ -55,22 +58,26 @@ export async function createVodClip(helix: TwitchHelix, outcome: VodOutcome, opt
     }
   }
   const started = Date.now(); let fallbackShown = false;
+  const pollSignal = AbortSignal.any([signal, AbortSignal.timeout(60_000)]), polling = new TwitchHelix(helix.tokens, pollSignal);
   while (Date.now() - started <= 60_000) {
     signal.throwIfAborted();
+    if (pollSignal.aborted) break;
+    let clip: Awaited<ReturnType<TwitchHelix['clip']>>;
     try {
-      const clip = await client.clip(clipId);
+      clip = await polling.clip(clipId);
+    } catch (error) { if (signal.aborted) throw error; }
       // Live archives can omit these fields until the stream ends. The VOD creation request still binds its exact window.
       const clipStart = clip?.vod_offset ?? (createdFromVod ? window.end - window.duration : undefined);
       if (clip && clip.broadcaster_id === broadcaster.user_id && (clip.video_id === video.id || createdFromVod && !clip.video_id) && clipStart !== undefined &&
         clipStart <= outcome.offset_s + 1 && clipStart + clip.duration >= outcome.end_s - 1) {
-                const ready: ClipResult = { ...base, state: 'ready', clip_id: clip.id, clip_url: canonicalClipUrl(clip.id) };
+        const ready: ClipResult = { ...base, state: 'ready', clip_id: clip.id, clip_url: canonicalClipUrl(clip.id) };
         options.onUpdate?.(ready); return ready;
       }
-    } catch (error) { if (signal.aborted) throw error; }
     if (!fallbackShown && Date.now() - started >= 20_000) {
       fallbackShown = true; options.onUpdate?.({ ...base, state: 'fallback', clip_id: clipId, reason: 'clip_processing' });
     }
-    await delay(2000, undefined, { signal });
+    try { await delay(2000, undefined, { signal: pollSignal }); }
+    catch (error) { if (signal.aborted) throw error; break; }
   }
   const value: ClipResult = { ...base, state: 'fallback', clip_id: clipId, reason: 'clip_timeout' };
   options.onUpdate?.(value); return value;

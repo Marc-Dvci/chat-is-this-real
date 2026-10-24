@@ -27,7 +27,8 @@ export async function transcribeAudio(model: ModelClient, wav: Buffer, previous:
   if (info.rms < 20) return { text: '', words: [], duration: info.duration, fallback: false };
   try {
     const result = await model.asr(wav, previous, model.config.MODEL_ASR, { vocabulary, ...(signal ? { signal } : {}) });
-    if (result.words.some((word) => word.end_time < word.begin_time || word.end_time > info.duration * 1000 + 500)) throw new ModelProviderError('invalid_output', 'asr_word_times');
+    if (result.words.some((word, index) => word.end_time < word.begin_time || word.end_time > info.duration * 1000 + 500 ||
+      index > 0 && word.begin_time + 50 < (result.words[index - 1]?.begin_time ?? 0))) throw new ModelProviderError('invalid_output', 'asr_word_times');
     return { ...result, duration: info.duration, fallback: false };
   } catch (error) {
     if (signal?.aborted || error instanceof ModelProviderError && ['quota', 'unsafe'].includes(error.reason)) throw error;

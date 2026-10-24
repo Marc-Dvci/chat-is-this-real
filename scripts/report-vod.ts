@@ -25,6 +25,7 @@ async function report(): Promise<void> {
     'The created clip was separately downloaded, decoded and matched to the source timecode. It was not reported as a completed live reply.', '',
     'Companion: `npm run companion -- --list`, then set the selected audio device and run `npm run companion` during your connected live stream.',
     'The optional recording input requires its actual broadcast wall clock. It is labelled in the probe and uses no camera or microphone.',
+    'Recording-input mode was tested end to end. Native device capture on each desktop OS still needs a device check.',
     'Audio is 16 kHz mono in short chunks. Closed chunks are processed serially and deleted. Coverage records silence and exposes gaps.',
     'The seconds-billed speech fallback has a separate local allowance cap; its real response fixture retains reported audio seconds. It has no word times.', '',
     'Library imports accept SRT, VTT, timestamped TXT, or supported media linked to one of the broadcaster’s past VODs.',

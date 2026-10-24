@@ -26,7 +26,8 @@ export class SegmentStore {
   broadcasts(): Broadcast[] { return this.db.prepare('SELECT * FROM broadcasts ORDER BY started_at DESC LIMIT 100').all().map((row) => broadcastSchema.parse(row)); }
   put(input: TranscriptSegment): void {
     const value = transcriptSegmentSchema.parse(input);
-    if (value.words.some((word) => word.end_time < word.begin_time || word.end_time > value.duration_s * 1000 + 500)) throw new Error('Invalid transcript word times.');
+    if (value.words.some((word, index) => word.end_time < word.begin_time || word.end_time > value.duration_s * 1000 + 500 ||
+      index > 0 && word.begin_time + 50 < (value.words[index - 1]?.begin_time ?? 0))) throw new Error('Invalid transcript word times.');
     this.db.prepare('INSERT INTO segments VALUES(?,?,?,?,?,?) ON CONFLICT(id) DO NOTHING').run(value.id, value.broadcast_id, value.offset_s, value.duration_s, value.text, JSON.stringify(value));
     this.cover(value.broadcast_id, value.offset_s, value.offset_s + value.duration_s);
   }

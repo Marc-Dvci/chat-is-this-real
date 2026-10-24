@@ -9,6 +9,9 @@ Unknown IDs become not_found. Word timing is used only when word text aligns to 
 | [6fe1a71](../eval/results/vod-dev-2026-10-24T14-40-32-372Z.json) | `qwen3.8-flash` | 20/20 dev moments | 6/6 dev questions | 26/26 | Earlier expanded-window check |
 | [6fe1a71](../eval/results/vod-dev-2026-10-24T14-41-21-745Z.json) | `qwen3.8-flash` | 20/20 dev moments | 6/6 dev questions | 26/26 | Earlier expanded-window check |
 | [6fe1a71](../eval/results/vod-dev-2026-10-24T14-42-07-737Z.json) | `qwen3.8-flash` | 20/20 dev moments | 5/6 dev questions | 26/26 | Earlier expanded-window check |
+| [4c3a072](../eval/results/vod-dev-2026-10-24T15-38-05-017Z.json) | `qwen3.8-flash` | 20/20 dev moments | 6/6 dev questions | 26/26 | Speech-window midpoint, ±15 s |
+| [4c3a072](../eval/results/vod-dev-2026-10-24T15-38-39-738Z.json) | `qwen3.8-flash` | 20/20 dev moments | 6/6 dev questions | 26/26 | Speech-window midpoint, ±15 s |
+| [4c3a072](../eval/results/vod-dev-2026-10-24T15-39-18-689Z.json) | `qwen3.8-flash` | 20/20 dev moments | 6/6 dev questions | 26/26 | Speech-window midpoint, ±15 s |
 
 The final timing rule measures distance from the midpoint of the independent speech window. Earlier runs expanded that window by the tolerance; their original reports remain unchanged.
 The retrieval evaluation creates no public clips. Its clip metric is explicitly not attempted.
@@ -25,6 +28,7 @@ The created clip was separately downloaded, decoded and matched to the source ti
 
 Companion: `npm run companion -- --list`, then set the selected audio device and run `npm run companion` during your connected live stream.
 The optional recording input requires its actual broadcast wall clock. It is labelled in the probe and uses no camera or microphone.
+Recording-input mode was tested end to end. Native device capture on each desktop OS still needs a device check.
 Audio is 16 kHz mono in short chunks. Closed chunks are processed serially and deleted. Coverage records silence and exposes gaps.
 The seconds-billed speech fallback has a separate local allowance cap; its real response fixture retains reported audio seconds. It has no word times.
 
