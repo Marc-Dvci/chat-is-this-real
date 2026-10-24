@@ -170,3 +170,92 @@ export const testBroadcastSchema = z.object({
   stream_id: z.string().optional(), stream_started_at: z.iso.datetime({ offset: true }).optional(),
   ended_at: z.iso.datetime().optional()
 });
+
+export const modelConfigSchema = z.object({
+  DASHSCOPE_API_KEY: z.string().min(1),
+  MODELSTUDIO_BASE_URL: z.url().default('https://dashscope-intl.aliyuncs.com/compatible-mode/v1'),
+  MODEL_TRIAGE: z.string().default('qwen3.8-flash'), MODEL_SEARCH: z.string().default('qwen3.8-flash'),
+  MODEL_JUDGE: z.string().default('qwen3.8-flash'), MODEL_VOD: z.string().default('qwen3.8-flash'),
+  MODEL_ASR: z.string().default('qwen-audio-3.1-asr-flash'), MODEL_ASR_FALLBACK: z.string().default('qwen3-asr-flash'),
+  ASR_LANGUAGE: z.string().default('en')
+});
+export type ModelConfig = z.infer<typeof modelConfigSchema>;
+export const modelRoleSchema = z.enum(['triage', 'search', 'judge', 'vod', 'asr', 'availability']);
+export type ModelRole = z.infer<typeof modelRoleSchema>;
+export const verdictSchema = z.enum(['real', 'not_real', 'missing_context', 'unconfirmed']);
+export type Verdict = z.infer<typeof verdictSchema>;
+export const triageSchema = z.object({
+  kind: z.enum(['fact', 'stream_memory', 'opinion', 'joke', 'question', 'other']),
+  checkable: z.boolean(), normalized_claim: z.string().max(1000),
+  time_sensitive: z.boolean(), sensitive: z.boolean(), search_queries: z.array(z.string().max(250)).max(3)
+});
+export type Triage = z.infer<typeof triageSchema>;
+export const evidenceSchema = z.object({
+  source_id: z.string().max(100), excerpt: z.string().max(1000), stance: z.enum(['supports', 'contradicts', 'context'])
+});
+export type Evidence = z.infer<typeof evidenceSchema>;
+export const judgeSchema = z.object({
+  verdict: verdictSchema, explanation: z.string().max(200), evidence: z.array(evidenceSchema).max(6)
+});
+export type JudgeProposal = z.infer<typeof judgeSchema>;
+export const vodProposalSchema = z.object({
+  found: z.boolean(), segment_ids: z.array(z.string().max(100)).max(20),
+  relation: z.enum(['said', 'said_similar', 'said_opposite', 'not_found']), summary: z.string().max(160)
+});
+export type VodProposal = z.infer<typeof vodProposalSchema>;
+export const modelUsageSchema = z.object({
+  id: z.string(), created_at: z.iso.datetime(), role: modelRoleSchema, model: z.string(),
+  latency_ms: z.number().nonnegative(), input_tokens: z.number().nonnegative(), output_tokens: z.number().nonnegative(),
+  search_calls: z.number().int().nonnegative(), status: z.enum(['ok', 'error']),
+  error_code: z.string().nullable(), format: z.enum(['json_schema', 'json_object', 'responses', 'native', 'text'])
+});
+export type ModelUsage = z.infer<typeof modelUsageSchema>;
+export const searchSourceSchema = z.object({ url: z.url(), title: z.string().optional() });
+export const providerSearchSchema = z.object({
+  output: z.array(z.looseObject({
+    type: z.string(), action: z.looseObject({ sources: z.array(searchSourceSchema).optional() }).optional(),
+    content: z.array(z.looseObject({ annotations: z.array(z.looseObject({
+      type: z.string(), url: z.string().optional(), title: z.string().optional()
+    })).optional() })).optional()
+  })),
+  usage: z.looseObject({
+    input_tokens: z.number().optional(), output_tokens: z.number().optional(),
+    x_tools: z.object({ web_search: z.object({ count: z.number() }).optional() }).optional()
+  }).nullable().optional()
+});
+export const asrWordSchema = z.object({
+  text: z.string(), begin_time: z.number().nonnegative(), end_time: z.number().nonnegative(),
+  fixed: z.boolean().optional()
+});
+export const nativeAsrSchema = z.object({
+  output: z.object({ text: z.string(), sentence: z.object({ words: z.array(asrWordSchema) }).optional() }),
+  usage: z.object({ input_tokens: z.number().optional(), output_tokens: z.number().optional(), duration: z.number().optional() }).optional()
+});
+export const sourceDocumentSchema = z.object({
+  id: z.string(), url: z.url(), title: z.string(), domain: z.string(),
+  tier: z.number().int().min(1).max(4), fetched_at: z.iso.datetime(), status: z.number().int(),
+  sha256: z.string(), text: z.string(), error: z.string().optional()
+});
+export type SourceDocument = z.infer<typeof sourceDocumentSchema>;
+export const providerChatSchema = z.object({
+  choices: z.array(z.object({ message: z.object({ content: z.string().nullable() }) })).min(1),
+  usage: z.object({ prompt_tokens: z.number(), completion_tokens: z.number() }).optional()
+});
+export const probeClaimSchema = z.object({
+  id: z.string(), message: z.string(), expected_kind: triageSchema.shape.kind,
+  expected_verdict: verdictSchema.nullable(), reference_url: z.url().nullable()
+});
+export const probeClaimsSchema = z.array(probeClaimSchema).length(10);
+export const modelProbeRowSchema = z.object({
+  id: z.string(), role: modelRoleSchema, model: z.string(), status: z.enum(['ok', 'error']),
+  elapsed_ms: z.number(), expected_kind: triageSchema.shape.kind.optional(), kind: triageSchema.shape.kind.optional(),
+  checkable: z.boolean().optional(), source_fetch_ms: z.number().optional(),
+  expected_verdict: verdictSchema.nullable().optional(), verdict: verdictSchema.optional(),
+  returned_excerpts: z.number().optional(), verified_excerpts: z.number().optional(), source_count: z.number().optional(),
+  found: z.boolean().optional(), valid_segment_ids: z.boolean().optional(),
+  word_errors: z.number().optional(), reference_words: z.number().optional(), context: z.boolean().optional(),
+  error: z.string().optional()
+});
+export type ModelProbeRow = z.infer<typeof modelProbeRowSchema>;
+export const modelProbeOptionsSchema = z.object({ live: z.boolean(), budget_usd: z.number().positive().max(20).default(1) });
+export const availabilitySchema = z.object({ ok: z.literal(true) });

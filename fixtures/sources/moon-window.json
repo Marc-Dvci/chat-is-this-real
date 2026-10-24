@@ -1,0 +1,16 @@
+{
+  "id": "nasa-moon-window",
+  "url": "https://science.nasa.gov/moon/facts/",
+  "title": "Moon Facts - NASA Science",
+  "domain": "science.nasa.gov",
+  "tier": 1,
+  "fetched_at": "2026-10-24T09:12:00.673Z",
+  "status": 200,
+  "text": "The Moon is an average of 238,855 miles (384,400 kilometers) away.",
+  "sha256": "6959cc7b800e59e91f822d64ba654fd798a2b1f869c29b49a94c05ad0583f601",
+  "recording": {
+    "original_sha256": "576a0b7de4e3cfa46202b240a26db4d2025079ebbbed4b897902656968b9ace0",
+    "start_offset": 893,
+    "description": "Verbatim bounded sentence from the fetched readable source."
+  }
+}

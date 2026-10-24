@@ -61,3 +61,19 @@ The [official rules](https://twitchcon-codex.devpost.com/rules), checked on 24 O
 require a working Twitch integration, Codex build evidence, the Codex session ID and a public
 demonstration video. The submission period ends on 2 November 2026 at 14:00 Pacific Time.
 The accessible project must remain free for judging through 15 November 2026.
+
+## M2 preparation
+
+The [model probe](model-probe.md) has a preview mode and requires explicit live opt-in.
+All inference calls use the configured SDK client in `src/llm/client.ts`, including native ASR.
+Structured output disables thinking, uses Zod validation and retries only once for unsupported
+strict output or invalid JSON. Search candidates come from tool sources and citation annotations.
+The search prose is discarded.
+
+The source adapter validates DNS and redirects, pins the checked addresses, caps compressed
+and expanded bodies, extracts readable text and retains useful published captions. A bounded
+NASA source window supplies the evidence-verification regression case. Reserved-address,
+URL, normalization and excerpt-rejection checks pass locally.
+
+The Model Studio CLI sign-in was verified with `bl auth status`; skill and CLI versions matched.
+The live probe is gated on the requested Model Studio usage approval.
