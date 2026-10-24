@@ -77,7 +77,7 @@ export type TwitchStream = z.infer<typeof twitchStreamSchema>;
 
 export const twitchVideoSchema = z.object({
   id: z.string().regex(/^\d+$/), stream_id: z.string().nullable(), user_id: z.string(),
-  created_at: z.iso.datetime({ offset: true }), duration: z.string(), type: z.string()
+  created_at: z.iso.datetime({ offset: true }), duration: z.string(), type: z.string(), title: z.string().default('Past broadcast')
 });
 export const twitchVideosSchema = z.object({ data: z.array(twitchVideoSchema) });
 export const twitchClipCreatedSchema = z.object({
@@ -403,12 +403,14 @@ export const vodOutcomeSchema = z.object({
 });
 export type VodOutcome = z.infer<typeof vodOutcomeSchema>;
 export const companionConfigSchema = z.object({
-  AUDIO_INPUT_FORMAT: z.enum(['dshow', 'avfoundation', 'pulse']).default(process.platform === 'win32' ? 'dshow' : process.platform === 'darwin' ? 'avfoundation' : 'pulse'),
+  AUDIO_INPUT_FORMAT: z.enum(['dshow', 'avfoundation', 'pulse']).default('dshow'),
   AUDIO_DEVICE: z.string().min(1), VOD_OFFSET_CORRECTION_S: z.coerce.number().min(-120).max(120).default(0),
   COMPANION_SERVER: z.url().default('http://127.0.0.1:4747')
 });
 export const companionStateSchema = z.object({ broadcast_id: z.string(), started_at: z.iso.datetime({ offset: true }),
   vod_id: z.string().regex(/^\d+$/u).nullable(), title: z.string(), category: z.string(), channel: z.string(), commands: z.array(z.string()) });
+export const companionOptionsSchema = z.object({ list: z.boolean().default(false), file: z.string().optional(),
+  wall_start: z.iso.datetime({ offset: true }).optional(), seconds: z.coerce.number().positive().max(10_800).optional() });
 export const ingestTranscriptSchema = z.object({
   broadcast_id: z.string().min(1).max(100), chunk_wall_start: z.iso.datetime(), duration_s: z.number().positive().max(16),
   text: z.string().max(8000), words: z.array(asrWordSchema).max(1000), chunk_id: z.string().uuid()
@@ -416,6 +418,12 @@ export const ingestTranscriptSchema = z.object({
 export const asrVocabularySchema = z.record(z.string().min(1).max(80), z.number().int().min(1).max(5));
 export const subtitleUploadSchema = z.object({ vod_id: z.string().regex(/^\d+$/u), format: z.enum(['srt', 'vtt', 'txt']), text: z.string().min(1).max(800_000) });
 export const libraryParamsSchema = z.object({ vod_id: z.string().regex(/^\d+$/u) });
+export const mediaInfoSchema = z.object({ format: z.object({ duration: z.coerce.number().positive().max(10_800) }) });
+export const mediaImportSchema = z.object({
+  id: z.string(), vod_id: z.string(), state: z.enum(['receiving', 'transcribing', 'ready', 'failed']),
+  progress_s: z.number().nonnegative(), total_s: z.number().nonnegative().nullable(), reason: z.string().nullable(), created_at: z.iso.datetime()
+});
+export type MediaImport = z.infer<typeof mediaImportSchema>;
 export const librarySearchSchema = z.object({ broadcast_id: z.string().max(100).optional(), q: z.string().max(1000).default('') });
 export const clipApprovalSchema = z.object({ confirmed: z.literal(true) });
 export const recordedBroadcastSchema = z.object({ broadcast_id: z.string(), vod_id: z.string(), stream_started_at: z.iso.datetime({ offset: true }), origin: z.string() });

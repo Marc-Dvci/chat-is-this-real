@@ -1,7 +1,7 @@
 import type { DatabaseSync } from 'node:sqlite';
 import type { CheckService } from '../check/service.js';
 import type { ChatSettings, CheckInput } from '../shared/schemas.js';
-import { twitchChannelInfoSchema } from '../shared/schemas.js';
+import { companionStateSchema, twitchChannelInfoSchema, twitchVideosSchema } from '../shared/schemas.js';
 import { ChatStore } from '../store/chat-store.js';
 import { RequestStore } from '../store/request-store.js';
 import { SettingsStore } from '../store/settings-store.js';
@@ -15,6 +15,7 @@ import { TwitchTokens } from '../twitch/tokens.js';
 export class LiveSession {
   private runtime: TwitchRuntime | undefined;
   private publisher: TwitchPublisher | undefined;
+  private helix: TwitchHelix | undefined;
   private starting: Promise<void> | undefined;
   private generation = 0;
   private notice = 'twitch_disconnected';
@@ -25,6 +26,22 @@ export class LiveSession {
   currentStreamId(): string | undefined { return this.runtime?.liveStreamId(); }
   channelContext(): CheckInput['channel'] { return this.channel; }
   configure(settings: ChatSettings): void { this.runtime?.core.configure(settings); }
+  async companionState() {
+    const id = this.currentStreamId();
+    if (!id || !this.helix) return undefined;
+    const stream = await this.helix.requireStream(id), vod = await this.helix.currentVod(stream);
+    const settings = new SettingsStore(this.db).get();
+    return companionStateSchema.parse({ broadcast_id: stream.id, started_at: stream.started_at, vod_id: vod?.id ?? null,
+      title: stream.title, category: stream.game_name, channel: this.helix.tokens.config.TWITCH_CHANNEL,
+      commands: [settings.real_command, settings.vod_command] });
+  }
+  async ownedVods() {
+    if (!this.helix) throw new Error('Connect Twitch first.');
+    const broadcaster = await this.helix.tokens.get('broadcaster');
+    const response = await this.helix.request('app', 'GET', `/videos?${new URLSearchParams({ user_id: broadcaster.user_id ?? '', type: 'archive', first: '100' })}`, twitchVideosSchema);
+    return response.data.filter((video) => video.user_id === broadcaster.user_id && video.type === 'archive');
+  }
+  twitch(): TwitchHelix | undefined { return this.helix; }
 
   async connect(): Promise<void> {
     if (this.starting) return this.starting;
@@ -32,7 +49,7 @@ export class LiveSession {
     const generation = ++this.generation;
     this.notice = 'twitch_connecting';
     this.starting = this.start(generation).catch(() => {
-      if (generation === this.generation) { this.runtime?.stop(); this.runtime = undefined; this.notice = 'twitch_reconnect_required'; }
+      if (generation === this.generation) { this.runtime?.stop(); this.runtime = undefined; this.helix = undefined; this.publisher = undefined; this.notice = 'twitch_reconnect_required'; }
       throw new Error('Reconnect Twitch with npm run setup:twitch.');
     }).finally(() => { this.starting = undefined; });
     return this.starting;
@@ -57,13 +74,14 @@ export class LiveSession {
     });
     const runtime = new TwitchRuntime(core, helix, (code) => { this.notice = code; });
     this.runtime = runtime;
+    this.helix = helix;
     this.publisher = new TwitchPublisher(helix, requests, () => runtime.liveStreamId(), (code) => { this.notice = code; });
     await runtime.start();
     if (generation !== this.generation) runtime.stop();
   }
   disconnect(): void {
     this.generation++;
-    this.runtime?.stop(); this.runtime = undefined; this.publisher = undefined;
+    this.runtime?.stop(); this.runtime = undefined; this.publisher = undefined; this.helix = undefined;
     this.notice = 'twitch_disconnected';
   }
 }

@@ -1,0 +1,1474 @@
+{
+  "suite": "vod",
+  "split": "dev",
+  "sample_count": 26,
+  "attempted_items": 26,
+  "created_at": "2026-10-24T14:42:06.472Z",
+  "git_commit": "6fe1a71acef6e5dfe8b038b8a03907822d13d5da",
+  "working_tree_dirty": true,
+  "model": "qwen3.8-flash",
+  "speech_source": "Original system narration from the actual prerecorded Twitch test. Human voice accuracy is not measured.",
+  "metrics": {
+    "hit_within_15s": {
+      "matched": 20,
+      "total": 20
+    },
+    "not_found_correctness": {
+      "matched": 6,
+      "total": 6
+    },
+    "failed_items": 0,
+    "not_attempted": 0,
+    "clip_success": {
+      "created": 0,
+      "attempted": 0,
+      "reason": "Retrieval evaluation does not create public clips. The live probe measures clipping separately."
+    }
+  },
+  "outputs": [
+    {
+      "id": "vod-001",
+      "expected": "found",
+      "expected_window_s": [
+        0,
+        18
+      ],
+      "output": {
+        "id": "fb7efd3e-0cf7-46e0-9636-630a6fa4f510",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-000"
+        ],
+        "quote": "The recording contains scripted examples for checking stream memory. It uses system speech. The test does not need a camera or a live microphone.",
+        "offset_s": 0.149,
+        "end_s": 10.509,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:23.932Z",
+        "elapsed_ms": 2106.5492000000004,
+        "calls": [
+          {
+            "id": "b57fa2dd-6a2d-4ac0-bdba-f3521605f477",
+            "created_at": "2026-10-24T14:41:23.926Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2088.7475999999997,
+            "input_tokens": 1379,
+            "output_tokens": 63,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-002",
+      "expected": "found",
+      "expected_window_s": [
+        56.028999999999996,
+        74.029
+      ],
+      "output": {
+        "id": "ce2ead65-ffa4-49f9-8782-3517fe3a918c",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-004"
+        ],
+        "quote": "In this scripted example, I said I would do fifty pushups if we reached one hundred subscribers. The promise is fifty pushups for one hundred subscribers. This sentence is here so the stream memory tool can find a number expressed.",
+        "offset_s": 56.18899999999999,
+        "end_s": 71.005,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:26.310Z",
+        "elapsed_ms": 2375.2801999999997,
+        "calls": [
+          {
+            "id": "48bdf82e-77c9-4e6a-acb2-c65af9b77c07",
+            "created_at": "2026-10-24T14:41:26.307Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2363.2976999999996,
+            "input_tokens": 1377,
+            "output_tokens": 63,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-003",
+      "expected": "found",
+      "expected_window_s": [
+        116.029,
+        134.029
+      ],
+      "output": {
+        "id": "43166b73-567d-4101-a92c-395c067d7229",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-008"
+        ],
+        "quote": "For the next community challenge, I chose a blue robot puzzle. The puzzle has a silver tower and a green bridge. The challenge is about the blue robot puzzle, not a racing game.",
+        "offset_s": 116.189,
+        "end_s": 128.629,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:27.477Z",
+        "elapsed_ms": 1167.2942999999996,
+        "calls": [
+          {
+            "id": "07894a38-e45e-4031-816e-8bd2f9b15e77",
+            "created_at": "2026-10-24T14:41:27.475Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1158.5106999999998,
+            "input_tokens": 1374,
+            "output_tokens": 63,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-004",
+      "expected": "found",
+      "expected_window_s": [
+        176.029,
+        194.029
+      ],
+      "output": {
+        "id": "bce1c26c-a4e9-4661-88c4-423efffc18c3",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-012"
+        ],
+        "quote": "the next practice session is scheduled for tuesday at 7 in the evening. this is a fictional schedule for the automated test. tuesday at 7 is the time i said.",
+        "offset_s": 176.189,
+        "end_s": 187.149,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:28.865Z",
+        "elapsed_ms": 1387.9403000000002,
+        "calls": [
+          {
+            "id": "bf3e80a6-d24e-4d97-90cf-9420904f50cf",
+            "created_at": "2026-10-24T14:41:28.863Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1380.124100000001,
+            "input_tokens": 1374,
+            "output_tokens": 61,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-005",
+      "expected": "found",
+      "expected_window_s": [
+        236.029,
+        254.029
+      ],
+      "output": {
+        "id": "c4a5d94b-c2f1-4e7e-9ccf-83444c9ecc47",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-016"
+        ],
+        "quote": "the word for the treasure hunt is pineapple. remember pineapple if you want to find this moment later. the treasure hunt word is not a password and does not grant access to anything.",
+        "offset_s": 236.189,
+        "end_s": 247.789,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:30.811Z",
+        "elapsed_ms": 1945.4766,
+        "calls": [
+          {
+            "id": "473897b7-4d0e-453c-9c23-d6950c4f9ea8",
+            "created_at": "2026-10-24T14:41:30.809Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1938.3806999999997,
+            "input_tokens": 1374,
+            "output_tokens": 60,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-006",
+      "expected": "found",
+      "expected_window_s": [
+        296.029,
+        314.029
+      ],
+      "output": {
+        "id": "772d85b0-c60c-44bf-8b62-a8dd5edd378b",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-020"
+        ],
+        "quote": "my chosen color for the imaginary team shirt is cyan. the shirt has white stripes. if someone asks which color i chose for the shirt, the answer is cyan with white stripes.",
+        "offset_s": 296.189,
+        "end_s": 308.30899999999997,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:32.422Z",
+        "elapsed_ms": 1610.6869000000006,
+        "calls": [
+          {
+            "id": "00582aeb-5c13-46eb-91df-b16451738485",
+            "created_at": "2026-10-24T14:41:32.418Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1601.2232999999997,
+            "input_tokens": 1376,
+            "output_tokens": 64,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-007",
+      "expected": "found",
+      "expected_window_s": [
+        356.029,
+        374.029
+      ],
+      "output": {
+        "id": "c416c61d-b3ab-4700-a7b0-ca1a4b03d287",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-024"
+        ],
+        "quote": "the plan for the fictional cooking break is tomato soup and toasted bread. i chose tomato soup rather than a noodle dish. this is another memory search example.",
+        "offset_s": 356.229,
+        "end_s": 366.989,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:33.862Z",
+        "elapsed_ms": 1440.2188999999998,
+        "calls": [
+          {
+            "id": "1d966eba-746f-4006-a9a1-a3e1a9c405b7",
+            "created_at": "2026-10-24T14:41:33.859Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1417.7031000000006,
+            "input_tokens": 1374,
+            "output_tokens": 57,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-008",
+      "expected": "found",
+      "expected_window_s": [
+        416.029,
+        434.029
+      ],
+      "output": {
+        "id": "69d9ff0d-6824-4a9f-b969-59d0ca2d09a0",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-028"
+        ],
+        "quote": "I changed the target for the building challenge from 10 rooms to 12 rooms. The old target was 10. The current target in this scripted example is 12 rooms.",
+        "offset_s": 416.189,
+        "end_s": 427.189,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:35.179Z",
+        "elapsed_ms": 1316.199200000001,
+        "calls": [
+          {
+            "id": "32c9329c-d55c-4c18-9c83-84dc8539a69d",
+            "created_at": "2026-10-24T14:41:35.176Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1304.506800000001,
+            "input_tokens": 1377,
+            "output_tokens": 59,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-009",
+      "expected": "found",
+      "expected_window_s": [
+        476.029,
+        494.029
+      ],
+      "output": {
+        "id": "2fde2a83-471b-41f9-8389-2c29c9ae4c8b",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-032"
+        ],
+        "quote": "the imaginary robot has a nickname. its nickname is pocket comet. pocket comet carries a small orange backpack. this sentence gives the search engine a distinctive name to retrieve.",
+        "offset_s": 476.229,
+        "end_s": 489.30899999999997,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:36.505Z",
+        "elapsed_ms": 1325.9051,
+        "calls": [
+          {
+            "id": "b24c14f5-22fe-41ab-acac-53cc7ecd4e65",
+            "created_at": "2026-10-24T14:41:36.502Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1314.6936000000005,
+            "input_tokens": 1374,
+            "output_tokens": 60,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-010",
+      "expected": "found",
+      "expected_window_s": [
+        536.029,
+        554.029
+      ],
+      "output": {
+        "id": "8d1b5e65-cba0-431d-b372-60d7c1429c3d",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-036"
+        ],
+        "quote": "The practice route begins at the stone arch and finishes at the wooden bridge. The starting point is the stone arch. The finishing point is the wooden bridge.",
+        "offset_s": 536.189,
+        "end_s": 546.069,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:38.090Z",
+        "elapsed_ms": 1584.4278000000013,
+        "calls": [
+          {
+            "id": "8113afd3-7e78-4efa-9cf2-d7068170a7ef",
+            "created_at": "2026-10-24T14:41:38.088Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1575.7720000000008,
+            "input_tokens": 1374,
+            "output_tokens": 60,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-011",
+      "expected": "found",
+      "expected_window_s": [
+        596.029,
+        614.029
+      ],
+      "output": {
+        "id": "e548dde6-1bb2-4dd7-bb5b-6b76bc5a7252",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-040"
+        ],
+        "quote": "halfway through this test, i promised to share the puzzle solution after the final round. i did not promise to share it before the round. the timing of the promise matters in this memory example.",
+        "offset_s": 596.269,
+        "end_s": 609.189,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:39.384Z",
+        "elapsed_ms": 1293.5087000000021,
+        "calls": [
+          {
+            "id": "646b92bc-6faa-408b-af3f-5ba60dfc866d",
+            "created_at": "2026-10-24T14:41:39.382Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1284.8191000000006,
+            "input_tokens": 1377,
+            "output_tokens": 68,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-012",
+      "expected": "found",
+      "expected_window_s": [
+        656.029,
+        674.029
+      ],
+      "output": {
+        "id": "205681cf-2e77-41e0-988a-6b96d5316a39",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-044"
+        ],
+        "quote": "the next drawing should contain three paper boats and one lighthouse. three paper boats and one lighthouse are the objects i selected. no other picture is being shown in this test.",
+        "offset_s": 656.189,
+        "end_s": 667.909,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:41.074Z",
+        "elapsed_ms": 1690.1404000000002,
+        "calls": [
+          {
+            "id": "7b29ba39-0c24-4cbf-9aa6-2f320d8a8a71",
+            "created_at": "2026-10-24T14:41:41.072Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1680.9058000000005,
+            "input_tokens": 1374,
+            "output_tokens": 63,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-013",
+      "expected": "found",
+      "expected_window_s": [
+        716.029,
+        734.029
+      ],
+      "output": {
+        "id": "a504073e-2182-4f88-8f2e-e1e5526cb623",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-048"
+        ],
+        "quote": "For the imaginary picnic, I selected apples, pears, and sparkling water. The drink is sparkling water. This is a scripted list that the memory tool can retrieve from stored transcript segments.",
+        "offset_s": 716.189,
+        "end_s": 729.669,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:42.478Z",
+        "elapsed_ms": 1403.767100000001,
+        "calls": [
+          {
+            "id": "c3673eb4-118b-4766-bd37-415c22572380",
+            "created_at": "2026-10-24T14:41:42.476Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1393.665399999998,
+            "input_tokens": 1374,
+            "output_tokens": 74,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-014",
+      "expected": "found",
+      "expected_window_s": [
+        776.029,
+        794.029
+      ],
+      "output": {
+        "id": "fd02eb67-df40-4026-80fe-9b50b3afc172",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-052"
+        ],
+        "quote": "I decided to call the next fictional level lantern garden. Lantern garden contains a pond and five stone steps. The name of the level is lantern garden.",
+        "offset_s": 776.189,
+        "end_s": 786.229,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:43.937Z",
+        "elapsed_ms": 1458.4337999999989,
+        "calls": [
+          {
+            "id": "21fff6fa-467e-4f83-aaac-f07f7273ed57",
+            "created_at": "2026-10-24T14:41:43.935Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1450.0649999999987,
+            "input_tokens": 1375,
+            "output_tokens": 57,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-015",
+      "expected": "found",
+      "expected_window_s": [
+        836.029,
+        854.029
+      ],
+      "output": {
+        "id": "3e630e4a-339a-4522-a483-00aeb49ea63e",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-056"
+        ],
+        "quote": "The proposed break is five minutes long. I said five minutes, and then I said we would return to the puzzle. The break length is another number that can be searched as words or digits.",
+        "offset_s": 836.189,
+        "end_s": 848.389,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:45.138Z",
+        "elapsed_ms": 1201.2093999999997,
+        "calls": [
+          {
+            "id": "7cb34b02-3dc1-442c-9810-622a9df5b48c",
+            "created_at": "2026-10-24T14:41:45.137Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1193.982,
+            "input_tokens": 1373,
+            "output_tokens": 55,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-016",
+      "expected": "found",
+      "expected_window_s": [
+        896.029,
+        914.029
+      ],
+      "output": {
+        "id": "bd464889-d28c-45a6-8f69-cb94e5d61143",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-060"
+        ],
+        "quote": "I put the imaginary spare key in the yellow toolbox. The toolbox is next to the workbench. This is a story prop in the test script, not a real credential or a real location.",
+        "offset_s": 896.189,
+        "end_s": 908.709,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:46.329Z",
+        "elapsed_ms": 1190.2978000000003,
+        "calls": [
+          {
+            "id": "1a6aac43-673e-4b5c-bb43-205ce2a91969",
+            "created_at": "2026-10-24T14:41:46.327Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1181.8509000000013,
+            "input_tokens": 1373,
+            "output_tokens": 62,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-017",
+      "expected": "found",
+      "expected_window_s": [
+        956.029,
+        974.029
+      ],
+      "output": {
+        "id": "45b29587-2554-413f-a805-65a67228ada3",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-064"
+        ],
+        "quote": "the fictional score target is 42 points. 42 points is the target for the final round. the script does not say the target is 24 points.",
+        "offset_s": 956.189,
+        "end_s": 967.309,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:48.094Z",
+        "elapsed_ms": 1764.8126999999986,
+        "calls": [
+          {
+            "id": "a7dfc313-d4b4-4483-a2a8-57b7e82d898d",
+            "created_at": "2026-10-24T14:41:48.092Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1757.4043999999994,
+            "input_tokens": 1376,
+            "output_tokens": 59,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-018",
+      "expected": "found",
+      "expected_window_s": [
+        1016.029,
+        1034.029
+      ],
+      "output": {
+        "id": "41d7d3b4-f6d3-49d5-8469-dbe1b0b55c57",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-068"
+        ],
+        "quote": "The next paper model is a small observatory with a copper dome. I chose an observatory, not a castle. Its dome is copper in this scripted example.",
+        "offset_s": 1016.189,
+        "end_s": 1027.149,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:49.487Z",
+        "elapsed_ms": 1392.7343999999975,
+        "calls": [
+          {
+            "id": "33d6a2a1-97c6-4001-a674-db2d89ab291d",
+            "created_at": "2026-10-24T14:41:49.485Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1385.0283999999992,
+            "input_tokens": 1375,
+            "output_tokens": 63,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-019",
+      "expected": "found",
+      "expected_window_s": [
+        1076.029,
+        1094.029
+      ],
+      "output": {
+        "id": "941829d7-12a0-4c44-bf77-f02948226db7",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-072"
+        ],
+        "quote": "the last community vote in this fictional story selected the forest path. the forest path won over the river path. these words are narration for a technical test rather than votes from real viewers.",
+        "offset_s": 1076.189,
+        "end_s": 1088.949,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:51.031Z",
+        "elapsed_ms": 1544.2286000000022,
+        "calls": [
+          {
+            "id": "4b9b1f22-87df-465e-a66e-e2ee0552cc29",
+            "created_at": "2026-10-24T14:41:51.029Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1534.2555999999968,
+            "input_tokens": 1373,
+            "output_tokens": 57,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-020",
+      "expected": "found",
+      "expected_window_s": [
+        1136.029,
+        1154.029
+      ],
+      "output": {
+        "id": "01106083-1f22-4d15-8157-16af51eccc0d",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "segment-076"
+        ],
+        "quote": "this is the end of the pre-recorded stream memory test. the closing phrase is bring the receipts. the tool should quote stored speech and use the stored time rather than inventing either one.",
+        "offset_s": 1136.189,
+        "end_s": 1148.069,
+        "broadcast_id": "318108456420",
+        "vod_id": "2909296715",
+        "broadcast_title": "Recorded development stream",
+        "broadcast_started_at": "2026-10-24T08:25:23Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-24T14:41:52.795Z",
+        "elapsed_ms": 1764.1899000000012,
+        "calls": [
+          {
+            "id": "608949fa-7a21-4f68-980c-8b1f7964424f",
+            "created_at": "2026-10-24T14:41:52.794Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1757.9848999999995,
+            "input_tokens": 1377,
+            "output_tokens": 66,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-021",
+      "expected": "not_found",
+      "expected_window_s": [
+        null,
+        null
+      ],
+      "output": {
+        "id": "3401a55a-7ffa-4e9a-9d9a-ebfddca696ac",
+        "type": "vod",
+        "found": false,
+        "relation": "not_found",
+        "segment_ids": [],
+        "quote": "",
+        "offset_s": null,
+        "end_s": null,
+        "broadcast_id": null,
+        "vod_id": null,
+        "broadcast_title": "",
+        "broadcast_started_at": null,
+        "timing": null,
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": "not_found",
+        "created_at": "2026-10-24T14:41:55.457Z",
+        "elapsed_ms": 2661.711900000002,
+        "calls": [
+          {
+            "id": "2815ec1b-c3e2-445c-85b3-035328304f8f",
+            "created_at": "2026-10-24T14:41:55.456Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2655.323700000001,
+            "input_tokens": 1378,
+            "output_tokens": 56,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-022",
+      "expected": "not_found",
+      "expected_window_s": [
+        null,
+        null
+      ],
+      "output": {
+        "id": "69276f2b-3fa3-46aa-97fd-6465f06999b0",
+        "type": "vod",
+        "found": false,
+        "relation": "not_found",
+        "segment_ids": [],
+        "quote": "",
+        "offset_s": null,
+        "end_s": null,
+        "broadcast_id": null,
+        "vod_id": null,
+        "broadcast_title": "",
+        "broadcast_started_at": null,
+        "timing": null,
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": "not_found",
+        "created_at": "2026-10-24T14:41:58.511Z",
+        "elapsed_ms": 3053.7477,
+        "calls": [
+          {
+            "id": "bc53d74d-0395-411d-816d-20a1b9a1c4e2",
+            "created_at": "2026-10-24T14:41:57.206Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1743.7188000000024,
+            "input_tokens": 1374,
+            "output_tokens": 71,
+            "search_calls": 0,
+            "status": "error",
+            "error_code": "schema_validation",
+            "format": "json_schema"
+          },
+          {
+            "id": "766a982e-eec5-467d-98d6-fe54985fb94a",
+            "created_at": "2026-10-24T14:41:58.510Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1300.2015000000029,
+            "input_tokens": 1483,
+            "output_tokens": 54,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_object"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-023",
+      "expected": "not_found",
+      "expected_window_s": [
+        null,
+        null
+      ],
+      "output": {
+        "id": "2f92ca86-e72d-49cd-8c55-fac9fb1b975b",
+        "type": "vod",
+        "found": false,
+        "relation": "not_found",
+        "segment_ids": [],
+        "quote": "",
+        "offset_s": null,
+        "end_s": null,
+        "broadcast_id": null,
+        "vod_id": null,
+        "broadcast_title": "",
+        "broadcast_started_at": null,
+        "timing": null,
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": "not_found",
+        "created_at": "2026-10-24T14:41:59.740Z",
+        "elapsed_ms": 1229.1970999999976,
+        "calls": [
+          {
+            "id": "82fdf6bb-dd77-42d5-8f72-9de24e05266e",
+            "created_at": "2026-10-24T14:41:59.739Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1223.9712,
+            "input_tokens": 1376,
+            "output_tokens": 49,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-024",
+      "expected": "not_found",
+      "expected_window_s": [
+        null,
+        null
+      ],
+      "output": {
+        "id": "1c93a11c-37e3-477e-989e-71679ddea9df",
+        "type": "vod",
+        "found": false,
+        "relation": "not_found",
+        "segment_ids": [],
+        "quote": "",
+        "offset_s": null,
+        "end_s": null,
+        "broadcast_id": null,
+        "vod_id": null,
+        "broadcast_title": "",
+        "broadcast_started_at": null,
+        "timing": null,
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": "not_found",
+        "created_at": "2026-10-24T14:42:02.631Z",
+        "elapsed_ms": 2890.536500000002,
+        "calls": [
+          {
+            "id": "d99daff8-b557-44e5-a63b-54bb4695e742",
+            "created_at": "2026-10-24T14:42:01.415Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1670.0815000000002,
+            "input_tokens": 1374,
+            "output_tokens": 76,
+            "search_calls": 0,
+            "status": "error",
+            "error_code": "schema_validation",
+            "format": "json_schema"
+          },
+          {
+            "id": "481d28d3-2283-483b-af72-023ae94b9b0f",
+            "created_at": "2026-10-24T14:42:02.630Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1211.871500000001,
+            "input_tokens": 1483,
+            "output_tokens": 49,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_object"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-025",
+      "expected": "not_found",
+      "expected_window_s": [
+        null,
+        null
+      ],
+      "output": {
+        "id": "bda93e33-a3bb-46e7-aee3-6818f06268b7",
+        "type": "vod",
+        "found": false,
+        "relation": "not_found",
+        "segment_ids": [],
+        "quote": "",
+        "offset_s": null,
+        "end_s": null,
+        "broadcast_id": null,
+        "vod_id": null,
+        "broadcast_title": "",
+        "broadcast_started_at": null,
+        "timing": null,
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": "not_found",
+        "created_at": "2026-10-24T14:42:04.552Z",
+        "elapsed_ms": 1920.833000000006,
+        "calls": [
+          {
+            "id": "0648b450-af46-42fc-ab8b-90fcdeee02ea",
+            "created_at": "2026-10-24T14:42:04.551Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1915.162400000001,
+            "input_tokens": 1374,
+            "output_tokens": 47,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    },
+    {
+      "id": "vod-026",
+      "expected": "not_found",
+      "expected_window_s": [
+        null,
+        null
+      ],
+      "output": {
+        "id": "b3897e12-9f47-4886-9a53-6966595284fd",
+        "type": "vod",
+        "found": false,
+        "relation": "not_found",
+        "segment_ids": [],
+        "quote": "",
+        "offset_s": null,
+        "end_s": null,
+        "broadcast_id": null,
+        "vod_id": null,
+        "broadcast_title": "",
+        "broadcast_started_at": null,
+        "timing": null,
+        "coverage": [
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": "not_found",
+        "created_at": "2026-10-24T14:42:06.472Z",
+        "elapsed_ms": 1919.811999999998,
+        "calls": [
+          {
+            "id": "58867e1d-fb38-415d-8039-b3920946f0b9",
+            "created_at": "2026-10-24T14:42:06.471Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1914.4063000000024,
+            "input_tokens": 1373,
+            "output_tokens": 35,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      },
+      "hit": true
+    }
+  ]
+}

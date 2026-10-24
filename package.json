@@ -30,7 +30,7 @@
     "report:claims": "tsx scripts/report-claims.ts",
     "record:test": "tsx scripts/make-test-recording.ts",
     "broadcast:test": "tsx scripts/broadcast-test.ts",
-    "companion": "tsx scripts/milestone-command.ts companion"
+    "companion": "tsx companion/index.ts"
   },
   "dependencies": {
     "@mozilla/readability": "0.6.0",

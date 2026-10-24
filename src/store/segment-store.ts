@@ -1,7 +1,6 @@
 import type { DatabaseSync } from 'node:sqlite';
 import { broadcastSchema, transcriptSegmentSchema, type Broadcast, type TranscriptCoverage, type TranscriptSegment } from '../shared/schemas.js';
 import { queryTerms } from '../vod/numbers.js';
-import { transaction } from './database.js';
 
 export class SegmentStore {
   constructor(readonly db: DatabaseSync) {
@@ -43,12 +42,17 @@ export class SegmentStore {
   candidates(broadcastId: string, question: string): TranscriptSegment[] {
     const all = this.all(broadcastId);
     if (all.length <= 720 && all.reduce((size, segment) => size + segment.text.length, 0) <= 80_000) return all;
-    const terms = queryTerms(question);
-    if (!terms.length) return [];
-    const matches = this.db.prepare(`SELECT segments.id FROM segment_fts JOIN segments ON segments.rowid=segment_fts.rowid
-      WHERE segment_fts MATCH ? AND broadcast_id=? ORDER BY bm25(segment_fts) LIMIT 40`).all(terms.map((term) => `"${term}"`).join(' OR '), broadcastId);
+    const matches = this.search(broadcastId, question);
     const ids = new Set(matches.flatMap((row) => { const index = all.findIndex((item) => item.id === row.id); return all.slice(Math.max(0, index - 1), index + 2).map((item) => item.id); }));
     return all.filter((segment) => ids.has(segment.id));
+  }
+  search(broadcastId: string, question: string): TranscriptSegment[] {
+    const terms = queryTerms(question);
+    if (!terms.length) return [];
+    const broadcast = this.broadcast(broadcastId);
+    return this.db.prepare(`SELECT segments.data_json FROM segment_fts JOIN segments ON segments.rowid=segment_fts.rowid
+      WHERE segment_fts MATCH ? AND broadcast_id=? ORDER BY bm25(segment_fts) LIMIT 40`).all(terms.map((term) => `"${term}"`).join(' OR '), broadcastId)
+      .map((row) => ({ ...transcriptSegmentSchema.parse(JSON.parse(String(row.data_json))), vod_id: broadcast?.vod_id ?? null }));
   }
   coverage(broadcastId: string): TranscriptCoverage {
     const ranges = this.db.prepare('SELECT start_s,end_s FROM transcript_windows WHERE broadcast_id=? ORDER BY start_s').all(broadcastId);
@@ -63,5 +67,5 @@ export class SegmentStore {
     return { broadcast_id: broadcastId, start_s: start, end_s: end, gaps,
       segment_count: Number(this.db.prepare('SELECT count(*) AS total FROM segments WHERE broadcast_id=?').get(broadcastId)?.total ?? 0) };
   }
-  remove(id: string): void { transaction(this.db, () => { this.db.prepare('DELETE FROM broadcasts WHERE id=?').run(id); }); }
+  remove(id: string): void { this.db.prepare('DELETE FROM broadcasts WHERE id=?').run(id); }
 }

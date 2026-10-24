@@ -12,6 +12,22 @@ export function alignChunk(input: Omit<TranscriptSegment, 'offset_s'>, rawOffset
   if (clipped && input.text && !input.words.length) return undefined;
   const words = input.words.filter((word) => word.begin_time >= clipped * 1000)
     .map((word) => ({ ...word, begin_time: word.begin_time - clipped * 1000, end_time: word.end_time - clipped * 1000 }));
-  const text = clipped ? words.map((word) => `${word.text}${word.punctuation ?? ''}`).join('').replace(/\s+/gu, ' ').trim() : input.text;
+  let text = input.text;
+  if (clipped && text) {
+    const first = input.words.find((word) => word.begin_time >= clipped * 1000 && word.text.trim());
+    if (!first) text = '';
+    else {
+      let cursor = 0, start = -1;
+      for (const word of input.words) {
+        if (!word.text.trim()) continue;
+        const position = text.indexOf(word.text.trim(), cursor);
+        if (position < 0) return undefined;
+        if (word === first) { start = position; break; }
+        cursor = position + word.text.trim().length;
+      }
+      if (start < 0) return undefined;
+      text = text.slice(start);
+    }
+  }
   return { ...input, text, words, offset_s: Math.max(0, rawOffset), duration_s: input.duration_s - clipped };
 }
