@@ -4,8 +4,8 @@ import { loadLocalEnv } from '../shared/env.js';
 
 const demo = process.argv.includes('--demo');
 if (!demo) loadLocalEnv();
-const config = serverConfigSchema.parse({ PORT: process.env.PORT });
-const app = buildApp({ databasePath: demo ? ':memory:' : 'data/chat.db', demo });
+const config = serverConfigSchema.parse(process.env);
+const app = buildApp({ databasePath: demo ? config.DEMO_DATABASE_PATH ?? ':memory:' : 'data/chat.db', demo });
 
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {
   process.once(signal, () => {

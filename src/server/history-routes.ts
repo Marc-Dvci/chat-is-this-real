@@ -8,7 +8,7 @@ import { assertNoSecretFragments } from '../shared/format-chat.js';
 import { loadedSecrets } from '../shared/secrets.js';
 
 export function registerHistoryRoutes(app: FastifyInstance, db: DatabaseSync, handlers: {
-  onSettings?: (settings: ChatSettings) => void; onRemoved?: (requestIds: string[]) => void
+  onSettings?: (settings: ChatSettings) => void; onRemoved?: (requestIds: string[]) => void; onPurge?: (userId: string) => void
 } = {}): void {
   const chat = new ChatStore(db), requests = new RequestStore(db), settings = new SettingsStore(db);
   app.get('/api/settings', async () => settings.get());
@@ -36,6 +36,7 @@ export function registerHistoryRoutes(app: FastifyInstance, db: DatabaseSync, ha
     if (typeof userId !== 'string') return reply.code(404).send({ error: 'No stored messages were found for that viewer.' });
     const removed = chat.clearUser(userId, 'manual-purge', new Date().toISOString(), 'user_request');
     handlers.onRemoved?.(removed);
+    handlers.onPurge?.(userId);
     return { removed: true };
   });
   const purge = () => chat.purge(settings.get().retention_days);

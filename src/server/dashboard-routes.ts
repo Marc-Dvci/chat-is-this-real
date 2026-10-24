@@ -2,12 +2,14 @@ import { randomUUID } from 'node:crypto';
 import { readFileSync, statSync } from 'node:fs';
 import type { DatabaseSync } from 'node:sqlite';
 import type { FastifyInstance } from 'fastify';
-import { checkIdParamsSchema, checkViewSchema, companionHeartbeatSchema, deskSnapshotSchema, historyContextSchema, modelUsageSchema, overlayViewSchema, postCheckSchema, presentationActionSchema, type ChatSettings, type CheckJob, type ModelUsage } from '../shared/schemas.js';
+import { checkIdParamsSchema, checkViewSchema, companionHeartbeatSchema, demoVoteSchema, deskSnapshotSchema, historyContextSchema, modelUsageSchema, overlayViewSchema, postCheckSchema, presentationActionSchema, type ChatSettings, type ModelUsage } from '../shared/schemas.js';
 import { SettingsStore } from '../store/settings-store.js';
 import { ChatStore } from '../store/chat-store.js';
 import { RequestStore } from '../store/request-store.js';
-import { PresentationStore } from '../store/presentation-store.js';
-import { PublicResults, publicText } from './public-result.js';
+import { publicText } from './public-result.js';
+import { PresentationControl } from './presentation-control.js';
+import { registerEventStream } from './event-stream.js';
+import { seedDemo } from '../demo/seed.js';
 import type { registerCheckRoutes } from './check-routes.js';
 import { formatChat } from '../shared/format-chat.js';
 import { buildNotFoundReply, buildVodReply } from '../shared/reply-text.js';
@@ -15,34 +17,23 @@ import { vodTimestampUrl } from '../vod/clips.js';
 
 export function registerDashboardRoutes(app: FastifyInstance, db: DatabaseSync, control: ReturnType<typeof registerCheckRoutes>) {
   const settings = new SettingsStore(db), chat = new ChatStore(db), requests = new RequestStore(db);
-  const presentation = new PresentationStore(db), results = new PublicResults(db);
+  const presenter = new PresentationControl(db, control), { presentation, results } = presenter;
   const demo = Boolean(control.catalog);
   let usageVersion = '', usage: ModelUsage[] = [];
-  const removed = () => {
-    const view = presentation.get(), job = view.job_id ? control.service.store.get(view.job_id) : undefined;
-    if (view.job_id && (!job?.outcome || job.reason === 'source_removed' || job.state === 'dismissed') || view.source_ids.some((id) => !chat.get(id)?.body)) presentation.hide();
-  };
-  control.session.onRemoval(removed);
+  const removed = () => presenter.removed();
   const overlay = () => {
     removed(); const current = presentation.get();
     const job = current.job_id ? control.service.store.get(current.job_id) : undefined;
-    return overlayViewSchema.parse({ demo, enabled: settings.get().overlay_enabled, presentation: current,
-      result: job ? results.project(job) : null, position: settings.get().overlay_position, motion: settings.get().motion_enabled });
+    let result = null;
+    try { if (job && ['reveal', 'dwell', 'exit'].includes(current.phase)) result = results.project(job); }
+    catch { presenter.hide(); }
+    const scores = presenter.votes.scores(control.session.currentStreamId() ?? '');
+    return overlayViewSchema.parse({ demo, enabled: settings.get().overlay_enabled, presentation: presentation.get(),
+      result, position: settings.get().overlay_position, motion: settings.get().motion_enabled,
+      votes: current.job_id ? presenter.votes.view(current.job_id) : null, waiting_for_review: presenter.waitingForReview(),
+      leaders: settings.get().leaderboard_enabled ? scores.slice(0, 5).map((score, index) => ({ rank: index + 1, points: score.points })) : [] });
   };
-  const show = (job: CheckJob, confirmed: boolean) => {
-    if (!['ready', 'on_air'].includes(job.state) || !job.outcome || job.outcome.failed) throw new Error('Wait for the check to finish.');
-    if (job.outcome.type !== 'vod' && job.outcome.sensitive && !confirmed) throw new Error('Confirm the sensitive claim before showing it.');
-    results.project(job);
-    settings.set({ ...settings.get(), overlay_enabled: true });
-    control.service.store.state(job.id, 'on_air');
-    presentation.show({ phase: 'dwell', job_id: job.id, message_text: '', source_ids: [] }, settings.get().dwell_s);
-  };
-  let autoSince = Date.now();
-  const unsubscribe = control.service.subscribe((job) => {
-    if (settings.get().auto_publish && Date.parse(job.created_at) >= autoSince && job.state === 'ready' && job.outcome?.type === 'fact' &&
-      !job.outcome.sensitive && job.outcome.evidence.length) { try { show(job, false); } catch { /* Failed verification stays private. */ } }
-  });
-  app.get('/api/desk', async () => {
+  const snapshot = () => {
     let calls = control.catalog?.cases.flatMap((item) => item.outcome.calls) ?? [];
     if (!demo) {
       try {
@@ -60,14 +51,34 @@ export function registerDashboardRoutes(app: FastifyInstance, db: DatabaseSync, 
     const row = db.prepare("SELECT value_json FROM settings WHERE key='companion_heartbeat'").get();
     const heartbeat = row ? companionHeartbeatSchema.safeParse(JSON.parse(String(row.value_json))) : undefined;
     const at = heartbeat?.success && heartbeat.data.broadcast_id === control.session.currentStreamId() ? heartbeat.data.captured_at : null;
-    return deskSnapshotSchema.parse({ demo, messages: control.session.messages(db), checks: control.service.store.list().map((job) => checkViewSchema.parse(job)),
+    const messages = control.session.messages(db);
+    return deskSnapshotSchema.parse({ demo, messages, checks: control.service.store.list().map((job) => checkViewSchema.parse(job)),
       requests: requests.list(), settings: settings.get(), overlay: overlay(), twitch: control.session.status(),
       companion: { state: demo ? 'recorded' : !at ? 'waiting' : Date.now() - Date.parse(at) > 45_000 ? 'stale' : 'current', last_chunk_at: at },
+      scores: presenter.votes.scores(control.session.currentStreamId() ?? '').map((score) => ({ ...score, display_name: messages.find((message) => message.user_id === score.user_id)?.display_name ?? 'Viewer' })),
       models: { recorded: demo, calls: selected.length, search_calls: selected.reduce((sum, call) => sum + call.search_calls, 0), last: selected.at(-1) ?? null },
       indexed_s: indexed.reduce((sum, item) => sum + item.end_s - item.start_s - item.gaps.reduce((gaps, gap) => gaps + gap.end_s - gap.start_s, 0), 0),
       samples: control.catalog?.cases.map(({ key, kind, text }) => ({ key, kind, text })) ?? [] });
-  });
+  };
+  app.get('/api/desk', async () => snapshot());
   app.get('/api/overlay', async () => overlay());
+  registerEventStream(app, '/api/desk/events', snapshot);
+  registerEventStream(app, '/api/overlay/events', overlay);
+  app.post('/api/demo/reset', async (_request, reply) => {
+    if (!control.catalog) return reply.code(404).send({ error: 'This action belongs to the recorded demo.' });
+    presenter.hide(); await control.service.resetReplay();
+    db.exec('DELETE FROM check_jobs; DELETE FROM requests; DELETE FROM messages; DELETE FROM moderation_watermarks; DELETE FROM broadcasts; DELETE FROM media_imports; DELETE FROM settings;');
+    seedDemo(db, control.catalog); presenter.hide(); await control.session.connect();
+    return snapshot();
+  });
+  app.post('/api/demo/vote', async (request, reply) => {
+    const vote = demoVoteSchema.safeParse(request.body);
+    if (!demo || !vote.success) return reply.code(404).send({ error: 'This action belongs to the scripted demo.' });
+    const user = chat.list(vote.data.user, 'demo-stream')[0];
+    if (!user) return reply.code(409).send({ error: 'That demo viewer is not available.' });
+    const message = { ...user, id: `demo-vote-${randomUUID()}`, body: vote.data.text, created_at: new Date().toISOString(), parent_id: null, removed_reason: null };
+    chat.put(message); return { accepted: presenter.observe(message), simulated: true };
+  });
   app.get('/api/results/:id', async (request, reply) => {
     const params = checkIdParamsSchema.safeParse(request.params), job = params.success ? control.service.store.get(params.data.id) : undefined;
     if (!job) return reply.code(404).send({ error: 'Result not found.' });
@@ -82,10 +93,10 @@ export function registerDashboardRoutes(app: FastifyInstance, db: DatabaseSync, 
     const action = presentationActionSchema.safeParse(request.body);
     if (!action.success) return reply.code(400).send({ error: 'Choose a presentation action.' });
     try {
-      if (action.data.action === 'hide') presentation.hide();
+      if (action.data.action === 'hide') presenter.hide();
       else if (action.data.action === 'show_check') {
         const job = control.service.store.get(action.data.id); if (!job) return reply.code(404).send({ error: 'Check not found.' });
-        show(job, action.data.sensitive_confirmed);
+        presenter.show(job, action.data.sensitive_confirmed);
       } else {
         const observed = control.session.messages(db);
         const selected = action.data.message_ids.flatMap((id) => { const value = chat.get(id) ?? observed.find((message) => message.id === id); return value ? [value] : []; })
@@ -93,7 +104,7 @@ export function registerDashboardRoutes(app: FastifyInstance, db: DatabaseSync, 
         if (selected.length !== action.data.message_ids.length || selected.some((message) => !message.body || message.removed_reason)) throw new Error('A selected message was removed.');
         const text = publicText(selected.map((message) => message.body).join(' ')); if (text.length > 1000) throw new Error('Keep the selected message within 1,000 characters.');
         for (const message of selected) if (!chat.get(message.id)) chat.put({ ...message, scope: 'check' });
-        settings.set({ ...settings.get(), overlay_enabled: true });
+        presenter.hide(); settings.set({ ...settings.get(), overlay_enabled: true });
         presentation.show({ phase: 'message', job_id: null, message_text: text, source_ids: selected.map((message) => message.id) }, settings.get().dwell_s);
       }
       return overlay();
@@ -121,6 +132,6 @@ export function registerDashboardRoutes(app: FastifyInstance, db: DatabaseSync, 
       return { posted: true, simulated: false };
     } catch { return reply.code(409).send({ error: 'The reply was blocked. Check the stored evidence and stream.' }); }
   });
-  app.addHook('onClose', async () => { unsubscribe(); presentation.close(); });
-  return { removed, settings: (value: ChatSettings) => { autoSince = Date.now(); if (!value.overlay_enabled) presentation.hide(); } };
+  app.addHook('onClose', async () => presenter.close());
+  return { removed, purge: (userId: string) => presenter.purge(userId), settings: (value: ChatSettings) => presenter.configure(value) };
 }

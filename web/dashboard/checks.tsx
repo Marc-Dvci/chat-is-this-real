@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { CheckView, DeskSnapshot, PublicResult } from '../../src/shared/schemas.js';
 import { Badge, Button, Icon, shortTime, verdictLabel } from '../shared/ui.js';
 import { ResultEvidence } from './result.js';
+import { Votes } from './votes.js';
 
 export function privateResultView(job: CheckView): PublicResult | null {
   const value = job.outcome; if (!value || !job.input || value.failed) return null;
@@ -45,7 +46,7 @@ export function ChecksPanel({ data, selected, onSelect, onNew, onShow, onPost, o
       {job.outcome && job.outcome.type !== 'vod' && <details className="check-diagnostics"><summary>Check details</summary><dl><dt>Normalized claim</dt><dd>{job.outcome.normalized_claim}</dd><dt>Model proposal</dt><dd>{job.outcome.model_verdict ? verdictLabel(job.outcome.model_verdict) : 'No proposal'}</dd><dt>Final decision</dt><dd>{verdictLabel(job.outcome.final_verdict)}</dd><dt>Rejected excerpts</dt><dd>{job.outcome.dropped_excerpts} of {job.outcome.returned_excerpts}</dd></dl></details>}
       <div className="detail-actions"><Button icon="play" tone="primary" disabled={!usable} onClick={() => onShow(job)}>Show on stream</Button><Button icon="chat" disabled={!usable} onClick={() => onPost(job)}>Post to chat</Button><Button icon="copy" disabled={!usable} onClick={() => onCopy(job)}>Copy link</Button><Button icon="close" disabled={job.state === 'dismissed'} onClick={() => onDismiss(job)}>Dismiss</Button></div>
       <div className="preview-toggle"><button className="text-button" aria-expanded={preview} onClick={() => setPreview(!preview)}><Icon name="play" size={15}/>{preview ? 'Close overlay preview' : 'Preview overlay'}</button><a href="/overlay" target="_blank" rel="noreferrer" aria-label="Open overlay in a new tab"><Icon name="external" size={16}/></a></div>{preview && <OverlayPreview/>}
-    </article> : <div className="empty-state"><Icon name="check" size={36}/><h3>Your next check starts here</h3><p>Select a chat message or enter a claim to review.</p><Button tone="primary" onClick={onNew}>Create a check</Button></div>}
+    </article> : <div className="empty-state"><Icon name="check" size={36}/><h3>Your next check starts here</h3><p>Select a chat message or enter a claim to review.</p><Button tone="primary" onClick={onNew}>Create a check</Button></div>}<Votes data={data}/>
   </section>;
 }
 function OverlayPreview() {

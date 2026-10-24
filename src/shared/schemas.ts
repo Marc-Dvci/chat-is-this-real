@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const serverConfigSchema = z.object({
-  PORT: z.coerce.number().int().min(1).max(65535).default(4747)
+  PORT: z.coerce.number().int().min(1).max(65535).default(4747), DEMO_DATABASE_PATH: z.string().min(1).optional()
 });
 
 export const healthSchema = z.object({
@@ -130,7 +130,7 @@ export const chatSettingsSchema = z.object({
   real_command: z.string().regex(/^![a-z][a-z0-9_]{0,20}$/u).default('!real'),
   vod_command: z.string().regex(/^![a-z][a-z0-9_]{0,20}$/u).default('!vod'),
   auto_publish: z.boolean().default(false), overlay_enabled: z.boolean().default(false), votes_enabled: z.boolean().default(true),
-  vote_window_s: z.number().int().min(5).max(60).default(20), dwell_s: z.number().int().min(5).max(60).default(12),
+  vote_window_s: z.number().int().min(20).max(60).default(20), dwell_s: z.number().int().min(5).max(60).default(12),
   overlay_position: z.enum(['bottom-left', 'bottom-right', 'top-left', 'top-right']).default('bottom-left'),
   motion_enabled: z.boolean().default(true), leaderboard_enabled: z.boolean().default(false),
   audio_input_format: z.enum(['dshow', 'avfoundation', 'pulse']).default('dshow'), audio_device: z.string().max(250).default(''),
@@ -476,7 +476,7 @@ export const checkJobSchema = z.object({
 export type CheckJob = z.infer<typeof checkJobSchema>;
 export const dashboardSessionSchema = z.object({ csrf_token: z.string().regex(/^[a-f0-9]{64}$/u) });
 export const requestListSchema = z.object({ requests: z.array(checkRequestSchema) });
-export const checkListSchema = z.object({ checks: z.array(checkJobSchema) });
+export const checkListSchema = z.object({ checks: z.array(z.lazy(() => checkViewSchema)) });
 export const checkJobRowSchema = z.object({
   id: z.string(), request_id: z.string().nullable(), kind: z.string(), state: z.string(), input_json: z.string().nullable(),
   outcome_json: z.string().nullable(), reason: z.string().nullable(), created_at: z.string(), updated_at: z.string()
@@ -531,7 +531,8 @@ export const presentationSchema = z.object({ phase: z.enum(['hidden', 'message',
 export type Presentation = z.infer<typeof presentationSchema>;
 export const companionHeartbeatSchema = z.object({ broadcast_id: z.string(), captured_at: z.iso.datetime() });
 export const overlayViewSchema = z.object({ enabled: z.boolean(), demo: z.boolean(), presentation: presentationSchema,
-  result: publicResultSchema.nullable(), position: chatSettingsSchema.shape.overlay_position, motion: z.boolean() });
+  result: publicResultSchema.nullable(), position: chatSettingsSchema.shape.overlay_position, motion: z.boolean(),
+  votes: z.lazy(() => voteViewSchema).nullable().default(null), waiting_for_review: z.boolean().default(false), leaders: z.array(z.object({ rank: z.number().int().positive(), points: z.number().int().positive() })).default([]) });
 export type OverlayView = z.infer<typeof overlayViewSchema>;
 export const presentationActionSchema = z.discriminatedUnion('action', [
   z.object({ action: z.literal('hide') }),
@@ -542,6 +543,7 @@ export const deskSnapshotSchema = z.object({ demo: z.boolean(), messages: z.arra
   requests: z.array(checkRequestSchema), settings: chatSettingsSchema, overlay: overlayViewSchema,
   twitch: z.object({ connected: z.boolean(), notice: z.string(), live_stream_id: z.string().nullable() }),
   companion: z.object({ state: z.enum(['recorded', 'waiting', 'current', 'stale']), last_chunk_at: z.iso.datetime().nullable() }),
+  scores: z.array(z.object({ user_id: z.string(), display_name: z.string(), points: z.number().int().positive() })).default([]),
   models: z.object({ recorded: z.boolean(), calls: z.number(), search_calls: z.number(), last: modelUsageSchema.nullable() }),
   indexed_s: z.number().nonnegative(), samples: z.array(z.object({ key: z.string(), kind: z.enum(['real', 'vod']), text: z.string() }))
 });
@@ -553,3 +555,16 @@ export const libraryListSchema = z.object({ broadcasts: z.array(broadcastSchema.
 export const libraryVodsSchema = z.object({ videos: z.array(twitchVideoSchema) });
 export const libraryImportsSchema = z.object({ imports: z.array(mediaImportSchema) });
 export const segmentListSchema = z.object({ segments: z.array(transcriptSegmentSchema) });
+export const screeningSchema = z.object({ kind: triageSchema.shape.kind, sensitive: z.boolean() });
+export const voteSessionSchema = z.object({ job_id: z.string(), broadcast_id: z.string(), opened_ms: z.number(), min_until_ms: z.number(), max_until_ms: z.number(),
+  ready_ms: z.number().nullable(), closed_ms: z.number().nullable(), revealed_verdict: verdictSchema.nullable(), cancelled: z.coerce.boolean() });
+export type VoteSession = z.infer<typeof voteSessionSchema>;
+export const voteViewSchema = z.object({ job_id: z.string(), real: z.number().int().nonnegative(), not_real: z.number().int().nonnegative(),
+  closes_at: z.iso.datetime(), closed: z.boolean(), revealed: z.boolean(), no_call: z.boolean() });
+export const scoreSchema = z.object({ user_id: z.string(), points: z.number().int().positive() });
+export const demoVoteSchema = z.object({ user: z.enum(['demo-user-1', 'demo-user-2', 'demo-user-3']), text: z.string().max(20) });
+export const overlayLiveReportSchema = z.object({ suite: z.literal('overlay-live'), run: z.string(), created_at: z.iso.datetime(), git_commit: z.string(), working_tree_dirty: z.boolean(),
+  stage: z.string(), passed: z.boolean(), three_viewer_acceptance: z.boolean(), eligible_voters_observed: z.number().int().nonnegative(),
+  reason: z.string().nullable().default(null),
+  bot_filtered: z.boolean(), duplicate_rejected: z.boolean(), approval_held: z.boolean(), score_once: z.boolean(),
+  source: z.literal('Authorized prerecorded stream'), fixture: z.string().nullable(), result: publicResultSchema.nullable() });
