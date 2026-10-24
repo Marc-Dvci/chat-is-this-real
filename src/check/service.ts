@@ -32,8 +32,12 @@ export class CheckService {
       return this.store.get(job.id) ?? job;
     }
     this.pending.push(job.id);
-    if (!this.drain) this.drain = Promise.resolve().then(() => this.work()).finally(() => { this.drain = undefined; });
+    this.kick();
     return job;
+  }
+  private kick(): void {
+    if (this.drain || this.closed || !this.pending.length) return;
+    this.drain = Promise.resolve().then(() => this.work()).finally(() => { this.drain = undefined; this.kick(); });
   }
   private async work(): Promise<void> {
     while (this.pending.length && !this.closed) {
@@ -52,7 +56,7 @@ export class CheckService {
         } });
         this.store.finish(id, outcome);
       } catch {
-        this.store.db.prepare("UPDATE check_jobs SET state='failed',reason='model_configuration' WHERE id=? AND reason IS NOT 'source_removed'").run(id);
+        this.store.db.prepare("UPDATE check_jobs SET state='failed',reason='model_configuration' WHERE id=? AND reason IS NOT 'source_removed' AND state NOT IN ('dismissed','on_air')").run(id);
       } finally {
         this.active = undefined;
         const current = this.store.get(id); if (current) this.changed(current);
@@ -65,7 +69,7 @@ export class CheckService {
   }
   dismiss(id: string): void {
     if (this.active?.id === id) this.active.abort.abort();
-    this.store.state(id, 'dismissed'); const job = this.store.get(id); if (job) this.changed(job);
+    this.store.dismiss(id); const job = this.store.get(id); if (job) this.changed(job);
   }
   async close(): Promise<void> { this.closed = true; this.active?.abort.abort(); await this.drain; }
 }

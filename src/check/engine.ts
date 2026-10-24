@@ -51,7 +51,8 @@ export class CheckEngine {
         return finish({ type: 'not_a_claim', final_verdict: 'not_a_claim', reason: triage.kind });
       }
       if (!triage.checkable) { options.onState?.('ready'); return finish({ reason: 'insufficient_context' }); }
-      const key = createHash('sha256').update(`${normalizeText(normalized)}:${new Date().toISOString().slice(0, 10)}:${config.SEARCH_MODE}`).digest('hex');
+      const key = createHash('sha256').update(JSON.stringify([normalizeText(value.claim), normalizeText(normalized),
+        value.channel, new Date().toISOString().slice(0, 10), config.SEARCH_MODE, config.SEARCH_REPLAY_PATH])).digest('hex');
       const cached = options.skipCache ? undefined : this.cache?.get(key);
       if (cached && !cached.sensitive && !triage.sensitive && !needsSensitiveReview(value.claim)) {
         options.onState?.('ready');
@@ -60,7 +61,7 @@ export class CheckEngine {
       }
       options.onState?.('searching');
       const replay = config.SEARCH_MODE === 'replay' ? await replaySearch(value.claim, config.SEARCH_REPLAY_PATH) : undefined;
-      const search = replay ?? await this.model.search(this.model.config.MODEL_SEARCH, { claim: normalized, queries: triage.search_queries }, signal);
+      const search = replay ?? await this.model.search(this.model.config.MODEL_SEARCH, { original_claim: value.claim, normalized_claim: normalized, queries: triage.search_queries }, signal);
       if (search.searchCalls > 1) throw new ModelProviderError('quota', 'search_budget_limit');
       options.onState?.('reading');
       const selected = selectSearchSources(search.sources);
@@ -75,12 +76,14 @@ export class CheckEngine {
       if (!sources.length) { options.onState?.('ready'); return finish({ sources: fetched, reason: 'sources_unavailable' }); }
       options.onState?.('judging');
       const proposal = await this.model.structured('judge', this.model.config.MODEL_JUDGE, judgeSchema, judgeInstructions, {
-        claim: normalized, sources: sources.map((source) => ({ source_id: source.id, url: source.url, tier: source.tier,
+        original_claim: value.claim, normalized_claim: normalized, sources: sources.map((source) => ({ source_id: source.id, url: source.url, tier: source.tier,
           title: source.title, fetched_at: source.fetched_at, capture_mode: source.origin, text: sourceWindow(source.text, [normalized, ...triage?.search_queries ?? []]) }))
       }, signal);
       signal.throwIfAborted();
       const decision = evaluateProposal(proposal, sources);
-      const explanation = cleanModelExplanation(proposal.explanation, loadedSecrets());
+      const clean = cleanModelExplanation(proposal.explanation, loadedSecrets());
+      const explanation = decision.final_verdict === proposal.verdict ? clean : decision.final_verdict === 'unconfirmed'
+        ? 'The verified excerpts do not establish an answer.' : 'The verdict follows the verified excerpts below.';
       const outcome = finish({ ...decision, sources, explanation });
       if (!options.skipCache && !outcome.sensitive) this.cache?.put(key, outcome);
       options.onState?.('ready');

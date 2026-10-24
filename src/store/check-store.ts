@@ -42,10 +42,13 @@ export class CheckStore {
   }
   finish(id: string, outcome: CheckOutcome): void {
     const job = this.get(id);
-    if (!job || job.reason === 'source_removed' || job.state === 'dismissed') return;
+    if (!job || job.reason === 'source_removed' || job.state === 'dismissed' || job.state === 'on_air') return;
     const parsed = checkOutcomeSchema.parse(outcome);
     const state = parsed.failed ? 'failed' : parsed.type === 'not_a_claim' ? 'not_a_claim' : 'ready';
     this.db.prepare('UPDATE check_jobs SET outcome_json=?,state=?,reason=?,updated_at=? WHERE id=?').run(JSON.stringify(parsed), state, parsed.reason, new Date().toISOString(), id);
+  }
+  dismiss(id: string): void {
+    this.db.prepare("UPDATE check_jobs SET state='dismissed',updated_at=? WHERE id=?").run(new Date().toISOString(), id);
   }
   list(): CheckJob[] {
     return this.db.prepare('SELECT id FROM check_jobs ORDER BY created_at DESC LIMIT 200').all().map((row) => this.get(String(row.id))).filter((job): job is CheckJob => !!job);
