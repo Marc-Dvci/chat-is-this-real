@@ -10,8 +10,8 @@ import { Readable } from 'node:stream';
 import { libraryParamsSchema } from '../shared/schemas.js';
 import { MediaImports } from '../vod/media-imports.js';
 
-export function registerLibraryRoutes(app: FastifyInstance, segments: SegmentStore, session: Pick<LiveSession, 'ownedVods' | 'currentStreamId'>): void {
-  const imports = new MediaImports(segments);
+export function registerLibraryRoutes(app: FastifyInstance, segments: SegmentStore, session: Pick<LiveSession, 'ownedVods' | 'currentStreamId'>, allowInference = true): void {
+  const imports = new MediaImports(segments, allowInference);
   app.addContentTypeParser('application/octet-stream', (_request, stream, done) => done(null, stream));
   app.get('/api/library/imports', async () => ({ imports: imports.list() }));
   app.post('/api/library/:vod_id/media', { bodyLimit: 2_147_483_648 }, async (request, reply) => {

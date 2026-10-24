@@ -21,7 +21,7 @@ export class TwitchPublisher {
       const stream = await this.helix.requireStream(request.broadcast_id);
       const bot = await this.helix.tokens.get('bot');
       const body = { broadcaster_id: stream.user_id, sender_id: bot.user_id,
-        reply_parent_message_id: request.original_message_id, message: safe };
+        ...(request.source === 'chat' ? { reply_parent_message_id: request.original_message_id } : {}), message: safe };
       const send = async (role: 'app' | 'bot') => {
         await this.helix.requireStream(request.broadcast_id);
         if (this.liveStream() !== request.broadcast_id || this.requests.get(requestId)?.state === 'cancelled') throw new Error('Publication was cancelled.');

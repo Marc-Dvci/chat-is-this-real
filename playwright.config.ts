@@ -13,7 +13,7 @@ export default defineConfig({
     screenshot: 'only-on-failure'
   },
   webServer: {
-    command: 'node dist/server/index.js',
+    command: 'node dist/server/index.js --demo',
     url: 'http://127.0.0.1:4747/api/health',
     env: { PORT: '4747' },
     reuseExistingServer: false,

@@ -49,6 +49,12 @@ export class ChatStore {
     return this.db.prepare("SELECT * FROM messages WHERE scope='history' AND user_id=? AND created_at<? AND created_at>=? AND body IS NOT NULL ORDER BY created_at DESC LIMIT 20")
       .all(userId, before, since).map((row) => message(row)).filter((row): row is StoredMessage => !!row && !exclude.includes(row.id)).slice(0, 5).reverse();
   }
+  context(id: string): StoredMessage[] {
+    const anchor = this.get(id); if (!anchor) return [];
+    const before = this.db.prepare('SELECT * FROM messages WHERE broadcast_id=? AND created_at<=? AND id<>? ORDER BY created_at DESC LIMIT 10').all(anchor.broadcast_id, anchor.created_at, id);
+    const after = this.db.prepare('SELECT * FROM messages WHERE broadcast_id=? AND created_at>? ORDER BY created_at LIMIT 10').all(anchor.broadcast_id, anchor.created_at);
+    return [...before.reverse(), anchor, ...after].map((row) => 'badges' in row ? row as StoredMessage : message(row)).filter((row): row is StoredMessage => !!row);
+  }
 
   private redact(where: string, values: readonly SQLInputValue[], reason: 'moderation' | 'user_request'): string[] {
     const affected = this.db.prepare(`SELECT id FROM requests WHERE id IN (

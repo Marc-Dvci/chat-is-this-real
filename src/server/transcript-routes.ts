@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import type { SegmentStore } from '../store/segment-store.js';
 import type { LiveSession } from './live-session.js';
-import { companionConfigSchema, ingestTranscriptSchema, librarySearchSchema } from '../shared/schemas.js';
+import { companionConfigSchema, companionHeartbeatSchema, ingestTranscriptSchema, librarySearchSchema } from '../shared/schemas.js';
 import { assertNoSecretFragments } from '../shared/format-chat.js';
 import { loadedSecrets } from '../shared/secrets.js';
 import { alignChunk, chunkOffset } from '../vod/align.js';
@@ -33,6 +33,8 @@ export function registerTranscriptRoutes(app: FastifyInstance, segments: Segment
         if (segment.text.trim()) segments.put(segment);
         else segments.cover(state.broadcast_id, segment.offset_s, segment.offset_s + segment.duration_s);
       }
+      const heartbeat = companionHeartbeatSchema.parse({ broadcast_id: state.broadcast_id, captured_at: new Date(Date.parse(item.chunk_wall_start) + item.duration_s * 1000).toISOString() });
+      segments.db.prepare("INSERT INTO settings VALUES('companion_heartbeat',?) ON CONFLICT(key) DO UPDATE SET value_json=excluded.value_json").run(JSON.stringify(heartbeat));
       return { accepted: true, indexed: Boolean(segment?.text.trim()), coverage: segments.coverage(state.broadcast_id) };
     } catch { return reply.code(400).send({ error: 'The transcript was not stored. Check alignment and protected text.' }); }
   });

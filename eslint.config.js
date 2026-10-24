@@ -2,7 +2,7 @@ import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['node_modules/**', 'dist/**', '.cache/**', 'data/**', 'coverage/**', 'e2e/screens/**', 'test-results/**', 'playwright-report/**', '.wrangler/**'] },
+  { ignores: ['node_modules/**', 'dist/**', 'web-dist/**', '.cache/**', 'data/**', 'coverage/**', 'e2e/screens/**', 'test-results/**', 'playwright-report/**', '.wrangler/**'] },
   js.configs.recommended,
   tseslint.configs.recommended,
   {

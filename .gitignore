@@ -8,6 +8,7 @@ footage/
 # Build and test output
 node_modules/
 dist/
+web-dist/
 e2e/screens/
 test-results/
 playwright-report/

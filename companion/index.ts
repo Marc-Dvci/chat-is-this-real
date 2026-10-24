@@ -27,9 +27,8 @@ async function run(): Promise<void> {
     await new Promise<void>((done, reject) => { child.once('error', reject); child.once('close', () => done()); });
     assertNoSecretFragments(text, loadedSecrets()); console.info(text); return;
   }
-  const config = companionConfigSchema.parse({ ...process.env, AUDIO_INPUT_FORMAT: format, AUDIO_DEVICE: options.file ? 'recording' : process.env.AUDIO_DEVICE });
   if (options.file && !options.wall_start) throw new Error('Recording input requires --wall-start from its actual broadcast.');
-  const server = new URL(config.COMPANION_SERVER);
+  const server = new URL(companionConfigSchema.shape.COMPANION_SERVER.parse(process.env.COMPANION_SERVER));
   if (server.protocol !== 'http:' || !['localhost', '127.0.0.1', '[::1]'].includes(server.hostname) || server.pathname !== '/' || server.search || server.hash || server.username || server.password) throw new Error('Use a local companion server.');
   const abort = new AbortController();
   const sessionResponse = await fetch(new URL('/api/session', server), { signal: AbortSignal.timeout(10_000) });
@@ -38,12 +37,15 @@ async function run(): Promise<void> {
   const stateResponse = await fetch(new URL('/api/companion/state', server), { signal: AbortSignal.timeout(10_000) });
   if (!stateResponse.ok) throw new Error('Connect Twitch during the prerecorded or live stream first.');
   const state = companionStateSchema.parse(await stateResponse.json());
-  const model = new ModelClient(loadModelConfig());
+  const selectedFormat = state.audio?.device ? state.audio.format : format;
+  const config = companionConfigSchema.parse({ ...process.env, AUDIO_INPUT_FORMAT: selectedFormat, AUDIO_DEVICE: options.file ? 'recording' : state.audio?.device || process.env.AUDIO_DEVICE });
+  const modelConfig = loadModelConfig();
+  const model = new ModelClient({ ...modelConfig, ASR_LANGUAGE: state.audio?.language ?? modelConfig.ASR_LANGUAGE });
   const vocabulary = Object.fromEntries(['Chat', state.channel, state.category, ...state.commands].filter((word) => word && word.length <= 80).map((word) => [word, 5]));
   await mkdir('data/audio', { recursive: true, mode: 0o700 });
   const directory = await mkdtemp(resolve('data/audio/capture-'));
   const input = options.file ? ['-re', ...mediaInputOptions, '-i', resolve(options.file)]
-    : ['-f', format, '-i', format === 'dshow' ? `audio=${config.AUDIO_DEVICE}` : format === 'avfoundation' ? `:${config.AUDIO_DEVICE}` : config.AUDIO_DEVICE];
+    : ['-f', selectedFormat, '-i', selectedFormat === 'dshow' ? `audio=${config.AUDIO_DEVICE}` : selectedFormat === 'avfoundation' ? `:${config.AUDIO_DEVICE}` : config.AUDIO_DEVICE];
   const child = spawn(ffmpegBinary(), ['-hide_banner', '-loglevel', 'error', '-nostdin', '-y', ...input,
     ...(options.seconds ? ['-t', String(options.seconds)] : []), '-vn', '-ar', '16000', '-ac', '1', '-c:a', 'pcm_s16le',
     '-progress', 'pipe:1', '-stats_period', '0.25', '-f', 'segment', '-segment_time', '15', '-segment_list', 'chunks.csv',

@@ -4,6 +4,8 @@ import { ChatStore } from '../store/chat-store.js';
 import { RequestStore } from '../store/request-store.js';
 import { SettingsStore } from '../store/settings-store.js';
 import { chatSettingsPatchSchema, chatSettingsSchema, historyPurgeSchema, historyQuerySchema, type ChatSettings } from '../shared/schemas.js';
+import { assertNoSecretFragments } from '../shared/format-chat.js';
+import { loadedSecrets } from '../shared/secrets.js';
 
 export function registerHistoryRoutes(app: FastifyInstance, db: DatabaseSync, handlers: {
   onSettings?: (settings: ChatSettings) => void; onRemoved?: (requestIds: string[]) => void
@@ -15,6 +17,8 @@ export function registerHistoryRoutes(app: FastifyInstance, db: DatabaseSync, ha
     if (!patch.success) return reply.code(400).send({ error: 'Check the chat settings.' });
     const parsed = chatSettingsSchema.safeParse({ ...settings.get(), ...patch.data });
     if (!parsed.success) return reply.code(400).send({ error: 'Check the chat settings.' });
+    try { assertNoSecretFragments(JSON.stringify(parsed.data), loadedSecrets()); }
+    catch { return reply.code(400).send({ error: 'A protected credential cannot be stored in these settings.' }); }
     const saved = settings.set(parsed.data);
     chat.purge(saved.retention_days); handlers.onSettings?.(saved);
     return saved;
@@ -28,7 +32,9 @@ export function registerHistoryRoutes(app: FastifyInstance, db: DatabaseSync, ha
   app.post('/api/history/purge', async (request, reply) => {
     const body = historyPurgeSchema.safeParse(request.body);
     if (!body.success) return reply.code(400).send({ error: 'Choose a viewer to remove.' });
-    const removed = chat.clearUser(body.data.user_id, 'manual-purge', new Date().toISOString(), 'user_request');
+    const userId = body.data.user_id ?? db.prepare('SELECT user_id FROM messages WHERE lower(user_login)=? LIMIT 1').get(body.data.user_login?.toLowerCase() ?? '')?.user_id;
+    if (typeof userId !== 'string') return reply.code(404).send({ error: 'No stored messages were found for that viewer.' });
+    const removed = chat.clearUser(userId, 'manual-purge', new Date().toISOString(), 'user_request');
     handlers.onRemoved?.(removed);
     return { removed: true };
   });

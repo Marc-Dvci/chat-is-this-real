@@ -5,7 +5,9 @@ text, viewer identifiers, badges, observed times and stream identifiers for the 
 retention period. `CHAT_RETENTION_DAYS` supplies the initial retention setting. Saved dashboard
 settings take precedence. Purging runs at startup and daily.
 
-An explicitly requested check retains its source message even when general history is off.
+The connected chat view keeps up to 200 recent messages in memory while history is off.
+Disconnecting clears this memory buffer. It is not written as general history.
+An explicitly requested check retains its selected source messages even when general history is off.
 Deleting a message clears its stored text and cancels requests that copied the message or
 used it as context. A user clear removes that viewer's stored text. A stream clear removes
 that stream's buffer. Tombstones prevent a late replay from restoring removed text.

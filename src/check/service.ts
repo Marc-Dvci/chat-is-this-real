@@ -7,7 +7,9 @@ import { ModelClient } from '../llm/client.js';
 import { loadModelConfig } from '../llm/config.js';
 import { SegmentStore } from '../store/segment-store.js';
 import { VodEngine } from '../vod/engine.js';
-import { type CheckInput, type CheckJob, type CheckRequest } from '../shared/schemas.js';
+import { type CheckInput, type CheckJob, type CheckRequest, type CheckOutcome, type VodOutcome, type CheckState } from '../shared/schemas.js';
+
+export type CheckReplay = (job: CheckJob, state: (value: CheckState) => void, signal: AbortSignal) => Promise<CheckOutcome | VodOutcome>;
 
 export class CheckService {
   readonly store: CheckStore;
@@ -18,10 +20,14 @@ export class CheckService {
   private engine: CheckEngine | undefined;
   private closed = false;
   private drain: Promise<void> | undefined;
-  constructor(db: DatabaseSync, private readonly changed: (job: CheckJob) => void = () => undefined) {
+  private readonly listeners = new Set<(job: CheckJob) => void>();
+  private readonly changed: (job: CheckJob) => void;
+  constructor(db: DatabaseSync, changed: (job: CheckJob) => void = () => undefined, private readonly replay?: CheckReplay) {
+    this.changed = (job) => { changed(job); for (const listener of this.listeners) listener(job); };
     this.store = new CheckStore(db); this.chat = new ChatStore(db); this.requests = new RequestStore(db);
     db.prepare("UPDATE check_jobs SET state='failed',reason='interrupted' WHERE state IN ('queued','triage','searching','reading','judging')").run();
   }
+  subscribe(listener: (job: CheckJob) => void): () => void { this.listeners.add(listener); return () => this.listeners.delete(listener); }
   enqueue(request: CheckRequest, channel: CheckInput['channel'] = { title: '', category: '', language: 'en' }): CheckJob {
     const existing = this.store.get(request.id);
     if (existing) return existing;
@@ -53,6 +59,10 @@ export class CheckService {
       const signal = AbortSignal.any([abort.signal, AbortSignal.timeout(45_000)]);
       this.active = { id, abort };
       try {
+        if (this.replay) {
+          const outcome = await this.replay(job, (state) => { this.store.state(id, state); const current = this.store.get(id); if (current) this.changed(current); }, signal);
+          this.store.finish(id, outcome); continue;
+        }
         const engine = this.engine ??= new CheckEngine(new ModelClient(loadModelConfig()), {
           get: (key) => this.store.getCache(key), put: (key, outcome) => this.store.putCache(key, outcome)
         });
