@@ -1,0 +1,76 @@
+{
+  "suite": "asr-fallback",
+  "split": "recorded-audio-probe",
+  "git_commit": "5ee8193ec8da0efc73370d3925121d72a1e24abf",
+  "created_at": "2026-10-24T15:22:55.186Z",
+  "unique_recordings": 1,
+  "planned_repetitions": 3,
+  "source": "Original system narration, not human speech.",
+  "wav_sha256": "3d3840830719e4f56916097f729e7a1f9d877b1c7da994e1a51112d39c5329b5",
+  "duration_s": 12.63,
+  "model": "qwen3-asr-flash",
+  "rows": [
+    {
+      "repetition": 1,
+      "text": "For the next community challenge, I chose a blue robot puzzle. The puzzle has a silver tower and a green bridge. The challenge is about the blue robot puzzle, not a racing game.",
+      "word_times_available": false
+    },
+    {
+      "repetition": 2,
+      "text": "For the next community challenge, I chose a blue robot puzzle. The puzzle has a silver tower and a green bridge. The challenge is about the blue robot puzzle, not a racing game.",
+      "word_times_available": false
+    },
+    {
+      "repetition": 3,
+      "text": "For the next community challenge, I chose a blue robot puzzle. The puzzle has a silver tower and a green bridge. The challenge is about the blue robot puzzle, not a racing game.",
+      "word_times_available": false
+    }
+  ],
+  "calls": [
+    {
+      "id": "774c2570-77b1-468a-a835-7963dd99b2c1",
+      "created_at": "2026-10-24T15:22:53.250Z",
+      "role": "asr",
+      "model": "qwen3-asr-flash",
+      "latency_ms": 2372.5879000000004,
+      "input_tokens": 318,
+      "output_tokens": 45,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "text",
+      "audio_seconds": 12,
+      "audio_seconds_estimated": false
+    },
+    {
+      "id": "640cf7cd-b720-4448-a5c9-5cce38b90897",
+      "created_at": "2026-10-24T15:22:54.311Z",
+      "role": "asr",
+      "model": "qwen3-asr-flash",
+      "latency_ms": 1055.9258999999993,
+      "input_tokens": 318,
+      "output_tokens": 45,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "text",
+      "audio_seconds": 12,
+      "audio_seconds_estimated": false
+    },
+    {
+      "id": "556fa10c-8689-49ae-9ae7-ecfa679036a0",
+      "created_at": "2026-10-24T15:22:55.183Z",
+      "role": "asr",
+      "model": "qwen3-asr-flash",
+      "latency_ms": 864.0296999999991,
+      "input_tokens": 318,
+      "output_tokens": 45,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "text",
+      "audio_seconds": 12,
+      "audio_seconds_estimated": false
+    }
+  ]
+}

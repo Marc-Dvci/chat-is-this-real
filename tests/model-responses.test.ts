@@ -18,3 +18,10 @@ it('reads text, usage and word times from the real native ASR response envelope'
   expect(words.length).toBeGreaterThan(0);
   expect(words.every((word) => word.end_time >= word.begin_time)).toBe(true);
 });
+
+it('reads the actual fallback response and its seconds-based usage', async () => {
+  const fixture: { response: unknown } = JSON.parse(await readFile('fixtures/models/fallback-asr.json', 'utf8'));
+  const response = providerChatSchema.parse(fixture.response);
+  expect(response.choices[0]?.message.content).toContain('blue robot puzzle');
+  expect(response.usage?.seconds).toBeGreaterThan(0);
+});

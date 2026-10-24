@@ -1,0 +1,16 @@
+{
+  "suite": "vod-clip-playback",
+  "split": "scripted-clip",
+  "created_at": "2026-10-24T15:19:54.047Z",
+  "source_probe": "1792854590515",
+  "clip_id": "SplendidSmokySlothPermaSmug-4-ErEk0-OLIfsW5H",
+  "clip_url": "https://clips.twitch.tv/SplendidSmokySlothPermaSmug-4-ErEk0-OLIfsW5H",
+  "clip_playable": true,
+  "alignment": {
+    "source_wall_start_ms": 1792854567917,
+    "source_offset_s": 56.983,
+    "observed_vod_offset_s": 53,
+    "method": "video_timecode_match"
+  },
+  "live_reply_sent": false
+}

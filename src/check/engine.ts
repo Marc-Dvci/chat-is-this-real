@@ -90,7 +90,7 @@ export class CheckEngine {
       options.onState?.('ready');
       return outcome;
     } catch (error) {
-      const reason = signal.aborted ? options.signal?.aborted ? 'cancelled' : 'timeout'
+      const reason = signal.aborted ? options.signal?.aborted && options.signal.reason?.name !== 'TimeoutError' ? 'cancelled' : 'timeout'
         : error instanceof ModelProviderError ? error.reason === 'quota' ? 'quota' : error.code : 'unsafe_or_invalid';
       options.onState?.('failed');
       return finish({ reason, failed: true });

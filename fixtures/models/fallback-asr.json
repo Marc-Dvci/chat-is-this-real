@@ -1,0 +1,40 @@
+{
+  "recorded_at": "2026-10-24T15:22:55.185Z",
+  "source": "Original prerecorded blue robot narration. No human voice.",
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "annotations": [
+            {
+              "emotion": "neutral",
+              "language": "en",
+              "type": "audio_info"
+            }
+          ],
+          "content": "For the next community challenge, I chose a blue robot puzzle. The puzzle has a silver tower and a green bridge. The challenge is about the blue robot puzzle, not a racing game.",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1792855373,
+    "id": "chatcmpl-190bf378-c7c4-9f8f-bdc1-7513f45b8277",
+    "model": "qwen3-asr-flash",
+    "object": "chat.completion",
+    "usage": {
+      "completion_tokens": 45,
+      "completion_tokens_details": {
+        "text_tokens": 45
+      },
+      "prompt_tokens": 318,
+      "prompt_tokens_details": {
+        "audio_tokens": 315,
+        "text_tokens": 3
+      },
+      "seconds": 12,
+      "total_tokens": 363
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "recorded_at": "2026-10-24T14:54:21.290Z",
+  "origin": "Actual Get Videos response for the original prerecorded test. Broadcaster user ID pseudonymized.",
+  "response": {
+    "data": [
+      {
+        "id": "2909296715",
+        "stream_id": "318108456420",
+        "user_id": "900001",
+        "created_at": "2026-10-24T08:25:30Z",
+        "duration": "19m55s",
+        "type": "archive",
+        "title": "Chat Is This Real | prerecorded development test"
+      }
+    ]
+  }
+}

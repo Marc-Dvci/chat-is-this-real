@@ -1,0 +1,16 @@
+{
+  "recorded_at": "2026-10-24T15:19:51.960Z",
+  "origin": "Actual clip response. Broadcaster ID and account URL path pseudonymized.",
+  "response": {
+    "data": [
+      {
+        "id": "SplendidSmokySlothPermaSmug-4-ErEk0-OLIfsW5H",
+        "url": "https://www.twitch.tv/demo_streamer/clip/SplendidSmokySlothPermaSmug-4-ErEk0-OLIfsW5H",
+        "broadcaster_id": "900001",
+        "video_id": "",
+        "vod_offset": null,
+        "duration": 31
+      }
+    ]
+  }
+}

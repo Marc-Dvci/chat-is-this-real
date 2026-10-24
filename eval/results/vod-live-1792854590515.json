@@ -1,0 +1,73 @@
+{
+  "suite": "vod-live",
+  "split": "scripted-live",
+  "source": "Original prerecorded system narration",
+  "run": "1792854590515",
+  "git_commit": "5ee8193ec8da0efc73370d3925121d72a1e24abf",
+  "created_at": "2026-10-24T15:09:50.515Z",
+  "passed": false,
+  "stage": "clip",
+  "expected_offset_s": 55.517,
+  "observed_offset_s": 55.708999999999996,
+  "offset_error_s": 0.19199999999999307,
+  "moment_age_s": 311.378,
+  "output": {
+    "id": "4a35a287-abd8-4210-8a34-0ae9d5a3853d",
+    "type": "vod",
+    "found": true,
+    "relation": "said",
+    "segment_ids": [
+      "9f503666-db5f-455a-9792-e4559ae1192a"
+    ],
+    "quote": "In this scripted example, I said I would do 50 push-ups if we reached 100 subscribers. The promise is 50 push-ups for 100 subscribers. This sentence is here so the stream memory tool can find a number expressed. ",
+    "offset_s": 55.708999999999996,
+    "end_s": 70.525,
+    "broadcast_id": "318096282594",
+    "vod_id": "2909523223",
+    "broadcast_title": "Chat Is This Real | prerecorded development test",
+    "broadcast_started_at": "2026-10-24T15:09:29Z",
+    "timing": "word",
+    "coverage": [
+      {
+        "broadcast_id": "318096282594",
+        "start_s": 0,
+        "end_s": 95.517,
+        "segment_count": 3,
+        "gaps": []
+      },
+      {
+        "broadcast_id": "318124951651",
+        "start_s": 0,
+        "end_s": 95.42099999999999,
+        "segment_count": 3,
+        "gaps": []
+      }
+    ],
+    "clip": {
+      "state": "fallback",
+      "clip_id": "SplendidSmokySlothPermaSmug-4-ErEk0-OLIfsW5H",
+      "clip_url": null,
+      "vod_url": "https://www.twitch.tv/videos/2909523223?t=0h0m55s",
+      "reason": "clip_timeout"
+    },
+    "reason": null,
+    "created_at": "2026-10-24T15:15:38.966Z",
+    "elapsed_ms": 2074.877999999968,
+    "calls": [
+      {
+        "id": "3cd36bfe-9342-4bdf-a557-3bbeb7373fd2",
+        "created_at": "2026-10-24T15:15:38.963Z",
+        "role": "vod",
+        "model": "qwen3.8-flash",
+        "latency_ms": 2060.167599999986,
+        "input_tokens": 521,
+        "output_tokens": 70,
+        "search_calls": 0,
+        "status": "ok",
+        "error_code": null,
+        "format": "json_schema"
+      }
+    ],
+    "failed": false
+  }
+}

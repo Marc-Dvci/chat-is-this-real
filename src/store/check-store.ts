@@ -1,5 +1,5 @@
 import type { DatabaseSync } from 'node:sqlite';
-import { checkJobRowSchema, checkJobSchema, checkOutcomeSchema, type CheckInput, type CheckJob, type CheckOutcome, type CheckState } from '../shared/schemas.js';
+import { checkJobRowSchema, checkJobSchema, checkOutcomeSchema, vodOutcomeSchema, type CheckInput, type CheckJob, type CheckOutcome, type CheckState, type ClipResult, type VodOutcome } from '../shared/schemas.js';
 import { transaction } from './database.js';
 
 export class CheckStore {
@@ -14,6 +14,7 @@ export class CheckStore {
         cache_key TEXT PRIMARY KEY, origin_request_id TEXT REFERENCES requests(id) ON DELETE CASCADE,
         outcome_json TEXT NOT NULL, expires_at INTEGER NOT NULL
       ) STRICT;
+      CREATE TABLE IF NOT EXISTS clip_attempts (job_id TEXT PRIMARY KEY REFERENCES check_jobs(id) ON DELETE CASCADE,created_at TEXT NOT NULL) STRICT;
       CREATE TRIGGER IF NOT EXISTS request_cancel_check AFTER UPDATE OF state ON requests WHEN new.state='cancelled' BEGIN
         UPDATE check_jobs SET input_json=NULL,outcome_json=NULL,state='failed',reason='source_removed',updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE request_id=new.id;
         DELETE FROM check_cache WHERE origin_request_id=new.id;
@@ -40,15 +41,21 @@ export class CheckStore {
   state(id: string, state: CheckState): void {
     this.db.prepare("UPDATE check_jobs SET state=?,updated_at=? WHERE id=? AND reason IS NOT 'source_removed' AND state NOT IN ('dismissed','on_air')").run(state, new Date().toISOString(), id);
   }
-  finish(id: string, outcome: CheckOutcome): void {
+  finish(id: string, outcome: CheckOutcome | VodOutcome): void {
     const job = this.get(id);
     if (!job || job.reason === 'source_removed' || job.state === 'dismissed' || job.state === 'on_air') return;
-    const parsed = checkOutcomeSchema.parse(outcome);
+    const parsed = outcome.type === 'vod' ? vodOutcomeSchema.parse(outcome) : checkOutcomeSchema.parse(outcome);
     const state = parsed.failed ? 'failed' : parsed.type === 'not_a_claim' ? 'not_a_claim' : 'ready';
     this.db.prepare('UPDATE check_jobs SET outcome_json=?,state=?,reason=?,updated_at=? WHERE id=?').run(JSON.stringify(parsed), state, parsed.reason, new Date().toISOString(), id);
   }
   dismiss(id: string): void {
     this.db.prepare("UPDATE check_jobs SET state='dismissed',updated_at=? WHERE id=?").run(new Date().toISOString(), id);
+  }
+  setClip(id: string, clip: ClipResult): void {
+    const job = this.get(id);
+    if (!job?.outcome || job.outcome.type !== 'vod' || job.reason === 'source_removed' || job.state === 'dismissed') return;
+    const outcome = vodOutcomeSchema.parse({ ...job.outcome, clip });
+    this.db.prepare('UPDATE check_jobs SET outcome_json=?,updated_at=? WHERE id=?').run(JSON.stringify(outcome), new Date().toISOString(), id);
   }
   list(): CheckJob[] {
     return this.db.prepare('SELECT id FROM check_jobs ORDER BY created_at DESC LIMIT 200').all().map((row) => this.get(String(row.id))).filter((job): job is CheckJob => !!job);

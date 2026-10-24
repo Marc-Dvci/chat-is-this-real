@@ -24,13 +24,16 @@
     "probe:twitch": "tsx scripts/probe-twitch.ts",
     "probe:core": "tsx scripts/probe-core.ts",
     "probe:engine": "tsx scripts/probe-engine.ts",
+    "probe:vod": "tsx scripts/probe-vod.ts",
+    "probe:asr-fallback": "tsx scripts/probe-asr-fallback.ts",
     "purge": "tsx scripts/purge.ts",
     "probe:models": "tsx scripts/probe-models.ts",
     "report:models": "tsx scripts/report-models.ts",
     "report:claims": "tsx scripts/report-claims.ts",
+    "report:vod": "tsx scripts/report-vod.ts",
     "record:test": "tsx scripts/make-test-recording.ts",
     "broadcast:test": "tsx scripts/broadcast-test.ts",
-    "companion": "tsx scripts/milestone-command.ts companion"
+    "companion": "tsx companion/index.ts"
   },
   "dependencies": {
     "@mozilla/readability": "0.6.0",

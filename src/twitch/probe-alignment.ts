@@ -6,6 +6,7 @@ import { promisify } from 'node:util';
 import { testBroadcastSchema, twitchClipDownloadsSchema, type ProbeReport } from '../shared/schemas.js';
 import { TwitchHelix } from './helix.js';
 import type { TwitchTokens } from './tokens.js';
+import { ffmpegBinary } from '../shared/ffmpeg.js';
 
 const run = promisify(execFile);
 const pixels = 200 * 24;
@@ -85,9 +86,9 @@ export async function alignRecordedProbe(report: ProbeReport, tokens: TwitchToke
   const observed = (clip.vod_offset ?? knownStart ?? 0) + sampleOffset;
   const baseline = (broadcast.source_wall_start_ms - Date.parse(report.stream_started_at)) / 1000;
   const start = Math.max(0, observed - baseline - 20);
-  const target = await run('ffmpeg.exe', ['-hide_banner', '-loglevel', 'error', '-ss', String(sampleOffset), '-i', path,
+  const target = await run(ffmpegBinary(), ['-hide_banner', '-loglevel', 'error', '-ss', String(sampleOffset), '-i', path,
     '-vf', frameFilter, '-frames:v', '1', '-f', 'rawvideo', 'pipe:1'], { encoding: 'buffer', windowsHide: true });
-  const source = await run('ffmpeg.exe', ['-hide_banner', '-loglevel', 'error', '-ss', String(start), '-i', 'data/test-stream/recording.mp4',
+  const source = await run(ffmpegBinary(), ['-hide_banner', '-loglevel', 'error', '-ss', String(start), '-i', 'data/test-stream/recording.mp4',
     '-t', '40', '-vf', `fps=10,${frameFilter}`, '-f', 'rawvideo', 'pipe:1'],
   { encoding: 'buffer', windowsHide: true, maxBuffer: 4 * 1024 * 1024 });
   if (target.stdout.length !== pixels || source.stdout.length < pixels * 2) throw new Error('The downloaded clip did not decode into usable video frames.');
