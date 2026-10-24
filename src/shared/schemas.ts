@@ -457,6 +457,9 @@ export const checkJobSchema = z.object({
   created_at: z.iso.datetime(), updated_at: z.iso.datetime()
 });
 export type CheckJob = z.infer<typeof checkJobSchema>;
+export const dashboardSessionSchema = z.object({ csrf_token: z.string().regex(/^[a-f0-9]{64}$/u) });
+export const requestListSchema = z.object({ requests: z.array(checkRequestSchema) });
+export const checkListSchema = z.object({ checks: z.array(checkJobSchema) });
 export const checkJobRowSchema = z.object({
   id: z.string(), request_id: z.string().nullable(), kind: z.string(), state: z.string(), input_json: z.string().nullable(),
   outcome_json: z.string().nullable(), reason: z.string().nullable(), created_at: z.string(), updated_at: z.string()

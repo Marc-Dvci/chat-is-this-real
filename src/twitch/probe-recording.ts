@@ -24,7 +24,8 @@ export class ProbeRecording {
   }
 }
 
-export async function exportProbeFixtures(report: ProbeReport, secrets: readonly string[], includeDeletion = false): Promise<number> {
+export async function exportProbeFixtures(report: ProbeReport, secrets: readonly string[], includeDeletion = false,
+  script = { claim: probeClaim, command: '!real' }): Promise<number> {
   const raw = await readFile(join('data/probe', report.run, 'frames.jsonl'), 'utf8');
   if (Buffer.byteLength(raw) > 50 * 1024 * 1024) throw new Error('Probe capture is too large.');
   const users = new Map<string, string>([[report.broadcaster_id, 'demo_streamer'], [report.bot_id, 'demo_bot']]);
@@ -78,7 +79,7 @@ export async function exportProbeFixtures(report: ProbeReport, secrets: readonly
       if (frame.payload.subscription?.type === 'channel.chat.message') {
         const event = twitchChatEventSchema.parse(frame.payload.event);
         const text = event.message.text.replace(/^(?:@\S+\s+)*/u, '').trim();
-        if (text !== probeClaim && !(text === '!real' && event.reply?.parent_message_body === probeClaim)) continue;
+        if (text !== script.claim && !(text === script.command && event.reply?.parent_message_body === script.claim)) continue;
         scriptedIds.add(event.message_id);
       } else if (!(includeDeletion && frame.payload.subscription?.type === 'channel.chat.message_delete'
         && typeof frame.payload.event?.message_id === 'string' && scriptedIds.has(frame.payload.event.message_id))) continue;

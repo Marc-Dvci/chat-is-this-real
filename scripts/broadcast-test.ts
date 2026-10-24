@@ -1,6 +1,5 @@
 import { spawn } from 'node:child_process';
-import { randomUUID } from 'node:crypto';
-import { mkdir, rename, stat, writeFile } from 'node:fs/promises';
+import { mkdir, stat, writeFile } from 'node:fs/promises';
 import { rootCertificates } from 'node:tls';
 import { setTimeout as delay } from 'node:timers/promises';
 import { parseArgs } from 'node:util';
@@ -12,6 +11,7 @@ import { loadTwitchConfig } from '../src/twitch/config.js';
 import { TwitchHelix } from '../src/twitch/helix.js';
 import { testStreamScopes } from '../src/twitch/oauth.js';
 import { TwitchTokens } from '../src/twitch/tokens.js';
+import { writeAtomic } from '../src/shared/atomic-file.js';
 
 async function broadcast(): Promise<void> {
   const { values } = parseArgs({ options: { live: { type: 'boolean', default: false }, seconds: { type: 'string', default: '1200' } } });
@@ -49,11 +49,7 @@ async function broadcast(): Promise<void> {
   let writes = Promise.resolve();
   const persist = (): Promise<void> => {
     const snapshot = JSON.stringify(manifest, null, 2);
-    const operation = writes.then(async () => {
-      const temporary = `data/test-stream/broadcast-${randomUUID()}.tmp`;
-      await writeFile(temporary, snapshot, { mode: 0o600 });
-      await rename(temporary, 'data/test-stream/broadcast.json');
-    });
+    const operation = writes.then(() => writeAtomic('data/test-stream/broadcast.json', snapshot));
     writes = operation.catch(() => undefined);
     return operation;
   };

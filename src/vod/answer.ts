@@ -4,12 +4,14 @@ import { queryTerms } from './numbers.js';
 
 function wordPositions(segment: TranscriptSegment) {
   let cursor = 0;
-  return segment.words.flatMap((word) => {
-    const text = word.text.trim(); if (!text) return [];
+  const positions = [];
+  for (const word of segment.words) {
+    const text = word.text.trim(); if (!text) continue;
     const index = segment.text.indexOf(text, cursor); if (index < 0) return [];
     cursor = index + text.length;
-    return [{ index, end: cursor, begin_s: word.begin_time / 1000, end_s: word.end_time / 1000 }];
-  });
+    positions.push({ index, end: cursor, begin_s: word.begin_time / 1000, end_s: word.end_time / 1000 });
+  }
+  return positions;
 }
 
 export function resolveVodAnswer(proposal: VodProposal, candidates: readonly TranscriptSegment[],

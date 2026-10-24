@@ -49,13 +49,15 @@ export class CheckService {
       if (!job?.input || job.reason === 'source_removed' || job.state === 'dismissed') continue;
       const request = job.request_id ? this.requests.get(job.request_id) : undefined;
       if (request?.state === 'cancelled') continue;
-      this.active = { id, abort: new AbortController() };
+      const input = job.input, abort = new AbortController();
+      const signal = AbortSignal.any([abort.signal, AbortSignal.timeout(45_000)]);
+      this.active = { id, abort };
       try {
-        this.engine ??= new CheckEngine(new ModelClient(loadModelConfig()), {
+        const engine = this.engine ??= new CheckEngine(new ModelClient(loadModelConfig()), {
           get: (key) => this.store.getCache(key), put: (key, outcome) => this.store.putCache(key, outcome)
         });
-        const vod = () => new VodEngine(this.engine!.model, new SegmentStore(this.store.db)).run(id, job.input!.claim, request?.broadcast_id, { signal: this.active!.abort.signal });
-        const outcome = job.kind === 'vod' ? await vod() : await this.engine.run(job.input, { signal: this.active.abort.signal, onState: (state) => {
+        const vod = () => new VodEngine(engine.model, new SegmentStore(this.store.db)).run(id, input.claim, request?.broadcast_id, { signal });
+        const outcome = job.kind === 'vod' ? await vod() : await engine.run(input, { signal, onState: (state) => {
           this.store.state(id, state); const current = this.store.get(id); if (current) this.changed(current);
         } });
         this.store.finish(id, outcome.type === 'stream_memory' ? await vod() : outcome);

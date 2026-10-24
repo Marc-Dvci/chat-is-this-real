@@ -14,7 +14,7 @@ export function registerLibraryRoutes(app: FastifyInstance, segments: SegmentSto
   const imports = new MediaImports(segments);
   app.addContentTypeParser('application/octet-stream', (_request, stream, done) => done(null, stream));
   app.get('/api/library/imports', async () => ({ imports: imports.list() }));
-  app.post('/api/library/:vod_id/media', async (request, reply) => {
+  app.post('/api/library/:vod_id/media', { bodyLimit: 2_147_483_648 }, async (request, reply) => {
     const params = libraryParamsSchema.safeParse(request.params);
     if (!params.success || !(request.body instanceof Readable)) return reply.code(400).send({ error: 'Choose a media file and one of your past broadcasts.' });
     if (imports.busy()) return reply.code(409).send({ error: 'Wait for the current media import.' });
@@ -25,7 +25,7 @@ export function registerLibraryRoutes(app: FastifyInstance, segments: SegmentSto
     } catch { return reply.code(400).send({ error: 'The media upload was not accepted. Use a supported file under 2 GB.' }); }
   });
   app.addHook('onClose', async () => imports.close());
-  app.post('/api/library/subtitles', async (request, reply) => {
+  app.post('/api/library/subtitles', { bodyLimit: 4_000_000 }, async (request, reply) => {
     const parsed = subtitleUploadSchema.safeParse(request.body);
     if (!parsed.success) return reply.code(400).send({ error: 'Choose an SRT, VTT or timestamped TXT file and one of your VODs.' });
     try {

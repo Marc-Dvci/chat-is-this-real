@@ -24,6 +24,7 @@
     "probe:twitch": "tsx scripts/probe-twitch.ts",
     "probe:core": "tsx scripts/probe-core.ts",
     "probe:engine": "tsx scripts/probe-engine.ts",
+    "probe:vod": "tsx scripts/probe-vod.ts",
     "purge": "tsx scripts/purge.ts",
     "probe:models": "tsx scripts/probe-models.ts",
     "report:models": "tsx scripts/report-models.ts",

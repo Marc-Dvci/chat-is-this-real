@@ -42,7 +42,7 @@ export class VodEngine {
       }
       return finish({ reason: ordered.length > 5 ? 'library_limit' : 'not_found' });
     } catch (error) {
-      return finish({ reason: signal.aborted ? options.signal?.aborted ? 'cancelled' : 'timeout'
+      return finish({ reason: signal.aborted ? options.signal?.aborted && options.signal.reason?.name !== 'TimeoutError' ? 'cancelled' : 'timeout'
         : error instanceof ModelProviderError ? error.reason === 'quota' ? 'quota' : error.code : 'unsafe_or_invalid', failed: true });
     }
   }
