@@ -256,7 +256,7 @@ export const modelConfigSchema = z.object({
   DASHSCOPE_API_KEY: z.string().min(1),
   MODELSTUDIO_BASE_URL: z.url().default('https://dashscope-intl.aliyuncs.com/compatible-mode/v1'),
   MODEL_TRIAGE: z.string().default('qwen3.8-flash'), MODEL_SEARCH: z.string().default('qwen3.8-flash'),
-  MODEL_JUDGE: z.string().default('qwen3.8-flash'), MODEL_VOD: z.string().default('qwen3.8-flash'),
+  MODEL_JUDGE: z.string().default('qwen3.8-max'), MODEL_VOD: z.string().default('qwen3.8-flash'),
   MODEL_ASR: z.string().default('qwen-audio-3.1-asr-flash'), MODEL_ASR_FALLBACK: z.string().default('qwen3-asr-flash'),
   MODELSTUDIO_ALLOW_PAID_SEARCH: z.enum(['true', 'false']).default('false').transform((value) => value === 'true'),
   ASR_LANGUAGE: z.string().default('en')
@@ -408,4 +408,18 @@ export type CheckJob = z.infer<typeof checkJobSchema>;
 export const checkJobRowSchema = z.object({
   id: z.string(), request_id: z.string().nullable(), kind: z.string(), state: z.string(), input_json: z.string().nullable(),
   outcome_json: z.string().nullable(), reason: z.string().nullable(), created_at: z.string(), updated_at: z.string()
+});
+export const claimRunSummarySchema = z.object({
+  suite: z.literal('claims'), split: z.enum(['dev', 'heldout']), sample_count: z.number(), attempted_items: z.number(),
+  git_commit: z.string(), working_tree_dirty: z.boolean(), models: z.object({ judge: z.string() }), retrieval_mode: z.enum(['replay', 'provider']),
+  metrics: z.object({
+    verdict_agreement: z.object({ matched: z.number(), total: z.number() }),
+    by_category: z.record(z.string(), z.object({ matched: z.number(), total: z.number(), attempted: z.number() })),
+    wrong_direction_errors: z.number(), injection_directional_errors: z.number(),
+    injection_coverage: z.object({ attempted: z.number(), total: z.number() }),
+    not_a_claim: z.object({ true_positive: z.number(), predicted: z.number(), expected: z.number() }),
+    excerpts: z.object({ verified: z.number(), returned: z.number() }),
+    latency_ms: z.object({ sample_count: z.number(), p50: z.number().nullable(), p90: z.number().nullable() }),
+    failed_items: z.number(), not_attempted: z.number()
+  })
 });

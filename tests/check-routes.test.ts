@@ -16,7 +16,7 @@ it('queues, inspects and dismisses a dashboard check through CSRF-protected rout
     const jobs = (await app.inject({ method: 'GET', url: '/api/checks' })).json<{ checks: { id: string; state: string; reason: string }[] }>();
     expect(jobs.checks).toContainEqual(expect.objectContaining({ id, state: 'failed', reason: 'model_configuration' }));
     expect((await app.inject({ method: 'POST', url: `/api/checks/${id}/dismiss`, headers })).json()).toEqual({ dismissed: true });
-    expect((await app.inject({ method: 'GET', url: '/api/twitch/status' })).json()).toEqual({ notice: 'twitch_disconnected', live_stream_id: null });
+    expect((await app.inject({ method: 'GET', url: '/api/twitch/status' })).json()).toEqual({ connected: false, notice: 'twitch_disconnected', live_stream_id: null });
     expect((await app.inject({ method: 'POST', url: '/api/twitch/disconnect', headers })).statusCode).toBe(200);
   } finally { await app.close(); vi.unstubAllEnvs(); }
 });

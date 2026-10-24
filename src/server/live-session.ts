@@ -21,14 +21,14 @@ export class LiveSession {
   private channel: CheckInput['channel'] = { title: '', category: '', language: 'en' };
   constructor(private readonly db: DatabaseSync, private readonly checks: CheckService) {}
 
-  status() { return { notice: this.notice, live_stream_id: this.runtime?.liveStreamId() ?? null }; }
+  status() { return { connected: this.runtime?.isConnected() ?? false, notice: this.notice, live_stream_id: this.runtime?.liveStreamId() ?? null }; }
   currentStreamId(): string | undefined { return this.runtime?.liveStreamId(); }
   channelContext(): CheckInput['channel'] { return this.channel; }
   configure(settings: ChatSettings): void { this.runtime?.core.configure(settings); }
 
   async connect(): Promise<void> {
     if (this.starting) return this.starting;
-    if (this.runtime) return;
+    if (this.runtime?.isStarted()) return;
     const generation = ++this.generation;
     this.notice = 'twitch_connecting';
     this.starting = this.start(generation).catch(() => {
