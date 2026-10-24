@@ -1,7 +1,8 @@
 # Run the Model Studio probe
 
 `npm run probe:models` previews the candidate models and validates the local speech references.
-The preview makes no inference calls. Set `LIVE=1` and pass `--live` to run an authorized live probe:
+The preview makes no inference calls. The default uses known reference URLs and never calls
+the paid search tool. Set `LIVE=1` and pass `--live` to use the authorized model allowance:
 
 ```powershell
 $env:LIVE='1'
@@ -9,7 +10,12 @@ npm.cmd run probe:models -- --live --budget-usd 1
 Remove-Item Env:LIVE
 ```
 
-The probe checks availability, structured classification, source-producing search, evidence
+Reference mode isolates classification and evidence judging from retrieval. It cannot measure
+search quality or end-to-end check latency. After separate search-fee approval, add
+`--search-mode provider` to test the full pipeline. Each run stops at its cost estimate or
+per-model token limit; the provider's Free Quota Only setting controls account-level billing.
+
+The probe checks availability, structured classification, optional source-producing search, evidence
 judging, native speech recognition with and without context, and segment-ID answers.
 The judge is skipped when triage rejects a claim or no source text is available. The report
 keeps missing judgments in the expected-item count. It labels verdicts as model proposals;

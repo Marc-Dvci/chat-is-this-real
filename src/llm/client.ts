@@ -80,7 +80,7 @@ export class ModelClient {
           const body: ChatCompletionCreateParamsNonStreaming & { enable_thinking: false } = {
             model, stream: false, enable_thinking: false,
             messages: [
-              { role: 'system', content: `${instructions}\nReturn only valid JSON.${objectMode ? ` Required schema: ${JSON.stringify(jsonSchema)}` : ''}` },
+              { role: 'system', content: `${instructions}\nApplication verification date: ${new Date().toISOString().slice(0, 10)}.\nReturn only valid JSON.${objectMode ? ` The previous response did not satisfy strict output. Follow every field and length limit. Required schema: ${JSON.stringify(jsonSchema)}` : ''}` },
               { role: 'user', content: JSON.stringify({ untrusted_data: data }) }
             ],
             response_format: objectMode ? { type: 'json_object' } : { type: 'json_schema', json_schema: { name: `${role}_response`, strict: true, schema: jsonSchema } }

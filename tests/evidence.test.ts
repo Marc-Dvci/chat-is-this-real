@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { expect, it } from 'vitest';
 import { sourceDocumentSchema } from '../src/shared/schemas.js';
-import { verifyEvidence } from '../src/check/verify.js';
+import { sourceWindow, verifyEvidence } from '../src/check/verify.js';
 import { normalizeText } from '../src/shared/text-normalize.js';
 
 it('keeps only excerpts found in the real recorded source window', async () => {
@@ -18,4 +18,13 @@ it('keeps only excerpts found in the real recorded source window', async () => {
 
 it('normalizes case, compatibility characters, quotes, dashes and whitespace consistently', () => {
   expect(normalizeText(' “Ａ Claim”\u00a0– ‘Test’\n')).toBe('"a claim" - \'test\'');
+});
+
+it('selects a relevant later passage without letting repeated generic terms dominate', async () => {
+  const source = sourceDocumentSchema.parse(JSON.parse(await readFile('fixtures/sources/moon-window.json', 'utf8')));
+  const text = `${'Moon overview and Moon introduction. '.repeat(400)}${source.text}${' General material. '.repeat(400)}`;
+  const selected = sourceWindow(text, ['Moon average distance kilometers']);
+  expect(selected).toContain(source.text);
+  expect(selected.length).toBeLessThanOrEqual(6000);
+  expect(sourceWindow(text, [], 250)).toHaveLength(250);
 });

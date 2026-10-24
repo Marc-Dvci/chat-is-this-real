@@ -49,8 +49,9 @@ function wordErrors(reference: string, actual: string) {
 }
 
 async function probe(): Promise<void> {
-  const { values } = parseArgs({ options: { live: { type: 'boolean', default: false }, 'budget-usd': { type: 'string', default: '1' } } });
-  const options = modelProbeOptionsSchema.parse({ live: values.live, budget_usd: Number(values['budget-usd']) });
+  const { values } = parseArgs({ options: { live: { type: 'boolean', default: false }, 'budget-usd': { type: 'string', default: '1' },
+    'search-mode': { type: 'string', default: 'reference' } } });
+  const options = modelProbeOptionsSchema.parse({ live: values.live, budget_usd: Number(values['budget-usd']), search_mode: values['search-mode'] });
   const config = loadModelConfig();
   const claims = probeClaimsSchema.parse(JSON.parse(await readFile('scripts/probe-claims.json', 'utf8')));
   const outline = testStreamOutlineSchema.parse(JSON.parse(await readFile('scripts/test-stream-outline.json', 'utf8')));
@@ -60,12 +61,15 @@ async function probe(): Promise<void> {
   }
   if (!options.live) {
     console.info(JSON.stringify({ mode: 'preview', endpoint: new URL(config.MODELSTUDIO_BASE_URL).hostname, candidates,
-      probe_claims: claims.length, planned_search_calls: claims.filter((claim) => claim.expected_verdict).length * candidates.search.length,
+      probe_claims: claims.length, search_mode: options.search_mode,
+      planned_search_calls: options.search_mode === 'provider' ? claims.filter((claim) => claim.expected_verdict).length * candidates.search.length : 0,
       speech_source: 'original prerecorded test, system speech', budget_usd: options.budget_usd,
       instruction: 'Use LIVE=1 and --live only after approving provider usage. This is a probe set, separate from the locked dev and heldout evaluations.' }, null, 2));
     return;
   }
   if (process.env.LIVE !== '1') throw new Error('Set LIVE=1 explicitly for live provider calls.');
+  const gitCommit = (await execute('git', ['rev-parse', 'HEAD'])).stdout.trim();
+  const workingTreeDirty = Boolean((await execute('git', ['status', '--porcelain'])).stdout.trim());
   const runId = new Date().toISOString().replace(/[:.]/g, '-');
   const directory = join('data/probe-models', runId);
   await mkdir(directory, { recursive: true, mode: 0o700 });
@@ -77,6 +81,10 @@ async function probe(): Promise<void> {
   const reportPath = join('eval/results', `models-probe-${runId}.json`);
   const checkBudget = () => {
     if (estimatedCost(client.calls) + 0.25 > options.budget_usd) throw new Error('The probe reached its conservative usage budget.');
+    for (const model of new Set(client.calls.map((call) => call.model))) {
+      const used = client.calls.filter((call) => call.model === model).reduce((sum, call) => sum + call.input_tokens + call.output_tokens, 0);
+      if (used >= 100_000) throw new Error('The probe reached its per-model token limit.');
+    }
   };
 
   async function measure<T>(id: string, role: ModelProbeRow['role'], model: string, operation: () => Promise<T>, details: (value: T) => Partial<ModelProbeRow> = () => ({})): Promise<T | undefined> {
@@ -121,7 +129,12 @@ async function probe(): Promise<void> {
       let sources: SourceDocument[] = [];
       let baselineSearch = 0;
       let searchModel: string | undefined;
-      for (const model of candidates.search.filter((candidate) => available.has(candidate))) {
+      if (options.search_mode === 'reference' && claim.reference_url) {
+        const source = await fetchSource(claim.reference_url, `${claim.id}-reference`);
+        sources = source.text ? [source] : [];
+        await writeFile(join(directory, `${claim.id}-reference-sources.json`), JSON.stringify([source]), { mode: 0o600 });
+      }
+      for (const model of options.search_mode === 'provider' ? candidates.search.filter((candidate) => available.has(candidate)) : []) {
         const searchStarted = performance.now();
         const result = await measure(claim.id, 'search', model, () => client.search(model, { claim: triage?.normalized_claim, queries: triage?.search_queries, date: new Date().toISOString().slice(0, 10) }), (result) => ({ source_count: selectSearchSources(result.sources).length }));
         if (!result) continue;
@@ -150,8 +163,9 @@ async function probe(): Promise<void> {
       }
       for (const model of candidates.judge.filter((candidate) => available.has(candidate))) {
         const judgment = await measure(claim.id, 'judge', model, () => client.structured('judge', model, judgeSchema, judgeInstructions, {
-          claim: triage?.normalized_claim, date: new Date().toISOString().slice(0, 10),
-          sources: sources.map((source) => ({ source_id: source.id, url: source.url, tier: source.tier, text: sourceWindow(source.text, triage?.search_queries ?? []) }))
+          claim: triage?.normalized_claim,
+          sources: sources.map((source) => ({ source_id: source.id, url: source.url, tier: source.tier, fetched_at: source.fetched_at,
+            text: sourceWindow(source.text, [triage?.normalized_claim ?? '', ...triage?.search_queries ?? []]) }))
         }), (result) => ({ expected_verdict: claim.expected_verdict, verdict: result.verdict, returned_excerpts: result.evidence.length, verified_excerpts: verifyEvidence(result.evidence, sources).verified.length }));
         if (judgment && sources.length && model === config.MODEL_JUDGE && triageModel === config.MODEL_TRIAGE && searchModel === config.MODEL_SEARCH) baselineLatency.push(
           (roleTimes.get(`${claim.id}:triage:${config.MODEL_TRIAGE}`) ?? 0) + baselineSearch + (roleTimes.get(`${claim.id}:judge:${model}`) ?? 0)
@@ -191,8 +205,9 @@ async function probe(): Promise<void> {
   } finally {
     await mkdir('eval/results', { recursive: true });
     const report = { suite: 'models-probe', split: 'probe', sample_count: claims.length, created_at: new Date().toISOString(),
-      git_commit: (await execute('git', ['rev-parse', 'HEAD'])).stdout.trim(),
+      git_commit: gitCommit, working_tree_dirty: workingTreeDirty,
       endpoint: new URL(config.MODELSTUDIO_BASE_URL).hostname, models: candidates, available_models: [...available],
+      search_mode: options.search_mode, source_selection: options.search_mode === 'reference' ? 'Known reference URLs; retrieval and end-to-end performance are not evaluated.' : 'Provider web search',
       baseline_configuration: { triage: config.MODEL_TRIAGE, search: config.MODEL_SEARCH, judge: config.MODEL_JUDGE },
       speech_source: 'system speech in the original prerecorded Twitch test', baseline_latency_ms: baselineLatency,
       summary: summarizeProbe(claims, rows, baselineLatency),

@@ -257,5 +257,8 @@ export const modelProbeRowSchema = z.object({
   error: z.string().optional(), skipped_reason: z.enum(['triage_not_checkable', 'no_sources']).optional()
 });
 export type ModelProbeRow = z.infer<typeof modelProbeRowSchema>;
-export const modelProbeOptionsSchema = z.object({ live: z.boolean(), budget_usd: z.number().positive().max(20).default(1) });
+export const modelProbeOptionsSchema = z.object({
+  live: z.boolean(), budget_usd: z.number().positive().max(20).default(1),
+  search_mode: z.enum(['reference', 'provider']).default('reference')
+});
 export const availabilitySchema = z.object({ ok: z.literal(true) });
