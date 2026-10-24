@@ -7,5 +7,6 @@ export async function replaySearch(claim: string, path = 'fixtures/search/probe.
   const recording = searchReplaySchema.parse(JSON.parse(await readFile(path, 'utf8')));
   const match = recording.items.find((item) => normalizeText(item.claim) === normalizeText(claim));
   return { sources: selectSearchSources(match?.sources ?? []), searchCalls: 0,
+    documents: match?.documents ?? [],
     origin: recording.origin, recorded_at: recording.recorded_at, matched: Boolean(match) };
 }

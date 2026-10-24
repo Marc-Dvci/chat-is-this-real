@@ -12,6 +12,8 @@ export class TwitchRuntime {
     private readonly notice: (code: string) => void, private readonly raw?: (frame: string) => void) {}
 
   liveStreamId(): string | undefined { return this.connected ? this.core.currentStreamId() : undefined; }
+  isConnected(): boolean { return this.connected; }
+  isStarted(): boolean { return Boolean(this.socket); }
 
   async start(): Promise<void> {
     if (this.socket) return;

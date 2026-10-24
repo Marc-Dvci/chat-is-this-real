@@ -5,7 +5,9 @@ import { ChatStore } from '../src/store/chat-store.js';
 import { RequestStore } from '../src/store/request-store.js';
 import { ChatCore } from '../src/twitch/chat-core.js';
 import { EventSubWs } from '../src/twitch/eventsub-ws.js';
-import { chatSettingsSchema, type CheckRequest, type StoredMessage } from '../src/shared/schemas.js';
+import { chatSettingsSchema, sourceDocumentSchema, type CheckOutcome, type CheckRequest, type StoredMessage } from '../src/shared/schemas.js';
+import { CheckStore } from '../src/store/check-store.js';
+import { evaluateProposal } from '../src/check/proposal.js';
 
 const connections: EventSubWs[] = [];
 const databases: ReturnType<typeof openDatabase>[] = [];
@@ -71,6 +73,33 @@ it('routes the real captured deletion through EventSub and cancels the stored re
   const request = created[0]; if (!request) throw new Error('The real reply must create a request.');
   expect(chat.get(request.original_message_id)).toMatchObject({ body: null, removed_reason: 'moderation' });
   expect(requests.get(request.id)).toMatchObject({ body: '', state: 'cancelled' });
+});
+
+it('scrubs finished check evidence and its cache when the real captured deletion arrives', async () => {
+  const { db, chat, requests } = setup();
+  const checks = new CheckStore(db);
+  const source = sourceDocumentSchema.parse(JSON.parse(await readFile('fixtures/sources/moon-window.json', 'utf8')));
+  let checkId = '';
+  const core = new ChatCore(chat, requests, '900001', '900002', chatSettingsSchema.parse({ history_enabled: true }), {
+    onRequest: (request) => {
+      checkId = request.id;
+      checks.create({ id: request.id, claim: request.body, context: [], channel: { title: '', category: '', language: 'en' } }, request.id);
+      const decision = evaluateProposal({ verdict: 'real', explanation: '', evidence: [{ source_id: source.id, excerpt: source.text, stance: 'supports' }] }, [source]);
+      const outcome: CheckOutcome = { id: request.id, type: 'fact', normalized_claim: request.body, triage: null, ...decision,
+        explanation: '', sources: [source], sensitive: false, reason: null, created_at: request.created_at, elapsed_ms: 1,
+        cache_hit: false, retrieval_mode: 'replay', calls: [], failed: false };
+      checks.finish(request.id, outcome); checks.putCache('domain-cache-key', outcome);
+      expect(checks.getCache('domain-cache-key')?.id).toBe(request.id);
+    }
+  });
+  core.setStream('recorded-stream');
+  await replay(core, 'fixtures/twitch/probe-1792847799669.jsonl');
+  expect(checks.get(checkId)).toMatchObject({ input: null, outcome: null, state: 'failed', reason: 'source_removed' });
+  expect(checks.getCache('domain-cache-key')).toBeUndefined();
+  checks.state(checkId, 'ready');
+  expect(checks.get(checkId)?.state).toBe('failed');
+  checks.dismiss(checkId);
+  expect(checks.get(checkId)).toMatchObject({ input: null, outcome: null, state: 'dismissed' });
 });
 
 it('blocks late messages and unknown reply snapshots after a user clear, but accepts new observed speech', () => {

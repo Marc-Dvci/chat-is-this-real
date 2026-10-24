@@ -6,6 +6,7 @@ import {
   type StoredToken, type TokenFile, type TokenRole, type TwitchConfig, type UserTokenRole
 } from '../shared/schemas.js';
 import { twitchRedirectUri, twitchScopes } from './oauth.js';
+import { registerSecrets } from '../shared/secrets.js';
 
 export class TwitchHttpError extends Error {
   constructor(readonly status: number) {
@@ -22,6 +23,7 @@ export class TwitchTokens {
 
   private constructor(readonly config: TwitchConfig, private readonly path: string, file: TokenFile) {
     this.file = file;
+    registerSecrets(this.loadedSecrets());
   }
 
   static async open(config: TwitchConfig, path = 'data/tokens.json'): Promise<TwitchTokens> {
@@ -38,6 +40,7 @@ export class TwitchTokens {
   }
 
   private async persist(): Promise<void> {
+    registerSecrets(this.loadedSecrets());
     const snapshot = JSON.stringify(this.file, null, 2);
     const write = this.writes.then(async () => {
       await mkdir(dirname(this.path), { recursive: true, mode: 0o700 });

@@ -1,0 +1,1253 @@
+{
+  "suite": "engine-probe",
+  "split": "dev-probe",
+  "sample_count": 15,
+  "unique_items": 5,
+  "planned_repetitions": 3,
+  "git_commit": "7fad1331ecfaac8155cdeab585d82b649a2d0514",
+  "working_tree_dirty": false,
+  "created_at": "2026-10-24T14:05:28.692Z",
+  "retrieval_mode": "replay",
+  "source_selection": "Curated assistant search replay. Provider discovery is simulated; fetching and inference are live.",
+  "rows": [
+    {
+      "item_id": "claim-003",
+      "repetition": 1,
+      "expected": "not_real",
+      "output": {
+        "id": "387b41c9-ce93-4bb7-b1aa-432afcb4073a",
+        "type": "fact",
+        "normalized_claim": "Minecraft Java Edition and Bedrock Edition use the same multiplayer servers and natively play together.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Minecraft Java Edition and Bedrock Edition use the same multiplayer servers and natively play together.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Minecraft Java and Bedrock crossplay support",
+            "Are Minecraft Java and Bedrock servers compatible?",
+            "Minecraft Realms vs dedicated servers Java Bedrock"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "not_real",
+        "explanation": "The source explicitly states that Java and Bedrock editions use different servers and players cannot play together natively.",
+        "evidence": [
+          {
+            "source_id": "387b41c9-ce93-4bb7-b1aa-432afcb4073a-source-0",
+            "excerpt": "While both editions support online multiplayer, they use different servers. This means that Java and Bedrock players can’t play together – so make sure to ask your friends which version they have.",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "387b41c9-ce93-4bb7-b1aa-432afcb4073a-source-0",
+            "url": "https://www.minecraft.net/en-us/article/java-or-bedrock-edition",
+            "title": "The Difference between Java and Bedrock Editions",
+            "domain": "www.minecraft.net",
+            "tier": 1,
+            "fetched_at": "2026-10-24T14:03:58.879Z",
+            "status": 200,
+            "sha256": "8bf3cb3c7f3dc4ee0af038bff3d850e3cad5fd5702ca312fafa41c2270f1cd88",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-24T14:04:02.906Z",
+        "elapsed_ms": 7143.832399999999,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "07e614eb-253b-484b-a627-74fc9755e826",
+            "created_at": "2026-10-24T14:03:58.874Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 3101.4875,
+            "input_tokens": 261,
+            "output_tokens": 114,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          },
+          {
+            "id": "03693043-3002-4d36-bef3-1d8d07452d5d",
+            "created_at": "2026-10-24T14:04:02.903Z",
+            "role": "judge",
+            "model": "qwen3.8-flash",
+            "latency_ms": 3726.398800000001,
+            "input_tokens": 1604,
+            "output_tokens": 150,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "item_id": "claim-005",
+      "repetition": 1,
+      "expected": "real",
+      "output": {
+        "id": "b76a45a8-647b-4a28-8f7c-89c8ace61cfa",
+        "type": "fact",
+        "normalized_claim": "Stardew Valley version 1.5 added local split-screen multiplayer.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Stardew Valley version 1.5 added local split-screen multiplayer.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Stardew Valley 1.5 update notes local split screen",
+            "Does Stardew Valley have local co-op in version 1.5"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "The source document explicitly lists the addition of local split-screen multiplayer mode under the Multiplayer changes section for version 1.5.",
+        "evidence": [
+          {
+            "source_id": "b76a45a8-647b-4a28-8f7c-89c8ace61cfa-source-0",
+            "excerpt": "Multiplayer changes Added local split-screen multiplayer mode. The join co-op screen now remembers the last IP you entered. Farmhands can now move buildings throug",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "b76a45a8-647b-4a28-8f7c-89c8ace61cfa-source-0",
+            "url": "https://www.stardewvalley.net/stardew-valley-1-5-update-full-changelog/",
+            "title": "Stardew Valley 1.5 Update Full Changelog",
+            "domain": "www.stardewvalley.net",
+            "tier": 1,
+            "fetched_at": "2026-10-24T14:04:06.233Z",
+            "status": 200,
+            "sha256": "71765be7eb995e044dff7c75d3090b9ef76ff6baf32ce910446c02e15d0a00d6",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-24T14:04:09.230Z",
+        "elapsed_ms": 6323.037899999999,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "33ffd8ba-2633-45f9-869a-f2d89c57736e",
+            "created_at": "2026-10-24T14:04:06.231Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 3319.6517000000003,
+            "input_tokens": 258,
+            "output_tokens": 108,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          },
+          {
+            "id": "89fb0c0d-d51b-4e21-96e2-ca58fe5acf5e",
+            "created_at": "2026-10-24T14:04:09.227Z",
+            "role": "judge",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2568.9272999999994,
+            "input_tokens": 1656,
+            "output_tokens": 154,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "item_id": "claim-009",
+      "repetition": 1,
+      "expected": "real",
+      "output": {
+        "id": "43a506a4-cc1b-4da5-adef-452c8337de40",
+        "type": "fact",
+        "normalized_claim": "The 2020 No Man's Sky Crossplay update allowed cross-platform groups.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "The 2020 No Man's Sky Crossplay update allowed cross-platform groups.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "No Man's Sky 2020 Crossplay update cross-platform groups",
+            "No Man's Sky Origins update crossplay features",
+            "Did No Man's Sky 2020 update allow cross-platform groups?"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "The source confirms the June 2020 update introduced cross-platform multiplayer, allowing players to create or join cross-platform groups.",
+        "evidence": [
+          {
+            "source_id": "43a506a4-cc1b-4da5-adef-452c8337de40-source-0",
+            "excerpt": "Cross-platform groups can be created or joined in game, or from the frontend. Ambient multiplayer on the Space Anomaly, in space, or on planets, can now match you with players from any platform.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "43a506a4-cc1b-4da5-adef-452c8337de40-source-0",
+            "url": "https://www.nomanssky.com/2020/06/introducing-crossplay-for-no-mans-sky/",
+            "title": "Introducing Crossplay for No Man’s Sky - No Man's Sky",
+            "domain": "www.nomanssky.com",
+            "tier": 1,
+            "fetched_at": "2026-10-24T14:04:12.617Z",
+            "status": 200,
+            "sha256": "c22427354f41983cdfbb41a0f8dc60bf68a0d9eeb2fa65bfb70c9b5021dc7f22",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-24T14:04:16.063Z",
+        "elapsed_ms": 6832.325000000001,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "6e7bd401-d878-40ac-bf00-ef0773cadaa4",
+            "created_at": "2026-10-24T14:04:12.616Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 3379.8343999999997,
+            "input_tokens": 262,
+            "output_tokens": 123,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          },
+          {
+            "id": "77a62c3a-3bd3-41f2-a007-e10d966a31e5",
+            "created_at": "2026-10-24T14:04:16.060Z",
+            "role": "judge",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2642.148799999999,
+            "input_tokens": 1624,
+            "output_tokens": 162,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "item_id": "claim-019",
+      "repetition": 1,
+      "expected": "real",
+      "output": {
+        "id": "ae14ec7c-3a90-490d-bc3b-2a8f17d282f9",
+        "type": "fact",
+        "normalized_claim": "The first element of a JavaScript array is at index zero.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "The first element of a JavaScript array is at index zero.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "JavaScript array index start at zero",
+            "MDN JavaScript Array indexing"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "The source explicitly states that JavaScript arrays are zero-indexed and the first element is at index 0.",
+        "evidence": [
+          {
+            "source_id": "ae14ec7c-3a90-490d-bc3b-2a8f17d282f9-source-0",
+            "excerpt": "JavaScript arrays are zero-indexed: the first element of an array is at index 0, the second is at index 1, and so on",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "ae14ec7c-3a90-490d-bc3b-2a8f17d282f9-source-0",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+            "title": "Array - JavaScript | MDN",
+            "domain": "developer.mozilla.org",
+            "tier": 1,
+            "fetched_at": "2026-10-24T14:04:18.276Z",
+            "status": 200,
+            "sha256": "23f9ed1e7f29dedc5812cf216500aabb0f5f32e8b26f4d9542595b9411c42f9f",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-24T14:04:20.678Z",
+        "elapsed_ms": 4615.080000000002,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "4e612fb1-1535-4c9f-abf4-994326cad853",
+            "created_at": "2026-10-24T14:04:18.275Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2205.856499999998,
+            "input_tokens": 256,
+            "output_tokens": 87,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          },
+          {
+            "id": "55e1089c-a843-439d-92b4-bf8bf99def1d",
+            "created_at": "2026-10-24T14:04:20.677Z",
+            "role": "judge",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2140.7415,
+            "input_tokens": 1571,
+            "output_tokens": 145,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "item_id": "claim-029",
+      "repetition": 1,
+      "expected": "real",
+      "output": {
+        "id": "5408b281-5a84-40b3-bffd-0da17eb1b1f7",
+        "type": "fact",
+        "normalized_claim": "The Sun is a star.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "The Sun is a star.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Is the Sun a star?",
+            "Sun definition astronomy"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "NASA explicitly identifies the Sun as a yellow dwarf star and notes it is the only star in our solar system.",
+        "evidence": [
+          {
+            "source_id": "5408b281-5a84-40b3-bffd-0da17eb1b1f7-source-0",
+            "excerpt": "Our Sun is a 4.5 billion-year-old yellow dwarf star – a hot glowing ball of hydrogen and helium – at the center of our solar system.",
+            "stance": "supports"
+          },
+          {
+            "source_id": "5408b281-5a84-40b3-bffd-0da17eb1b1f7-source-0",
+            "excerpt": "The Sun is the only star in our solar system. It is the center of our solar system, and its gravity holds the solar system together.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "5408b281-5a84-40b3-bffd-0da17eb1b1f7-source-0",
+            "url": "https://science.nasa.gov/sun/facts/",
+            "title": "Sun: Facts - NASA Science",
+            "domain": "science.nasa.gov",
+            "tier": 1,
+            "fetched_at": "2026-10-24T14:04:22.551Z",
+            "status": 200,
+            "sha256": "7a46d3fe374a2f3eef0cbc84b852d24265c11b7c7e540e01dd84c9e48716f62e",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 2,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-24T14:04:26.480Z",
+        "elapsed_ms": 5801.472900000001,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "ef496d41-6a70-4f86-9a60-6cf31661824a",
+            "created_at": "2026-10-24T14:04:22.550Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1867.625,
+            "input_tokens": 250,
+            "output_tokens": 78,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          },
+          {
+            "id": "685f3032-6989-4db2-ac86-81799b63192d",
+            "created_at": "2026-10-24T14:04:26.478Z",
+            "role": "judge",
+            "model": "qwen3.8-flash",
+            "latency_ms": 3732.746800000001,
+            "input_tokens": 1710,
+            "output_tokens": 236,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "item_id": "claim-003",
+      "repetition": 2,
+      "expected": "not_real",
+      "output": {
+        "id": "60cd314e-b997-4037-8d83-84dae366586b",
+        "type": "fact",
+        "normalized_claim": "Minecraft Java Edition and Bedrock Edition use the same multiplayer servers and allow native cross-play.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Minecraft Java Edition and Bedrock Edition use the same multiplayer servers and allow native cross-play.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Minecraft Java vs Bedrock crossplay support",
+            "Minecraft Java Bedrock unified server list",
+            "Can Minecraft Java players join Bedrock servers natively"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "not_real",
+        "explanation": "Source explicitly states Java and Bedrock use different servers and players cannot play together natively.",
+        "evidence": [
+          {
+            "source_id": "60cd314e-b997-4037-8d83-84dae366586b-source-0",
+            "excerpt": "While both editions support online multiplayer, they use different servers. This means that Java and Bedrock players can’t play together – so make sure to ask your friends which version they have.",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "60cd314e-b997-4037-8d83-84dae366586b-source-0",
+            "url": "https://www.minecraft.net/en-us/article/java-or-bedrock-edition",
+            "title": "The Difference between Java and Bedrock Editions",
+            "domain": "www.minecraft.net",
+            "tier": 1,
+            "fetched_at": "2026-10-24T14:04:29.884Z",
+            "status": 200,
+            "sha256": "8bf3cb3c7f3dc4ee0af038bff3d850e3cad5fd5702ca312fafa41c2270f1cd88",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-24T14:04:33.116Z",
+        "elapsed_ms": 6635.694299999999,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "d6db8ea8-a0d5-4f65-a5a1-0e2edf640b8d",
+            "created_at": "2026-10-24T14:04:29.882Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 3398.359499999995,
+            "input_tokens": 261,
+            "output_tokens": 114,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          },
+          {
+            "id": "f78e87ad-7c35-4200-a41d-54959e0dbce9",
+            "created_at": "2026-10-24T14:04:33.115Z",
+            "role": "judge",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2971.7837,
+            "input_tokens": 1549,
+            "output_tokens": 152,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "item_id": "claim-005",
+      "repetition": 2,
+      "expected": "real",
+      "output": {
+        "id": "64b65618-456f-47e3-bd8a-7de6196d468d",
+        "type": "fact",
+        "normalized_claim": "Stardew Valley version 1.5 added local split-screen multiplayer.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Stardew Valley version 1.5 added local split-screen multiplayer.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Stardew Valley 1.5 update notes local co-op",
+            "Did Stardew Valley 1.5 add split screen"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "The changelog explicitly lists 'Added local split-screen multiplayer mode' under the Multiplayer changes section for version 1.5.",
+        "evidence": [
+          {
+            "source_id": "64b65618-456f-47e3-bd8a-7de6196d468d-source-0",
+            "excerpt": "Multiplayer changes Added local split-screen multiplayer mode. The join co-op screen now remembers the last IP you entered.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "64b65618-456f-47e3-bd8a-7de6196d468d-source-0",
+            "url": "https://www.stardewvalley.net/stardew-valley-1-5-update-full-changelog/",
+            "title": "Stardew Valley 1.5 Update Full Changelog",
+            "domain": "www.stardewvalley.net",
+            "tier": 1,
+            "fetched_at": "2026-10-24T14:04:35.795Z",
+            "status": 200,
+            "sha256": "71765be7eb995e044dff7c75d3090b9ef76ff6baf32ce910446c02e15d0a00d6",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-24T14:04:38.818Z",
+        "elapsed_ms": 5701.354600000006,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "1a0808c8-e233-4c49-83a5-3202364555bd",
+            "created_at": "2026-10-24T14:04:35.793Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2669.4311000000016,
+            "input_tokens": 258,
+            "output_tokens": 103,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          },
+          {
+            "id": "a49362c5-4d81-42c7-8a29-0b2bd3cd390a",
+            "created_at": "2026-10-24T14:04:38.816Z",
+            "role": "judge",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2590.8867000000027,
+            "input_tokens": 1651,
+            "output_tokens": 143,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "item_id": "claim-009",
+      "repetition": 2,
+      "expected": "real",
+      "output": {
+        "id": "35af0911-9155-45f6-a895-93a978b36efd",
+        "type": "fact",
+        "normalized_claim": "The 2020 No Man's Sky update enabled cross-platform multiplayer.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "The 2020 No Man's Sky update enabled cross-platform multiplayer.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "No Man's Sky 2020 crossplay update announcement",
+            "No Man's Sky cross-platform multiplayer release date 2020"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "The source document explicitly announces the release of cross-platform multiplayer for No Man's Sky in June 2020, confirming the claim.",
+        "evidence": [
+          {
+            "source_id": "35af0911-9155-45f6-a895-93a978b36efd-source-0",
+            "excerpt": "starting tomorrow, PlayStation 4 players, Xbox One players and PC players will all be able to explore, journey, survive, build, and trade together.",
+            "stance": "supports"
+          },
+          {
+            "source_id": "35af0911-9155-45f6-a895-93a978b36efd-source-0",
+            "excerpt": "Cross-Platform Multiplayer Replaced the entire network backend, so that players can now make multiplayer connections across all platforms.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "35af0911-9155-45f6-a895-93a978b36efd-source-0",
+            "url": "https://www.nomanssky.com/2020/06/introducing-crossplay-for-no-mans-sky/",
+            "title": "Introducing Crossplay for No Man’s Sky - No Man's Sky",
+            "domain": "www.nomanssky.com",
+            "tier": 1,
+            "fetched_at": "2026-10-24T14:04:41.778Z",
+            "status": 200,
+            "sha256": "c22427354f41983cdfbb41a0f8dc60bf68a0d9eeb2fa65bfb70c9b5021dc7f22",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 2,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-24T14:04:46.100Z",
+        "elapsed_ms": 7281.399799999999,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "c3044ff2-67a1-4585-9d5e-00ae478b7e4b",
+            "created_at": "2026-10-24T14:04:41.777Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2953.748400000004,
+            "input_tokens": 262,
+            "output_tokens": 105,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          },
+          {
+            "id": "049f616f-8092-4cb5-8398-26fe46685e44",
+            "created_at": "2026-10-24T14:04:46.099Z",
+            "role": "judge",
+            "model": "qwen3.8-flash",
+            "latency_ms": 4175.951300000001,
+            "input_tokens": 1624,
+            "output_tokens": 238,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "item_id": "claim-019",
+      "repetition": 2,
+      "expected": "real",
+      "output": {
+        "id": "3ae8f207-bfbc-49e8-8671-92205f75d8a4",
+        "type": "fact",
+        "normalized_claim": "The first element of a JavaScript array is at index zero.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "The first element of a JavaScript array is at index zero.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "JavaScript array first element index zero",
+            "MDN JavaScript Array indexing"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "The source explicitly states that JavaScript arrays are zero-indexed, meaning the first element is at index 0.",
+        "evidence": [
+          {
+            "source_id": "3ae8f207-bfbc-49e8-8671-92205f75d8a4-source-0",
+            "excerpt": "JavaScript arrays are zero-indexed: the first element of an array is at index 0, the second is at index 1, and so on",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "3ae8f207-bfbc-49e8-8671-92205f75d8a4-source-0",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+            "title": "Array - JavaScript | MDN",
+            "domain": "developer.mozilla.org",
+            "tier": 1,
+            "fetched_at": "2026-10-24T14:04:48.232Z",
+            "status": 200,
+            "sha256": "23f9ed1e7f29dedc5812cf216500aabb0f5f32e8b26f4d9542595b9411c42f9f",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-24T14:04:50.917Z",
+        "elapsed_ms": 4816.397300000004,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "16744173-5d25-48c1-a64a-7e80dc14806e",
+            "created_at": "2026-10-24T14:04:48.231Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2126.9285999999993,
+            "input_tokens": 256,
+            "output_tokens": 87,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          },
+          {
+            "id": "bdca5dab-4668-4717-b6b3-289e3ffdcdbc",
+            "created_at": "2026-10-24T14:04:50.914Z",
+            "role": "judge",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2485.8407000000007,
+            "input_tokens": 1512,
+            "output_tokens": 146,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "item_id": "claim-029",
+      "repetition": 2,
+      "expected": "real",
+      "output": {
+        "id": "507d6e69-cb1b-4674-8a6b-21945d9e96a1",
+        "type": "fact",
+        "normalized_claim": "The Sun is a star.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "The Sun is a star.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Is the Sun classified as a star?",
+            "Definition of star in astronomy"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "NASA explicitly identifies the Sun as a yellow dwarf star and notes it is our solar system's only star.",
+        "evidence": [
+          {
+            "source_id": "507d6e69-cb1b-4674-8a6b-21945d9e96a1-source-0",
+            "excerpt": "Our Sun is a 4.5 billion-year-old yellow dwarf star – a hot glowing ball of hydrogen and helium – at the center of our solar system.",
+            "stance": "supports"
+          },
+          {
+            "source_id": "507d6e69-cb1b-4674-8a6b-21945d9e96a1-source-0",
+            "excerpt": "The Sun is the only star in our solar system. It is the center of our solar system, and its gravity holds the solar system together.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "507d6e69-cb1b-4674-8a6b-21945d9e96a1-source-0",
+            "url": "https://science.nasa.gov/sun/facts/",
+            "title": "Sun: Facts - NASA Science",
+            "domain": "science.nasa.gov",
+            "tier": 1,
+            "fetched_at": "2026-10-24T14:04:52.993Z",
+            "status": 200,
+            "sha256": "7a46d3fe374a2f3eef0cbc84b852d24265c11b7c7e540e01dd84c9e48716f62e",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 2,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-24T14:04:57.901Z",
+        "elapsed_ms": 6984.174500000001,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "43d97253-80bd-4f61-b70e-9f05991b051b",
+            "created_at": "2026-10-24T14:04:52.992Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2070.932399999998,
+            "input_tokens": 250,
+            "output_tokens": 82,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          },
+          {
+            "id": "8bd38907-f30f-46ff-ad66-9aaa8e665ac6",
+            "created_at": "2026-10-24T14:04:57.899Z",
+            "role": "judge",
+            "model": "qwen3.8-flash",
+            "latency_ms": 4724.699099999998,
+            "input_tokens": 1714,
+            "output_tokens": 243,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "item_id": "claim-003",
+      "repetition": 3,
+      "expected": "not_real",
+      "output": {
+        "id": "74eeabe1-27ad-4c25-862a-aa8144f39263",
+        "type": "fact",
+        "normalized_claim": "Minecraft Java and Bedrock editions use the same multiplayer servers and support native cross-play.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Minecraft Java and Bedrock editions use the same multiplayer servers and support native cross-play.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Minecraft Java and Bedrock cross-play compatibility",
+            "Do Minecraft Java and Bedrock share the same multiplayer servers?",
+            "Minecraft Java vs Bedrock multiplayer interoperability"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "not_real",
+        "explanation": "The source explicitly states that Java and Bedrock editions use different servers and cannot play together, contradicting the claim of native cross-play.",
+        "evidence": [
+          {
+            "source_id": "74eeabe1-27ad-4c25-862a-aa8144f39263-source-0",
+            "excerpt": "While both editions support online multiplayer, they use different servers. This means that Java and Bedrock players can’t play together – so make sure to ask your friends which version they have.",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "74eeabe1-27ad-4c25-862a-aa8144f39263-source-0",
+            "url": "https://www.minecraft.net/en-us/article/java-or-bedrock-edition",
+            "title": "The Difference between Java and Bedrock Editions",
+            "domain": "www.minecraft.net",
+            "tier": 1,
+            "fetched_at": "2026-10-24T14:05:00.093Z",
+            "status": 200,
+            "sha256": "8bf3cb3c7f3dc4ee0af038bff3d850e3cad5fd5702ca312fafa41c2270f1cd88",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-24T14:05:03.365Z",
+        "elapsed_ms": 5463.573199999992,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "085609cf-0e5d-4246-9054-3f5a6ffd1b8c",
+            "created_at": "2026-10-24T14:05:00.092Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2186.416799999992,
+            "input_tokens": 261,
+            "output_tokens": 119,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          },
+          {
+            "id": "c3865219-3388-496c-8dd1-5053c580e88e",
+            "created_at": "2026-10-24T14:05:03.363Z",
+            "role": "judge",
+            "model": "qwen3.8-flash",
+            "latency_ms": 3113.1591000000044,
+            "input_tokens": 1605,
+            "output_tokens": 158,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "item_id": "claim-005",
+      "repetition": 3,
+      "expected": "real",
+      "output": {
+        "id": "2ef791d9-fefb-4875-bded-65e4d26ee81d",
+        "type": "fact",
+        "normalized_claim": "Stardew Valley version 1.5 added local split-screen multiplayer.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Stardew Valley version 1.5 added local split-screen multiplayer.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Stardew Valley 1.5 update notes features",
+            "Does Stardew Valley have local split screen",
+            "Stardew Valley 1.5 changelog"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "The changelog explicitly states under 'Multiplayer changes' that version 1.5 added local split-screen multiplayer mode.",
+        "evidence": [
+          {
+            "source_id": "2ef791d9-fefb-4875-bded-65e4d26ee81d-source-0",
+            "excerpt": "Multiplayer changes Added local split-screen multiplayer mode. The join co-op screen now remembers the last IP you entered.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "2ef791d9-fefb-4875-bded-65e4d26ee81d-source-0",
+            "url": "https://www.stardewvalley.net/stardew-valley-1-5-update-full-changelog/",
+            "title": "Stardew Valley 1.5 Update Full Changelog",
+            "domain": "www.stardewvalley.net",
+            "tier": 1,
+            "fetched_at": "2026-10-24T14:05:06.095Z",
+            "status": 200,
+            "sha256": "71765be7eb995e044dff7c75d3090b9ef76ff6baf32ce910446c02e15d0a00d6",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-24T14:05:09.161Z",
+        "elapsed_ms": 5796.061900000001,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "07fd652c-6c8c-41d4-a8f2-62dca95690ab",
+            "created_at": "2026-10-24T14:05:06.093Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2723.6294999999955,
+            "input_tokens": 258,
+            "output_tokens": 112,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          },
+          {
+            "id": "a7168522-44c6-46a8-b018-b8b9d8939236",
+            "created_at": "2026-10-24T14:05:09.160Z",
+            "role": "judge",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2593.8411999999953,
+            "input_tokens": 1637,
+            "output_tokens": 136,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "item_id": "claim-009",
+      "repetition": 3,
+      "expected": "real",
+      "output": {
+        "id": "3aa317c4-c972-4723-a389-fcb2efeb2ecf",
+        "type": "fact",
+        "normalized_claim": "The 2020 No Man's Sky Crossplay update allowed cross-platform groups.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "The 2020 No Man's Sky Crossplay update allowed cross-platform groups.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "No Man's Sky crossplay update 2020 release date",
+            "No Man's Sky Origins update cross-play details"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "The source document explicitly states that the June 2020 update introduced cross-platform multiplayer, allowing players on PS4, Xbox One, and PC to play together in groups.",
+        "evidence": [
+          {
+            "source_id": "3aa317c4-c972-4723-a389-fcb2efeb2ecf-source-0",
+            "excerpt": "Cross-platform groups can be created or joined in game, or from the frontend. Ambient multiplayer on the Space Anomaly, in space, or on planets, can now match you with players from any platform.",
+            "stance": "supports"
+          },
+          {
+            "source_id": "3aa317c4-c972-4723-a389-fcb2efeb2ecf-source-0",
+            "excerpt": "We are excited to be able to announce that, starting tomorrow, PlayStation 4 players, Xbox One players and PC players will all be able to explore, journey, survive, build, and trade together.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "3aa317c4-c972-4723-a389-fcb2efeb2ecf-source-0",
+            "url": "https://www.nomanssky.com/2020/06/introducing-crossplay-for-no-mans-sky/",
+            "title": "Introducing Crossplay for No Man’s Sky - No Man's Sky",
+            "domain": "www.nomanssky.com",
+            "tier": 1,
+            "fetched_at": "2026-10-24T14:05:11.928Z",
+            "status": 200,
+            "sha256": "c22427354f41983cdfbb41a0f8dc60bf68a0d9eeb2fa65bfb70c9b5021dc7f22",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 2,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-24T14:05:16.721Z",
+        "elapsed_ms": 7559.326000000001,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "308bc8be-99ed-49e7-a2dc-f8c831f29f69",
+            "created_at": "2026-10-24T14:05:11.926Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2760.851999999999,
+            "input_tokens": 262,
+            "output_tokens": 105,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          },
+          {
+            "id": "09998a7f-7aa4-4144-92a1-31c7d07b9431",
+            "created_at": "2026-10-24T14:05:16.719Z",
+            "role": "judge",
+            "model": "qwen3.8-flash",
+            "latency_ms": 4673.1456000000035,
+            "input_tokens": 1622,
+            "output_tokens": 271,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "item_id": "claim-019",
+      "repetition": 3,
+      "expected": "real",
+      "output": {
+        "id": "33d217e8-5caf-482d-90fd-c9b6e6fa4b37",
+        "type": "fact",
+        "normalized_claim": "The first element of a JavaScript array is at index zero.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "The first element of a JavaScript array is at index zero.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "JavaScript array indexing start value",
+            "MDN JavaScript Array index zero"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "The source explicitly states that JavaScript arrays are zero-indexed, meaning the first element is at index 0.",
+        "evidence": [
+          {
+            "source_id": "33d217e8-5caf-482d-90fd-c9b6e6fa4b37-source-0",
+            "excerpt": "JavaScript arrays are zero-indexed: the first element of an array is at index 0, the second is at index 1, and so on — and the last element is at the value of the array's length property minus 1.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "33d217e8-5caf-482d-90fd-c9b6e6fa4b37-source-0",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+            "title": "Array - JavaScript | MDN",
+            "domain": "developer.mozilla.org",
+            "tier": 1,
+            "fetched_at": "2026-10-24T14:05:18.762Z",
+            "status": 200,
+            "sha256": "23f9ed1e7f29dedc5812cf216500aabb0f5f32e8b26f4d9542595b9411c42f9f",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-24T14:05:22.293Z",
+        "elapsed_ms": 5571.721900000004,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "180dbf33-ccf0-4a0e-8010-cf95a02c1775",
+            "created_at": "2026-10-24T14:05:18.760Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2034.336599999995,
+            "input_tokens": 256,
+            "output_tokens": 87,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          },
+          {
+            "id": "185f0199-4dd5-4338-b629-ea5a5067dcc1",
+            "created_at": "2026-10-24T14:05:22.291Z",
+            "role": "judge",
+            "model": "qwen3.8-flash",
+            "latency_ms": 3269.9676000000036,
+            "input_tokens": 1521,
+            "output_tokens": 164,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "item_id": "claim-029",
+      "repetition": 3,
+      "expected": "real",
+      "output": {
+        "id": "7d6f21c1-dc7f-49d6-8c3f-400a796969e6",
+        "type": "fact",
+        "normalized_claim": "The Sun is a star.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "The Sun is a star.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Is the Sun classified as a star?"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "NASA source explicitly identifies the Sun as a yellow dwarf star and notes it is the only star in our solar system.",
+        "evidence": [
+          {
+            "source_id": "7d6f21c1-dc7f-49d6-8c3f-400a796969e6-source-0",
+            "excerpt": "Our Sun is a 4.5 billion-year-old yellow dwarf star – a hot glowing ball of hydrogen and helium – at the center of our solar system.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "7d6f21c1-dc7f-49d6-8c3f-400a796969e6-source-0",
+            "url": "https://science.nasa.gov/sun/facts/",
+            "title": "Sun: Facts - NASA Science",
+            "domain": "science.nasa.gov",
+            "tier": 1,
+            "fetched_at": "2026-10-24T14:05:24.412Z",
+            "status": 200,
+            "sha256": "7a46d3fe374a2f3eef0cbc84b852d24265c11b7c7e540e01dd84c9e48716f62e",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-24T14:05:28.692Z",
+        "elapsed_ms": 6398.566500000001,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "b1142157-f23f-47ff-be54-0a228971f421",
+            "created_at": "2026-10-24T14:05:24.410Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2112.8329999999987,
+            "input_tokens": 250,
+            "output_tokens": 73,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          },
+          {
+            "id": "c4f4a432-3550-4485-9d8a-d3fe95d74d36",
+            "created_at": "2026-10-24T14:05:28.690Z",
+            "role": "judge",
+            "model": "qwen3.8-flash",
+            "latency_ms": 4116.1888000000035,
+            "input_tokens": 1714,
+            "output_tokens": 152,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema"
+          }
+        ],
+        "failed": false
+      }
+    }
+  ]
+}

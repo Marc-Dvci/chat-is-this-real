@@ -13,6 +13,7 @@ it('keeps only excerpts found in the real recorded source window', async () => {
   ], [source]);
   expect(verified.verified).toHaveLength(1);
   expect(verified.verified[0]?.source_id).toBe(source.id);
+  expect(verified.verified[0]?.excerpt).toBe(source.text);
   expect(verified.dropped).toBe(2);
 });
 
