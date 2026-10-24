@@ -1,0 +1,19 @@
+{
+  "suite": "overlay-live",
+  "run": "1792871533007",
+  "created_at": "2026-10-24T19:52:13.300Z",
+  "git_commit": "28ab9cb21fdd0207338e2183191d6cf43af32453",
+  "working_tree_dirty": false,
+  "stage": "voting",
+  "passed": false,
+  "three_viewer_acceptance": false,
+  "eligible_voters_observed": 0,
+  "reason": "probe_wait_or_transport",
+  "bot_filtered": true,
+  "duplicate_rejected": true,
+  "approval_held": true,
+  "score_once": false,
+  "source": "Authorized prerecorded stream",
+  "fixture": "fixtures/twitch/probe-1792871533007.jsonl",
+  "result": null
+}

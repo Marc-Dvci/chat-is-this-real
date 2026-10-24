@@ -51,3 +51,13 @@ it('awards no points for qualified results or a cancelled round and removes purg
     tally.remove({ type: 'user', id: 'viewer-a' }); expect(tally.view('vote-round-a')?.real).toBe(0);
   } finally { db.close(); }
 });
+it('cancels unfinished rounds after a restart and preserves previously awarded points', () => {
+  const { db, tally, message, time } = setup();
+  try {
+    tally.open('vote-round-a', 'vote-stream', 20); tally.vote(message('viewer-a', '1')); tally.ready('vote-round-a'); time(21_000); tally.reveal('vote-round-a', 'real');
+    tally.open('vote-round-b', 'vote-stream', 20); tally.vote(message('viewer-b', '2'));
+    const resumed = new VoteTally(db, () => 81_000); resumed.reveal('vote-round-b', 'not_real');
+    expect(resumed.get('vote-round-b')?.cancelled).toBe(true);
+    expect(resumed.scores('vote-stream')).toEqual([{ user_id: 'viewer-a', points: 1 }]);
+  } finally { db.close(); }
+});

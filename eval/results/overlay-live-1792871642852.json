@@ -1,0 +1,47 @@
+{
+  "suite": "overlay-live",
+  "run": "1792871642852",
+  "created_at": "2026-10-24T19:54:03.113Z",
+  "git_commit": "28ab9cb21fdd0207338e2183191d6cf43af32453",
+  "working_tree_dirty": true,
+  "stage": "complete",
+  "passed": true,
+  "three_viewer_acceptance": false,
+  "eligible_voters_observed": 1,
+  "reason": null,
+  "bot_filtered": true,
+  "duplicate_rejected": true,
+  "approval_held": true,
+  "score_once": true,
+  "source": "Authorized prerecorded stream",
+  "fixture": "fixtures/twitch/probe-1792871642852.jsonl",
+  "result": {
+    "id": "ee5c1848-1b14-4622-b472-77dad5ba5e22",
+    "type": "fact",
+    "claim": "The Sun is a star.",
+    "verdict": "real",
+    "explanation": "The source explicitly identifies the Sun as a star multiple times.",
+    "evidence": [
+      {
+        "source_id": "ee5c1848-1b14-4622-b472-77dad5ba5e22-source-0",
+        "excerpt": "Our Sun is a 4.5 billion-year-old yellow dwarf star – a hot glowing ball of hydrogen and helium – at the center of our solar system.",
+        "stance": "supports"
+      }
+    ],
+    "sources": [
+      {
+        "id": "ee5c1848-1b14-4622-b472-77dad5ba5e22-source-0",
+        "url": "https://science.nasa.gov/sun/facts/",
+        "title": "Sun: Facts - NASA Science",
+        "domain": "science.nasa.gov",
+        "tier": 1,
+        "fetched_at": "2026-10-24T19:54:09.793Z",
+        "status": 200,
+        "sha256": "7a46d3fe374a2f3eef0cbc84b852d24265c11b7c7e540e01dd84c9e48716f62e",
+        "origin": "live_fetch"
+      }
+    ],
+    "checked_at": "2026-10-24T19:54:13.203Z",
+    "retrieval_mode": "replay"
+  }
+}

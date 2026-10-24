@@ -51,8 +51,9 @@ test('dashboard, overlay and SQLite agree through voting and the approved reveal
     await expect(desk.locator('.caller-scores li')).toHaveCount(2); await expect(overlay.locator('.broadcast-leaders>div')).toHaveCount(2);
     await overlay.screenshot({ path: 'e2e/screens/overlay-vote-result.png', omitBackground: true }); await desk.screenshot({ path: 'e2e/screens/desk-vote-result.png', fullPage: true });
     const scan = await new AxeBuilder({ page: overlay }).analyze(); expect(scan.violations.filter((item) => ['serious', 'critical'].includes(item.impact ?? ''))).toEqual([]);
-    await desk.getByRole('button', { name: 'Hide now' }).click(); await expect(overlay.locator('.overlay-root')).toHaveAttribute('data-state', 'hidden');
     await desk.getByRole('button', { name: 'Hide leaderboard', exact: true }).click(); await expect(overlay.locator('.broadcast-leaders')).toHaveCount(0);
+    await desk.getByRole('button', { name: 'Leaderboard', exact: true }).click(); await expect(overlay.locator('.broadcast-leaders>div')).toHaveCount(2);
+    await desk.getByRole('button', { name: 'Hide now' }).click(); await expect(overlay.locator('.overlay-root')).toHaveAttribute('data-state', 'hidden'); await expect(overlay.locator('.broadcast-leaders')).toHaveCount(0);
     expect(errors).toEqual([]);
   } finally { db.close(); await context.close().catch(() => undefined); }
 });

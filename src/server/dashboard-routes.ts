@@ -93,7 +93,7 @@ export function registerDashboardRoutes(app: FastifyInstance, db: DatabaseSync, 
     const action = presentationActionSchema.safeParse(request.body);
     if (!action.success) return reply.code(400).send({ error: 'Choose a presentation action.' });
     try {
-      if (action.data.action === 'hide') presenter.hide();
+      if (action.data.action === 'hide') { presenter.hide(); settings.set({ ...settings.get(), leaderboard_enabled: false }); }
       else if (action.data.action === 'show_check') {
         const job = control.service.store.get(action.data.id); if (!job) return reply.code(404).send({ error: 'Check not found.' });
         presenter.show(job, action.data.sensitive_confirmed);
