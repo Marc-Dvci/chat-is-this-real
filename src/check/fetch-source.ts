@@ -23,6 +23,10 @@ export async function fetchSource(value: string, id: string, signal?: AbortSigna
     if (downloaded.contentType.toLowerCase().includes('html') && text) {
       const { document } = parseHTML(text);
       document.querySelectorAll('script,style,noscript,template').forEach((node) => node.remove());
+      for (const block of document.querySelectorAll('p,h1,h2,h3,h4,h5,h6,li,div,section,article,tr,td,th,dt,dd,br')) {
+        block.before(' '); block.after(' ');
+      }
+      const mainText = document.querySelector('main')?.textContent?.replace(/\s+/gu, ' ').trim() ?? '';
       const captions = [...document.querySelectorAll('figcaption,img[alt]')]
         .map((node) => (node.tagName === 'IMG' ? node.getAttribute('alt') : node.textContent)?.replace(/\s+/gu, ' ').trim() ?? '')
         .filter((caption) => caption.length >= 40 && caption.length <= 1000);
@@ -31,6 +35,8 @@ export async function fetchSource(value: string, id: string, signal?: AbortSigna
         text = article?.textContent ?? document.body?.textContent ?? '';
         title = article?.title ?? document.title ?? domain;
       } catch { text = document.body?.textContent ?? ''; title = document.title || domain; }
+      // Some official release archives lose their version lists during article extraction.
+      if (mainText.length > Math.max(500, text.length * 3)) text = mainText;
       for (const caption of new Set(captions)) if (!text.includes(caption)) text += `\n${caption}`;
     }
     text = Buffer.from(text.replace(/\s+/gu, ' ').trim()).subarray(0, 200_000).toString('utf8').replace(/\uFFFD$/u, '');
