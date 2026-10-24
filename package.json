@@ -30,6 +30,7 @@
     "probe:models": "tsx scripts/probe-models.ts",
     "report:models": "tsx scripts/report-models.ts",
     "report:claims": "tsx scripts/report-claims.ts",
+    "report:vod": "tsx scripts/report-vod.ts",
     "record:test": "tsx scripts/make-test-recording.ts",
     "broadcast:test": "tsx scripts/broadcast-test.ts",
     "companion": "tsx companion/index.ts"

@@ -484,3 +484,13 @@ export const engineProbeSummarySchema = z.object({
   suite: z.literal('engine-probe'), unique_items: z.number(), planned_repetitions: z.number(),
   working_tree_dirty: z.boolean(), rows: z.array(z.object({ expected: z.string(), output: z.object({ final_verdict: z.string() }) }))
 });
+export const vodRunSummarySchema = z.object({
+  git_commit: z.string(), model: z.string(), sample_count: z.number(), attempted_items: z.number(),
+  metrics: z.object({ hit_within_15s: z.object({ matched: z.number(), total: z.number(), target: z.string().optional() }),
+    not_found_correctness: z.object({ matched: z.number(), total: z.number() }), failed_items: z.number(), not_attempted: z.number() })
+});
+export const liveVodSummarySchema = z.object({
+  passed: z.boolean().default(false), stage: z.string().default('not_recorded'),
+  offset_error_s: z.number().optional(), aligned_offset_error_s: z.number().optional(),
+  clip_playable: z.boolean().default(false), reply_sent: z.boolean().default(false)
+});

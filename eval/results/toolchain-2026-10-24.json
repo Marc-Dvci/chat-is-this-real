@@ -1,0 +1,11 @@
+{
+  "suite": "toolchain",
+  "created_at": "2026-10-24T15:35:47.479Z",
+  "ffmpeg_version": "ffmpeg version 9.0.2-essentials_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers",
+  "ffprobe_version": "ffprobe version 9.0.2-essentials_build-www.gyan.dev Copyright (c) 2007-2026 the FFmpeg developers",
+  "archive_sha256": "60f467265b1e312373dbcd92200c2618a74850f98d3d078e94296bb3fa2047ba",
+  "verified_vendor_checksum": true,
+  "download": "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip",
+  "release_reference": "https://ffmpeg.org/download.html",
+  "system_installation_modified": false
+}

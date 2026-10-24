@@ -1,0 +1,16 @@
+{
+  "suite": "media-import",
+  "split": "recorded-media-probe",
+  "created_at": "2026-10-24T15:34:38.048Z",
+  "source": "First 45 seconds of the original test recording, trimmed to the measured archive start.",
+  "bytes": 1440078,
+  "output": {
+    "id": "cb99b3c6-07ee-4b9a-bcde-e3612a916854",
+    "vod_id": "2909296715",
+    "state": "ready",
+    "progress_s": 45,
+    "total_s": 45,
+    "reason": null,
+    "created_at": "2026-10-24T15:34:35.469Z"
+  }
+}

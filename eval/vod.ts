@@ -29,8 +29,9 @@ export async function runVod(): Promise<void> {
   try {
     for (const item of questions) {
       const output = await engine.run(randomUUID(), item.question, source.broadcast_id, { past: false });
+      const expectedOffset = item.offset_min_s !== null && item.offset_max_s !== null ? (item.offset_min_s + item.offset_max_s) / 2 : null;
       const hit = item.expected === 'not_found' ? !output.found && !output.failed : output.found && output.offset_s !== null &&
-        item.offset_min_s !== null && item.offset_max_s !== null && output.offset_s >= item.offset_min_s - 15 && output.offset_s <= item.offset_max_s + 15;
+        expectedOffset !== null && Math.abs(output.offset_s - expectedOffset) <= 15;
       rows.push({ id: item.id, expected: item.expected, hit, output });
       console.info(`${item.id}: ${output.failed ? 'failed' : output.found ? `found at ${output.offset_s?.toFixed(2)}s` : 'not_found'}.`);
       if (output.reason === 'quota') break;
@@ -42,7 +43,7 @@ export async function runVod(): Promise<void> {
     await writeFile(path, JSON.stringify({ suite: 'vod', split: 'dev', sample_count: questions.length, attempted_items: rows.length,
       created_at: new Date().toISOString(), git_commit: commit, working_tree_dirty: dirty, model: model.config.MODEL_VOD,
       speech_source: 'Original system narration from the actual prerecorded Twitch test. Human voice accuracy is not measured.',
-      metrics: { hit_within_15s: { matched: rows.filter((row) => row.expected === 'found' && row.hit).length, total: found.length },
+      metrics: { hit_within_15s: { matched: rows.filter((row) => row.expected === 'found' && row.hit).length, total: found.length, target: 'Midpoint of the independently authored speech window', tolerance_s: 15 },
         not_found_correctness: { matched: rows.filter((row) => row.expected === 'not_found' && row.hit).length, total: absent.length },
         failed_items: rows.filter((row) => row.output.failed).length, not_attempted: questions.length - rows.length,
         clip_success: { created: 0, attempted: 0, reason: 'Retrieval evaluation does not create public clips. The live probe measures clipping separately.' } },
