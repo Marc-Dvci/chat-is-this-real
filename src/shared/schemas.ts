@@ -226,7 +226,7 @@ export const providerSearchSchema = z.object({
 });
 export const asrWordSchema = z.object({
   text: z.string(), begin_time: z.number().nonnegative(), end_time: z.number().nonnegative(),
-  fixed: z.boolean().optional()
+  fixed: z.boolean().optional(), punctuation: z.string().optional()
 });
 export const nativeAsrSchema = z.object({
   output: z.object({ text: z.string(), sentence: z.object({ words: z.array(asrWordSchema) }).optional() }),
@@ -274,4 +274,35 @@ export const modelProbeMeasurementsSchema = z.object({
 export const searchReplaySchema = z.object({
   origin: z.literal('host_web_search_curated'), recorded_at: z.iso.datetime(), description: z.string(),
   items: z.array(z.object({ id: z.string(), claim: z.string(), query: z.string(), sources: z.array(searchSourceSchema).max(6) }))
+});
+export const evaluationSourceCatalogSchema = z.record(z.string(), z.url());
+export const evaluationVerdictSchema = z.enum(['real', 'not_real', 'missing_context', 'unconfirmed', 'not_a_claim']);
+export const evaluationClaimSchema = z.object({
+  id: z.string().regex(/^claim-\d{3}$/u), message: z.string().min(1).max(1000),
+  category: z.enum(['gaming', 'programming', 'science', 'time_sensitive', 'not_claim', 'injection', 'missing_context']),
+  expected_kind: triageSchema.shape.kind, expected_verdict: evaluationVerdictSchema,
+  reference_url: z.url().nullable(), reference_excerpt: z.string().nullable(),
+  reference_sha256: z.string().nullable(), reference_fetched_at: z.iso.datetime().nullable(),
+  split: z.enum(['dev', 'heldout']), notes: z.string()
+});
+export type EvaluationClaim = z.infer<typeof evaluationClaimSchema>;
+export const transcriptSegmentSchema = z.object({
+  id: z.string(), broadcast_id: z.string(), vod_id: z.string().nullable(),
+  offset_s: z.number().nonnegative(), duration_s: z.number().positive(), text: z.string(),
+  words: z.array(asrWordSchema), source: z.enum(['live', 'upload']), created_at: z.iso.datetime()
+});
+export type TranscriptSegment = z.infer<typeof transcriptSegmentSchema>;
+export const vodEvaluationQuestionSchema = z.object({
+  id: z.string(), question: z.string(), expected: z.enum(['found', 'not_found']),
+  offset_min_s: z.number().nonnegative().nullable(), offset_max_s: z.number().nonnegative().nullable(), notes: z.string()
+});
+export const evaluationLockSchema = z.object({
+  version: z.literal(1), data_commit: z.string().regex(/^[0-9a-f]{40}$/u), created_at: z.iso.datetime(),
+  files: z.array(z.object({
+    path: z.enum(['eval/claims.jsonl', 'eval/vod/transcript.jsonl', 'eval/vod/questions.jsonl', 'eval/vod/source.json']),
+    sha256: z.string().regex(/^[0-9a-f]{64}$/u)
+  })).length(4)
+});
+export const evaluationOptionsSchema = z.object({
+  suite: z.enum(['claims', 'vod']).default('claims'), split: z.enum(['dev', 'heldout']).default('dev'), verify_lock: z.boolean().default(false)
 });

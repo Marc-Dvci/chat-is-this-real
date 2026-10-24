@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "data_commit": "a8cf609a180a2ecdccb1af2dc31a2960e88de15c",
+  "created_at": "2026-10-24T12:43:46.845Z",
+  "files": [
+    {
+      "path": "eval/claims.jsonl",
+      "sha256": "b8a5d05ce290c3d2bac4be0d9cb86404cbc7626add8220afda4895c0743b873d"
+    },
+    {
+      "path": "eval/vod/transcript.jsonl",
+      "sha256": "f96450263e8d158d4bc629612bc2a699a062c84f4b492e0b62ff7d17e63cba69"
+    },
+    {
+      "path": "eval/vod/questions.jsonl",
+      "sha256": "e23e2223b8a030d907be319e36a8595c46a27393e3f19d41c68350427651b4ef"
+    },
+    {
+      "path": "eval/vod/source.json",
+      "sha256": "51917a101f50792a4521877ec98cad686c989f0dcbbffb13073ae46e15208128"
+    }
+  ]
+}

@@ -93,3 +93,18 @@ The client blocks provider search unless it is explicitly enabled. This revised 
 keeps provider-search behavior unverified; it allows the build to continue using recorded
 search discovery. Model decisions and the remaining validation limits are documented in
 `docs/model-decisions.md`.
+
+## M3 data audit
+
+The authored corpus matches the plan's category mix and split counts. Supplied factual
+reference excerpts matched captured primary-source text. The integrity report distinguishes
+those authorship checks from engine accuracy. Some dynamic pages required bounded browser
+excerpts, which remain explicit in the item notes.
+
+The original audio from the completed prerecorded Twitch stream was transcribed with the
+configured native ASR model. Silent chunks were skipped. Expected VOD windows come from the
+prepared outline and the M1 timecode alignment. Audio before the archive start was excluded
+and the first word timings were rebased. No paid search was used.
+
+Manual label review remains deferred to the end at the user's request. The dev-only review
+sheet is `docs/EVAL_REVIEW.md`. The locked heldout data must remain outside tuning.
