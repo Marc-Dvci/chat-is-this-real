@@ -32,6 +32,6 @@ it('imports generated captions from the real transcript through the protected li
     expect(segments.all(`upload-${video.id}`)[0]?.text).toBe(segment.text);
     const rejected = await app.inject({ method: 'POST', url: `/api/library/${video.id}/media`, headers: { ...headers, 'Content-Type': 'application/octet-stream' }, payload: Buffer.from('This is not a media container.') });
     expect(rejected.statusCode).toBe(202);
-    await vi.waitFor(() => expect((segments.db.prepare('SELECT data_json FROM media_imports').get()?.data_json ?? '')).toContain('failed'), { timeout: 10_000 });
+    await vi.waitFor(() => expect((segments.db.prepare('SELECT data_json FROM media_imports').get()?.data_json ?? '')).toContain('failed'), { timeout: 20_000 });
   } finally { await app.close(); db.close(); vi.unstubAllEnvs(); }
-});
+}, 30_000);

@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import type { FastifyInstance } from 'fastify';
 import type { DatabaseSync } from 'node:sqlite';
 import { CheckService } from '../check/service.js';
-import { checkIdParamsSchema, clipApprovalSchema, createCheckSchema, type ChatSettings } from '../shared/schemas.js';
+import { checkIdParamsSchema, checkViewSchema, clipApprovalSchema, createCheckSchema, type ChatSettings, type DemoCatalog } from '../shared/schemas.js';
 import { assertNoSecretFragments } from '../shared/format-chat.js';
 import { loadedSecrets } from '../shared/secrets.js';
 import { ChatStore } from '../store/chat-store.js';
@@ -13,34 +13,40 @@ import { LiveSession } from './live-session.js';
 import { registerTranscriptRoutes } from './transcript-routes.js';
 import { createVodClip, vodTimestampUrl } from '../vod/clips.js';
 import { registerLibraryRoutes } from './library-routes.js';
+import { DemoSession } from '../demo/session.js';
+import { demoReplay } from '../demo/replay.js';
 
-export function registerCheckRoutes(app: FastifyInstance, db: DatabaseSync): {
-  settings: (value: ChatSettings) => void; removed: (ids: string[]) => void
-} {
+export function registerCheckRoutes(app: FastifyInstance, db: DatabaseSync, catalog?: DemoCatalog) {
   const clips = new Map<string, { abort: AbortController; done: Promise<void> }>();
   const checks = new CheckService(db, (job) => {
     if (job.reason === 'source_removed' || job.state === 'dismissed') clips.get(job.id)?.abort.abort();
-  }), chat = new ChatStore(db), requests = new RequestStore(db);
-  const session = new LiveSession(db, checks);
+  }, catalog ? demoReplay(catalog) : undefined), chat = new ChatStore(db), requests = new RequestStore(db);
+  const session = catalog ? new DemoSession(db, checks) : new LiveSession(db, checks);
   const segments = new SegmentStore(db);
   registerTranscriptRoutes(app, segments, session);
-  registerLibraryRoutes(app, segments, session);
-  app.get('/api/checks', async () => ({ checks: checks.store.list() }));
+  registerLibraryRoutes(app, segments, session, !catalog);
+  app.get('/api/checks', async () => ({ checks: checks.store.list().map((job) => checkViewSchema.parse(job)) }));
   app.post('/api/checks', async (request, reply) => {
     const parsed = createCheckSchema.safeParse(request.body);
     if (!parsed.success) return reply.code(400).send({ error: 'Choose a message or enter a claim of up to 1,000 characters.' });
-    const value = parsed.data, existing = value.message_id ? chat.get(value.message_id) : undefined;
-    if (value.message_id && (!existing?.body || existing.removed_reason)) return reply.code(404).send({ error: 'This chat message is no longer available.' });
-    const claim = value.claim ?? existing?.body ?? '';
+    const value = parsed.data;
+    const selectedIds = [...new Set(value.message_ids ?? (value.message_id ? [value.message_id] : []))];
+    const observed = session.messages(db);
+    const selected = selectedIds.flatMap((id) => { const message = chat.get(id) ?? observed.find((item) => item.id === id); return message ? [message] : []; })
+      .sort((left, right) => left.created_at.localeCompare(right.created_at));
+    if (selected.length !== selectedIds.length || selected.some((message) => !message.body || message.removed_reason)) return reply.code(404).send({ error: 'A selected message is no longer available.' });
+    const existing = selected[0], claim = value.claim ?? selected.map((message) => message.body).join(' ');
+    if (!claim.trim() || claim.length > 1000) return reply.code(400).send({ error: 'Keep the combined claim within 1,000 characters.' });
     try { assertNoSecretFragments(claim, loadedSecrets()); }
     catch { return reply.code(400).send({ error: 'This text contains a protected credential fragment.' }); }
     const id = randomUUID(), now = new Date().toISOString();
+    for (const message of selected) if (!chat.get(message.id)) chat.put({ ...message, scope: 'check' });
     const source = existing ?? chat.put({ id: `dashboard-${id}`, broadcast_id: session.currentStreamId() ?? 'local', user_id: 'dashboard',
       user_login: 'dashboard', display_name: 'Dashboard', body: claim, badges: [], parent_id: null, created_at: now, scope: 'check', removed_reason: null });
     if (!source?.body) return reply.code(409).send({ error: 'The source was removed.' });
-    const context = new SettingsStore(db).get().history_enabled ? chat.recent(source.user_id, now, [source.id]) : [];
-    const queued = requests.put({ id, kind: value.kind, body: claim, broadcast_id: source.broadcast_id, author_user_id: source.user_id,
-      original_message_id: source.id, command_message_id: `dashboard-${id}`, context_ids: context.map((message) => message.id), source_message_ids: [source.id],
+    const context = new SettingsStore(db).get().history_enabled ? chat.recent(source.user_id, source.created_at, selected.length ? selected.map((message) => message.id) : [source.id]) : [];
+    const queued = requests.put({ id, kind: value.kind, body: claim, broadcast_id: session.currentStreamId() ?? source.broadcast_id, author_user_id: source.user_id,
+      original_message_id: source.id, command_message_id: `dashboard-${id}`, context_ids: context.map((message) => message.id), source_message_ids: selected.length ? selected.map((message) => message.id) : [source.id],
       created_at: now, state: 'queued', source: 'dashboard' });
     return reply.code(202).send(checks.enqueue(queued, session.channelContext()));
   });
@@ -78,5 +84,5 @@ export function registerCheckRoutes(app: FastifyInstance, db: DatabaseSync): {
     for (const task of clips.values()) task.abort.abort();
     await Promise.all([...clips.values()].map((task) => task.done));
   });
-  return { settings: (value) => session.configure(value), removed: (ids) => checks.cancel(ids) };
+  return { service: checks, session, segments, catalog, settings: (value: ChatSettings) => session.configure(value), removed: (ids: string[]) => checks.cancel(ids) };
 }

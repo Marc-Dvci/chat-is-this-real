@@ -18,7 +18,7 @@ const execute = promisify(execFile);
 export class MediaImports {
   private active: { abort: AbortController; done: Promise<void> } | undefined;
   private receiving = false;
-  constructor(private readonly segments: SegmentStore) {
+  constructor(private readonly segments: SegmentStore, private readonly allowInference = true) {
     segments.db.exec('CREATE TABLE IF NOT EXISTS media_imports (id TEXT PRIMARY KEY,data_json TEXT NOT NULL) STRICT;');
     for (const item of this.list()) if (!['ready', 'failed'].includes(item.state)) this.save({ ...item, state: 'failed', reason: 'interrupted' });
   }
@@ -28,6 +28,7 @@ export class MediaImports {
     this.segments.db.prepare('INSERT INTO media_imports VALUES(?,?) ON CONFLICT(id) DO UPDATE SET data_json=excluded.data_json').run(item.id, JSON.stringify(mediaImportSchema.parse(item)));
   }
   async receive(video: z.infer<typeof twitchVideoSchema>, input: Readable): Promise<MediaImport> {
+    if (!this.allowInference) throw new Error('Media inference is disabled in the recorded demo.');
     if (this.busy()) throw new Error('Wait for the current media import.');
     this.receiving = true;
     const item: MediaImport = { id: randomUUID(), vod_id: video.id, state: 'receiving', progress_s: 0, total_s: null, reason: null, created_at: new Date().toISOString() };

@@ -128,7 +128,13 @@ export const chatSettingsSchema = z.object({
   permission: z.enum(['moderators', 'vips', 'everyone']).default('moderators'),
   cooldown_s: z.number().int().min(1).max(3600).default(60),
   real_command: z.string().regex(/^![a-z][a-z0-9_]{0,20}$/u).default('!real'),
-  vod_command: z.string().regex(/^![a-z][a-z0-9_]{0,20}$/u).default('!vod')
+  vod_command: z.string().regex(/^![a-z][a-z0-9_]{0,20}$/u).default('!vod'),
+  auto_publish: z.boolean().default(false), overlay_enabled: z.boolean().default(false), votes_enabled: z.boolean().default(true),
+  vote_window_s: z.number().int().min(5).max(60).default(20), dwell_s: z.number().int().min(5).max(60).default(12),
+  overlay_position: z.enum(['bottom-left', 'bottom-right', 'top-left', 'top-right']).default('bottom-left'),
+  motion_enabled: z.boolean().default(true), leaderboard_enabled: z.boolean().default(false),
+  audio_input_format: z.enum(['dshow', 'avfoundation', 'pulse']).default('dshow'), audio_device: z.string().max(250).default(''),
+  asr_language: z.enum(['en', 'fr']).default('en')
 }).refine((settings) => settings.real_command !== settings.vod_command, 'Commands must have distinct names.');
 export type ChatSettings = z.infer<typeof chatSettingsSchema>;
 export const chatSettingsPatchSchema = z.object({
@@ -137,7 +143,13 @@ export const chatSettingsPatchSchema = z.object({
   permission: chatSettingsSchema.shape.permission.removeDefault().optional(),
   cooldown_s: chatSettingsSchema.shape.cooldown_s.removeDefault().optional(),
   real_command: chatSettingsSchema.shape.real_command.removeDefault().optional(),
-  vod_command: chatSettingsSchema.shape.vod_command.removeDefault().optional()
+  vod_command: chatSettingsSchema.shape.vod_command.removeDefault().optional(),
+  auto_publish: chatSettingsSchema.shape.auto_publish.removeDefault().optional(), overlay_enabled: chatSettingsSchema.shape.overlay_enabled.removeDefault().optional(),
+  votes_enabled: chatSettingsSchema.shape.votes_enabled.removeDefault().optional(), vote_window_s: chatSettingsSchema.shape.vote_window_s.removeDefault().optional(),
+  dwell_s: chatSettingsSchema.shape.dwell_s.removeDefault().optional(), overlay_position: chatSettingsSchema.shape.overlay_position.removeDefault().optional(),
+  motion_enabled: chatSettingsSchema.shape.motion_enabled.removeDefault().optional(), leaderboard_enabled: chatSettingsSchema.shape.leaderboard_enabled.removeDefault().optional(),
+  audio_input_format: chatSettingsSchema.shape.audio_input_format.removeDefault().optional(), audio_device: chatSettingsSchema.shape.audio_device.removeDefault().optional(),
+  asr_language: chatSettingsSchema.shape.asr_language.removeDefault().optional()
 }).strict();
 export const oauthStartParamsSchema = z.object({ role: z.enum(['broadcaster', 'bot']) });
 export const storedMessageSchema = z.object({
@@ -174,7 +186,8 @@ export const historyQuerySchema = z.object({
   user: z.string().max(100).optional(), stream: z.string().max(100).optional(), q: z.string().max(200).default(''),
   limit: z.coerce.number().int().min(1).max(200).default(100)
 });
-export const historyPurgeSchema = z.object({ user_id: z.string().min(1).max(100) });
+export const historyPurgeSchema = z.object({ user_id: z.string().min(1).max(100).optional(), user_login: z.string().regex(/^[a-zA-Z0-9_]{3,25}$/u).optional() })
+  .refine((value) => Boolean(value.user_id || value.user_login), 'Choose a viewer.');
 export const chatEnvironmentSchema = z.object({ CHAT_RETENTION_DAYS: z.coerce.number().int().min(1).max(90).default(14) });
 export const purgeOptionsSchema = z.object({ user: z.string().regex(/^[a-zA-Z0-9_]{3,25}$/u).transform((value) => value.toLowerCase()) });
 export const sourceTiersSchema = z.object({ official_domains: z.array(z.string()), institutional_domains: z.array(z.string()),
@@ -190,8 +203,9 @@ export const checkInputSchema = z.object({
 export type CheckInput = z.infer<typeof checkInputSchema>;
 export const createCheckSchema = z.object({
   claim: z.string().trim().min(1).max(1000).optional(), message_id: z.string().min(1).max(100).optional(),
+  message_ids: z.array(z.string().min(1).max(100)).min(1).max(10).optional(),
   kind: z.enum(['real', 'vod']).default('real')
-}).strict().refine((value) => Boolean(value.claim || value.message_id), 'Choose a message or enter a claim.');
+}).strict().refine((value) => Boolean(value.claim || value.message_id || value.message_ids?.length), 'Choose a message or enter a claim.');
 export const checkIdParamsSchema = z.object({ id: checkInputSchema.shape.id });
 export const twitchChannelInfoSchema = z.object({ data: z.array(z.object({
   title: z.string(), game_name: z.string(), broadcaster_language: z.string()
@@ -410,7 +424,8 @@ export const companionConfigSchema = z.object({
   COMPANION_SERVER: z.url().default('http://127.0.0.1:4747')
 });
 export const companionStateSchema = z.object({ broadcast_id: z.string(), started_at: z.iso.datetime({ offset: true }),
-  vod_id: z.string().regex(/^\d+$/u).nullable(), title: z.string(), category: z.string(), channel: z.string(), commands: z.array(z.string()) });
+  vod_id: z.string().regex(/^\d+$/u).nullable(), title: z.string(), category: z.string(), channel: z.string(), commands: z.array(z.string()),
+  audio: z.object({ format: z.enum(['dshow', 'avfoundation', 'pulse']), device: z.string(), language: z.enum(['en', 'fr']) }).optional() });
 export const companionOptionsSchema = z.object({ list: z.boolean().default(false), file: z.string().optional(),
   wall_start: z.iso.datetime({ offset: true }).optional(), seconds: z.coerce.number().positive().max(10_800).optional() });
 export const ingestTranscriptSchema = z.object({
@@ -494,3 +509,47 @@ export const liveVodSummarySchema = z.object({
   offset_error_s: z.number().optional(), aligned_offset_error_s: z.number().optional(),
   clip_playable: z.boolean().default(false), reply_sent: z.boolean().default(false)
 });
+export const demoCatalogSchema = z.object({
+  origin: z.string(), cases: z.array(z.object({ key: z.string(), kind: z.enum(['real', 'vod']), text: z.string(),
+    outcome: z.union([checkOutcomeSchema, vodOutcomeSchema]) })), segments: z.array(transcriptSegmentSchema),
+  broadcasts: z.array(broadcastSchema), coverage: z.array(transcriptCoverageSchema)
+});
+export type DemoCatalog = z.infer<typeof demoCatalogSchema>;
+export const checkViewSchema = checkJobSchema.extend({ outcome: z.union([
+  checkOutcomeSchema.extend({ sources: z.array(sourceSummarySchema) }), vodOutcomeSchema
+]).nullable() });
+export type CheckView = z.infer<typeof checkViewSchema>;
+export const publicFactSchema = z.object({ id: z.string(), type: z.literal('fact'), claim: z.string(), verdict: verdictSchema,
+  explanation: z.string(), evidence: z.array(evidenceSchema), sources: z.array(sourceSummarySchema), checked_at: z.iso.datetime(), retrieval_mode: z.enum(['replay', 'provider']) });
+export const publicVodSchema = z.object({ id: z.string(), type: z.literal('vod'), claim: z.string(), found: z.boolean(), quote: z.string(),
+  offset_s: z.number().nullable(), end_s: z.number().nullable(), relation: vodProposalSchema.shape.relation, timing: vodOutcomeSchema.shape.timing,
+  clip: clipResultSchema.nullable(), vod_id: z.string().nullable(), broadcast_started_at: z.string().nullable(), coverage: z.array(transcriptCoverageSchema), checked_at: z.iso.datetime() });
+export const publicResultSchema = z.discriminatedUnion('type', [publicFactSchema, publicVodSchema]);
+export type PublicResult = z.infer<typeof publicResultSchema>;
+export const presentationSchema = z.object({ phase: z.enum(['hidden', 'message', 'checking', 'reveal', 'dwell', 'exit']),
+  job_id: z.string().nullable(), message_text: z.string(), source_ids: z.array(z.string()), updated_at: z.iso.datetime(), hide_at: z.iso.datetime().nullable() });
+export type Presentation = z.infer<typeof presentationSchema>;
+export const companionHeartbeatSchema = z.object({ broadcast_id: z.string(), captured_at: z.iso.datetime() });
+export const overlayViewSchema = z.object({ enabled: z.boolean(), demo: z.boolean(), presentation: presentationSchema,
+  result: publicResultSchema.nullable(), position: chatSettingsSchema.shape.overlay_position, motion: z.boolean() });
+export type OverlayView = z.infer<typeof overlayViewSchema>;
+export const presentationActionSchema = z.discriminatedUnion('action', [
+  z.object({ action: z.literal('hide') }),
+  z.object({ action: z.literal('show_check'), id: checkInputSchema.shape.id, sensitive_confirmed: z.boolean().default(false) }),
+  z.object({ action: z.literal('show_message'), message_ids: z.array(z.string().max(100)).min(1).max(10) })
+]);
+export const deskSnapshotSchema = z.object({ demo: z.boolean(), messages: z.array(storedMessageSchema), checks: z.array(checkViewSchema),
+  requests: z.array(checkRequestSchema), settings: chatSettingsSchema, overlay: overlayViewSchema,
+  twitch: z.object({ connected: z.boolean(), notice: z.string(), live_stream_id: z.string().nullable() }),
+  companion: z.object({ state: z.enum(['recorded', 'waiting', 'current', 'stale']), last_chunk_at: z.iso.datetime().nullable() }),
+  models: z.object({ recorded: z.boolean(), calls: z.number(), search_calls: z.number(), last: modelUsageSchema.nullable() }),
+  indexed_s: z.number().nonnegative(), samples: z.array(z.object({ key: z.string(), kind: z.enum(['real', 'vod']), text: z.string() }))
+});
+export type DeskSnapshot = z.infer<typeof deskSnapshotSchema>;
+export const historyContextSchema = z.object({ id: z.string().max(100) });
+export const postCheckSchema = z.object({ sensitive_confirmed: z.boolean().default(false) });
+export const messageListSchema = z.object({ messages: z.array(storedMessageSchema) });
+export const libraryListSchema = z.object({ broadcasts: z.array(broadcastSchema.extend({ coverage: transcriptCoverageSchema })) });
+export const libraryVodsSchema = z.object({ videos: z.array(twitchVideoSchema) });
+export const libraryImportsSchema = z.object({ imports: z.array(mediaImportSchema) });
+export const segmentListSchema = z.object({ segments: z.array(transcriptSegmentSchema) });
