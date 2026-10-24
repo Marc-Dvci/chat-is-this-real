@@ -37,6 +37,24 @@ Automated checks and milestone PRs continue throughout the build.
 - M3: real stream transcript and label spot-check before locking evaluation data.
 - Later live checks, deployment and submission follow the plan's human gates.
 
+## M1 audit
+
+The authorization callback verifies one-use state and the configured account before persisting tokens.
+Tokens are validated at startup and on subsequent use after an hour; refreshes are serialized per role.
+The probe's app-token reply explicitly targets only the source channel.
+Each chat send and clip creation rechecks that the approved stream is still live.
+Cancellation aborts pending Helix requests and closes the terminal and EventSub connection.
+Fixture export starts from captured raw frames and pseudonymizes identifiers; it selects the scripted chat exchange.
+Twitch registration, sign-in, the test stream and the observed clap offset are the M1 acceptance gates.
+The user's prerecorded-stream request replaces camera and microphone input for this probe.
+The generated video contains original scripted narration, an explicit system-speech label and source timecodes.
+The authorized encoder uses verified RTMPS transport and keeps stream keys out of persisted manifests and logs.
+The real probe received the claim and broadcaster reply, confirmed the threaded bot response, found the live archive,
+and created VOD and live clips. The decoded source-timecode match is recorded in `docs/probe.md`.
+Recorded app validation exposed `scopes: null`; the token manager now handles it, with a real-response regression test.
+Recorded API replies include a leading mention. The fixture preserves it for the command-parser milestone.
+The fixture exporter preserves badge set names and versions because permissions depend on those fields.
+
 ## Contest source
 
 The [official rules](https://twitchcon-codex.devpost.com/rules), checked on 24 October 2026,

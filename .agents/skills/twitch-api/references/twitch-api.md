@@ -83,3 +83,14 @@
 - Frontend: `Twitch.ext.onAuthorized` gives `token` (JWT), `userId` (opaque), `channelId`, `clientId`, `helixToken`. Send the JWT as a header to the EBS.
 - EBS: verify the JWT with the extension's shared secret, which is base64-encoded (decode it to bytes first). Payload fields: `exp`, `opaque_user_id`, `channel_id`, `role`, `pubsub_perms`, `user_id`.
 - `POST https://api.twitch.tv/helix/extensions/pubsub`: EBS-signed JWT with `role: "external"`, header `Client-Id`; body `target` (["broadcast"]), `broadcaster_id`, `message` (max 5 KB). Limits: 100 messages per minute per client and broadcaster in the reference, and 1 per second per channel on the building page; respect the stricter one. Legacy Twitch PubSub was shut down in April 2025, and the docs do not say whether this endpoint is affected, so keep the polling fallback.
+
+## Observed in M1 (24 Oct 2026)
+- App-token validation returns `scopes: null` and omits `login` and `user_id`. Treat null scopes as an empty list for app tokens; continue enforcing all required scopes for user tokens.
+- The scripted reply sent through Send Chat Message arrived with a leading parent mention in EventSub, including when the API input was just `!real`.
+- Get Streams returned `id` and `started_at`. Get Videos returned the in-progress archive and its matching `stream_id`.
+- Both Clip From VOD and live clip creation succeeded. The observed source alignment and recorded fixture provenance are in `docs/probe.md`.
+- Clip-download URLs from `GET /helix/clips/downloads` use CloudFront. The authorized clip was downloaded and decoded for source-timecode alignment. Source: https://dev.twitch.tv/docs/api/reference/#get-clips-download
+- `https://ingest.twitch.tv/ingests` returns `url_template_secure` with an RTMPS endpoint. The optional prerecorded test-stream tool validates TLS with a CA bundle and never logs the stream key.
+- Optional test automation additionally requests `channel:read:stream_key`, `channel:manage:broadcast` and `user:write:chat` from the broadcaster. These are not needed for normal bot operation.
+- App-token chat messages explicitly use `for_source_only: true`. A user-token fallback can reach every channel in Shared Chat, so broadcaster test messages are blocked when a shared session is active. Source: https://dev.twitch.tv/docs/api/reference/#send-chat-message
+- A blank extra redirect field can trigger the console's HTTPS error. Keep a single populated localhost callback field. Source: https://discuss.dev.twitch.com/t/unable-to-use-localhost-are-redirect-url-for-oauth-implicit-grant-flow/61951
