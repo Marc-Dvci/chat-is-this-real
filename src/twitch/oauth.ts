@@ -1,6 +1,6 @@
 import { randomBytes, timingSafeEqual } from 'node:crypto';
 import Fastify from 'fastify';
-import { oauthCallbackSchema, type TwitchConfig, type UserTokenRole } from '../shared/schemas.js';
+import { oauthCallbackSchema, oauthStartParamsSchema, type TwitchConfig, type UserTokenRole } from '../shared/schemas.js';
 
 export const twitchRedirectUri = 'http://localhost:4747/auth/callback';
 
@@ -10,6 +10,7 @@ export const twitchScopes = {
 } as const;
 
 export const testStreamScopes = ['channel:read:stream_key', 'channel:manage:broadcast', 'user:write:chat'] as const;
+export const testModerationScopes = ['moderator:manage:chat_messages'] as const;
 
 export function authorizationUrl(clientId: string, role: UserTokenRole, state: string, extraScopes: readonly string[] = []): string {
   const url = new URL('https://id.twitch.tv/oauth2/authorize');
@@ -24,9 +25,15 @@ export function createOAuthSetup(
   config: TwitchConfig, exchange: (role: UserTokenRole, code: string) => Promise<void>,
   extraScopes: Partial<Record<UserTokenRole, readonly string[]>> = {}
 ) {
-  const app = Fastify({ logger: false });
+  const app = Fastify({ logger: false, forceCloseConnections: true });
   const pending = new Map<string, { role: UserTokenRole; expires: number }>();
   const connected = new Set<UserTokenRole>();
+  function begin(role: UserTokenRole): string {
+    for (const [state, attempt] of pending) if (attempt.role === role || attempt.expires <= Date.now()) pending.delete(state);
+    const state = randomBytes(32).toString('hex');
+    pending.set(state, { role, expires: Date.now() + 10 * 60_000 });
+    return authorizationUrl(config.TWITCH_CLIENT_ID, role, state, extraScopes[role]);
+  }
 
   app.addHook('onSend', async (_request, reply, payload) => {
     reply.header('Cache-Control', 'no-store');
@@ -62,15 +69,15 @@ export function createOAuthSetup(
       return reply.code(400).type('text/plain').send('Could not connect this account. Check that you signed in to the configured account, then restart setup.');
     }
   });
+  app.get('/auth/start/:role', async (request, reply) => {
+    const params = oauthStartParamsSchema.safeParse(request.params);
+    if (!params.success) return reply.code(400).type('text/plain').send('Choose the broadcaster or bot account.');
+    return reply.redirect(begin(params.data.role));
+  });
 
   return {
     app,
     connected,
-    begin(role: UserTokenRole): string {
-      for (const [state, attempt] of pending) if (attempt.role === role || attempt.expires <= Date.now()) pending.delete(state);
-      const state = randomBytes(32).toString('hex');
-      pending.set(state, { role, expires: Date.now() + 10 * 60_000 });
-      return authorizationUrl(config.TWITCH_CLIENT_ID, role, state, extraScopes[role]);
-    }
+    begin
   };
 }

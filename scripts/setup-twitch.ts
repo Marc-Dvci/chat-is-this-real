@@ -1,27 +1,27 @@
 import { setTimeout as delay } from 'node:timers/promises';
 import { parseArgs } from 'node:util';
 import { loadTwitchConfig } from '../src/twitch/config.js';
-import { createOAuthSetup, testStreamScopes } from '../src/twitch/oauth.js';
+import { createOAuthSetup, testModerationScopes, testStreamScopes } from '../src/twitch/oauth.js';
 import { TwitchTokens } from '../src/twitch/tokens.js';
 
 async function setup(): Promise<void> {
   const config = loadTwitchConfig();
-  const { values } = parseArgs({ options: { automation: { type: 'boolean', default: false } } });
+  const { values } = parseArgs({ options: { automation: { type: 'boolean', default: false }, moderation: { type: 'boolean', default: false } } });
+  const extra = [...values.automation ? testStreamScopes : [], ...values.moderation ? testModerationScopes : []];
   const tokens = await TwitchTokens.open(config);
   const setup = createOAuthSetup(config, (role, code) => tokens.authorize(role, code,
-    role === 'broadcaster' && values.automation ? testStreamScopes : []),
-  values.automation ? { broadcaster: testStreamScopes } : {});
+    role === 'broadcaster' ? extra : []), extra.length ? { broadcaster: extra } : {});
   let cancelled = false;
   const cancel = () => { cancelled = true; };
   process.once('SIGINT', cancel);
   process.once('SIGTERM', cancel);
   try {
     await setup.app.listen({ host: '127.0.0.1', port: 4747 });
-    const roles = values.automation ? ['broadcaster'] as const : ['broadcaster', 'bot'] as const;
+    const roles = extra.length ? ['broadcaster'] as const : ['broadcaster', 'bot'] as const;
     for (const role of roles) {
       console.info(`Open the ${role} authorization link in ${role === 'bot' ? 'a private window signed in as the bot' : 'your browser signed in as the broadcaster'}:`);
-      console.info(setup.begin(role));
-      const deadline = Date.now() + 10 * 60_000;
+      console.info(`http://localhost:4747/auth/start/${role}`);
+      const deadline = Date.now() + 60 * 60_000;
       while (!setup.connected.has(role) && !cancelled && Date.now() < deadline) await delay(250);
       if (!setup.connected.has(role)) throw new Error('Authorization stopped or expired. Run setup again.');
       console.info(`${role === 'bot' ? 'Bot' : 'Broadcaster'} authorization saved.`);

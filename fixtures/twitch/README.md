@@ -8,3 +8,8 @@ the user login and user ID.
 
 The live probe adds scrubbed EventSub frame recordings after the scripted stream check.
 Raw recordings and credentials stay under the ignored `data/` directory.
+
+`probe-1792847799669.jsonl` records the M4 scripted reply and deletion. The live core probe
+created a request, sent its acknowledgement, deleted the scripted source and received the
+real moderation event. Frame structure and badge semantics are retained; account and session
+identifiers are pseudonymized. The regression test enters through `EventSubWs.receive`.

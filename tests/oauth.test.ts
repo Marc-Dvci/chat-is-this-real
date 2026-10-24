@@ -45,4 +45,19 @@ describe('authorization callback entry point', () => {
     expect(response.statusCode).toBe(400);
     expect(response.body).not.toContain('private-value');
   });
+
+  it('creates one-use state when the local start link is opened', async () => {
+    const setup = createOAuthSetup(config, async () => undefined);
+    apps.push(setup.app);
+    const started = await setup.app.inject({ url: '/auth/start/broadcaster' });
+    expect(started.statusCode).toBe(302);
+    const destination = new URL(String(started.headers.location));
+    expect(destination.hostname).toBe('id.twitch.tv');
+    const state = destination.searchParams.get('state');
+    expect(state).toHaveLength(64);
+    const completed = await setup.app.inject({ url: `/auth/callback?state=${state}&code=local-test-code` });
+    expect(completed.statusCode).toBe(200);
+    expect((await setup.app.inject({ url: `/auth/callback?state=${state}&code=local-test-code` })).statusCode).toBe(400);
+    expect((await setup.app.inject({ url: '/auth/start/app' })).statusCode).toBe(400);
+  });
 });

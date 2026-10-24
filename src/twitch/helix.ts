@@ -1,15 +1,16 @@
 import type { z } from 'zod';
 import {
-  twitchChatSentSchema, twitchClipCreatedSchema, twitchClipsSchema, twitchSharedChatSchema, twitchStreamsSchema, twitchVideosSchema,
+  twitchChatSentSchema, twitchClipCreatedSchema, twitchClipsSchema, twitchEmptyResponseSchema, twitchSharedChatSchema, twitchStreamsSchema, twitchVideosSchema,
   type TokenRole, type TwitchStream
 } from '../shared/schemas.js';
 import { formatChat } from '../shared/format-chat.js';
 import { TwitchHttpError, type TwitchTokens } from './tokens.js';
 
 export class TwitchHelix {
+  private readonly scriptedMessages = new Set<string>();
   constructor(readonly tokens: TwitchTokens, readonly signal?: AbortSignal) {}
 
-  async request<T>(role: TokenRole, method: 'GET' | 'POST' | 'PATCH', path: string, schema: z.ZodType<T>, body?: unknown): Promise<T> {
+  async request<T>(role: TokenRole, method: 'GET' | 'POST' | 'PATCH' | 'DELETE', path: string, schema: z.ZodType<T>, body?: unknown): Promise<T> {
     if (!path.startsWith('/') || path.startsWith('//')) throw new Error('Invalid Twitch API path.');
     const url = `https://api.twitch.tv/helix${path}`;
     for (let attempt = 0; attempt < 2; attempt++) {
@@ -79,7 +80,18 @@ export class TwitchHelix {
     });
     const sent = response.data[0];
     if (!sent?.is_sent) throw new Error('Twitch did not send the scripted test message.');
+    this.scriptedMessages.add(sent.message_id);
     return sent.message_id;
+  }
+
+  async deleteScriptedTestMessage(stream: TwitchStream, messageId: string): Promise<void> {
+    if (!this.scriptedMessages.has(messageId)) throw new Error('Only a message sent by this test can be deleted.');
+    const broadcaster = await this.tokens.get('broadcaster');
+    if (!broadcaster.scopes.includes('moderator:manage:chat_messages')) throw new Error('Authorize test-message deletion first.');
+    await this.requireStream(stream.id);
+    await this.request('broadcaster', 'DELETE', `/moderation/chat?${new URLSearchParams({ broadcaster_id: stream.user_id,
+      moderator_id: broadcaster.user_id ?? '', message_id: messageId })}`, twitchEmptyResponseSchema);
+    this.scriptedMessages.delete(messageId);
   }
 
   async createVodProbeClip(stream: TwitchStream, vodId: string, endOffset: number): Promise<string> {

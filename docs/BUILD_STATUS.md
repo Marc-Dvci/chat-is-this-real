@@ -108,3 +108,26 @@ and the first word timings were rebased. No paid search was used.
 
 Manual label review remains deferred to the end at the user's request. The dev-only review
 sheet is `docs/EVAL_REVIEW.md`. The locked heldout data must remain outside tuning.
+
+## M4 core audit
+
+The WebSocket class routes real recorded replies into stored requests. Permissions default
+to broadcaster and moderators. Viewer cooldowns, leading mention stripping and foreign
+Shared Chat filtering run before queue creation. History is opt-in; selected source snapshots
+remain available for an explicitly requested check.
+
+SQLite stores messages, source links, settings and publication attempts. Moderation clears
+message text, its search-index entry and copied request text. Tombstones and clear watermarks
+block late replay and unknown pre-clear reply snapshots. Retention runs at startup and daily.
+The protected Fastify routes expose history filters, settings and viewer purging. Host, origin
+and session-header checks protect local mutations.
+
+Every outgoing message uses the shared formatter and the loaded-secret guard. Model-written
+explanations lose URLs, mentions and command text before code-owned links are appended.
+The publisher rechecks the active broadcaster-started stream and cancellation before sending.
+It reserves one attempt per request and message kind. App-token failure can fall back to the
+bot token only outside Shared Chat, with the app-only field omitted. Drops are retained.
+
+The live core probe created a request, received its acknowledgement and handled its real
+deletion. The observed timing and pseudonymized frames are linked from `docs/probe-core.md`.
+The short prerecorded stream ended automatically. No model or paid search call was made.

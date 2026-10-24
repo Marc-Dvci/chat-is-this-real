@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { formatChat } from '../src/shared/format-chat.js';
 
 describe('publication boundary', () => {
@@ -19,5 +19,12 @@ describe('publication boundary', () => {
     expect(() => formatChat(`Message ${secret.slice(3, 15)}`, [secret])).toThrow('secret fragment');
     expect(() => formatChat(`${'x'.repeat(510)} ${secret}`, [secret])).toThrow('secret fragment');
     expect(() => formatChat(`Message ${secret}`, [secret])).toThrow('secret fragment');
+  });
+
+  it('also protects credentials loaded by a different application component', () => {
+    const secret = 'unused-environment-credential';
+    vi.stubEnv('DASHSCOPE_API_KEY', secret);
+    try { expect(() => formatChat(`Result: ${secret.slice(4, 16)}`)).toThrow('secret fragment'); }
+    finally { vi.unstubAllEnvs(); }
   });
 });
