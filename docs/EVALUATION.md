@@ -2,7 +2,7 @@
 
 The [integrity audit](../eval/results/ground-truth-integrity.json) records the authored claim
 mix, split sizes, transcript segments and VOD question counts. Factual labels reference
-primary documentation or publisher pages. Opposite claims about the same fact stay in the
+documentation, publisher pages and the official community wiki. Opposite claims about the same fact stay in the
 same split. Related claims can share source pages, so this small corpus does not establish
 independent topic generalization.
 

@@ -1,21 +1,25 @@
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { Readability } from '@mozilla/readability';
 import { parseHTML } from 'linkedom';
-import type { SourceDocument } from '../shared/schemas.js';
+import { sourceTiersSchema, type SourceDocument } from '../shared/schemas.js';
 import { downloadSource, sourceUrl } from './source-network.js';
 
+const sourceTiers = sourceTiersSchema.parse(JSON.parse(readFileSync(new URL('../../config/source-tiers.json', import.meta.url), 'utf8')));
 export function sourceTier(host: string): 1 | 2 | 3 | 4 {
   const domain = host.replace(/^www\./, '').toLowerCase();
-  if (['nasa.gov', 'esa.int', 'python.org', 'developer.mozilla.org', 'nomanssky.com', 'minecraft.net', 'godotengine.org', 'twitch.tv', 'nodejs.org', 'alibabacloud.com'].some((official) => domain === official || domain.endsWith(`.${official}`))) return 1;
-  if (domain.endsWith('.edu') || domain.endsWith('.ac.uk') || domain === 'wikipedia.org' || domain.endsWith('.wikipedia.org')) return 2;
-  if (['reuters.com', 'apnews.com', 'bbc.com', 'theverge.com', 'arstechnica.com'].some((press) => domain === press || domain.endsWith(`.${press}`))) return 3;
+  const matches = (patterns: readonly string[]) => patterns.some((pattern) => domain === pattern || domain.endsWith(`.${pattern}`));
+  if (matches(sourceTiers.institutional_domains)) return 2;
+  if (matches(sourceTiers.official_domains)) return 1;
+  if (sourceTiers.institutional_suffixes.some((suffix) => domain.endsWith(suffix))) return 2;
+  if (matches(sourceTiers.press_domains)) return 3;
   return 4;
 }
 
 export async function fetchSource(value: string, id: string, signal?: AbortSignal): Promise<SourceDocument> {
   const url = sourceUrl(value);
   const domain = url.hostname.toLowerCase();
-  const base = { id, url: url.href, title: domain, domain, tier: sourceTier(domain), fetched_at: new Date().toISOString() };
+  const base = { id, url: url.href, title: domain, domain, tier: sourceTier(domain), fetched_at: new Date().toISOString(), origin: 'live_fetch' as const };
   try {
     const downloaded = await downloadSource(url.href, signal);
     let text = downloaded.body;

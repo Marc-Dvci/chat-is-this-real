@@ -5,6 +5,10 @@ import OpenAI from 'openai';
 import type { ChatCompletionCreateParamsNonStreaming } from 'openai/resources/chat/completions';
 import { z } from 'zod';
 import { assertNoSecretFragments } from '../shared/format-chat.js';
+import { loadedSecrets, registerSecrets } from '../shared/secrets.js';
+import { requireLocalAllowance } from './allowance.js';
+import { ModelProviderError } from './errors.js';
+export { ModelProviderError } from './errors.js';
 import {
   modelUsageSchema, nativeAsrSchema, providerChatSchema, providerSearchSchema,
   type ModelConfig, type ModelRole, type ModelUsage
@@ -13,16 +17,9 @@ import {
 type Meter = { input_tokens: number; output_tokens: number; search_calls: number };
 type Format = ModelUsage['format'];
 
-export class ModelProviderError extends Error {
-  constructor(readonly reason: 'quota' | 'provider' | 'invalid_output' | 'timeout', readonly code: string, readonly strictUnsupported = false) {
-    super(`Model Studio ${reason.replace('_', ' ')} (${code}).`);
-    this.name = 'ModelProviderError';
-  }
-}
-
 function providerError(error: unknown): ModelProviderError {
   if (error instanceof ModelProviderError) return error;
-  if (error instanceof OpenAI.APIConnectionTimeoutError || (error instanceof Error && /timeout|aborted/i.test(error.name))) {
+  if (error instanceof OpenAI.APIConnectionTimeoutError || error instanceof OpenAI.APIUserAbortError || (error instanceof Error && /timeout|aborted/i.test(error.name))) {
     return new ModelProviderError('timeout', 'timeout');
   }
   if (error instanceof OpenAI.APIError) {
@@ -39,18 +36,21 @@ export class ModelClient {
   readonly calls: ModelUsage[] = [];
 
   constructor(readonly config: ModelConfig, private readonly recordDirectory?: string, private readonly onUsage?: (usage: ModelUsage) => void) {
+    registerSecrets([config.DASHSCOPE_API_KEY]);
     this.sdk = new OpenAI({ apiKey: config.DASHSCOPE_API_KEY, baseURL: config.MODELSTUDIO_BASE_URL, maxRetries: 0, timeout: 45_000 });
   }
 
   private async record(role: ModelRole, model: string, request: unknown, response: unknown): Promise<void> {
     if (!this.recordDirectory) return;
     const text = JSON.stringify({ role, model, request, response });
-    assertNoSecretFragments(text, [this.config.DASHSCOPE_API_KEY]);
+    assertNoSecretFragments(text, loadedSecrets([this.config.DASHSCOPE_API_KEY]));
     await mkdir(this.recordDirectory, { recursive: true, mode: 0o700 });
     await writeFile(join(this.recordDirectory, `${randomUUID()}.json`), text, { mode: 0o600 });
   }
 
   private async track<T>(role: ModelRole, model: string, format: Format, operation: (meter: Meter) => Promise<T>): Promise<T> {
+    this.safeText(model, 'unsafe_model_identifier');
+    await requireLocalAllowance(model);
     const started = performance.now();
     const meter: Meter = { input_tokens: 0, output_tokens: 0, search_calls: 0 };
     let error: ModelProviderError | undefined;
@@ -69,7 +69,13 @@ export class ModelClient {
     }
   }
 
+  private safeText(text: string, code: string): void {
+    try { assertNoSecretFragments(text, loadedSecrets()); }
+    catch { throw new ModelProviderError('unsafe', code); }
+  }
+
   async structured<T>(role: Exclude<ModelRole, 'asr' | 'search'>, model: string, schema: z.ZodType<T>, instructions: string, data: unknown, signal?: AbortSignal): Promise<T> {
+    this.safeText(JSON.stringify(data), 'unsafe_input');
     const jsonSchema = z.toJSONSchema(schema);
     delete jsonSchema.$schema;
     let objectMode = false;
@@ -91,6 +97,7 @@ export class ModelClient {
           await this.record(role, model, body, response);
           const text = response.choices[0]?.message.content;
           if (!text) throw new ModelProviderError('invalid_output', 'empty_response');
+          this.safeText(text, 'unsafe_output');
           try {
             const parsed = schema.safeParse(JSON.parse(text));
             if (!parsed.success) throw new ModelProviderError('invalid_output', 'schema_validation');
@@ -110,6 +117,7 @@ export class ModelClient {
 
   async search(model: string, data: unknown, signal?: AbortSignal) {
     if (!this.config.MODELSTUDIO_ALLOW_PAID_SEARCH) throw new ModelProviderError('provider', 'paid_search_disabled');
+    this.safeText(JSON.stringify(data), 'unsafe_input');
     return this.track('search', model, 'responses', async (meter) => {
       const body = {
         model, stream: false as const, store: false, max_tool_calls: 1,
@@ -140,6 +148,7 @@ export class ModelClient {
   }
 
   async asr(wav: Buffer, previous = '', model = this.config.MODEL_ASR) {
+    this.safeText(previous, 'unsafe_input');
     if (wav.length > 8 * 1024 * 1024) throw new Error('Transcription chunks must be under 8 MB.');
     return this.track('asr', model, 'native', async (meter) => {
       let context = previous.slice(0, 300);

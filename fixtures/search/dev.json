@@ -1,0 +1,461 @@
+{
+  "origin": "host_web_search_curated",
+  "recorded_at": "2026-10-24T13:57:11.357Z",
+  "description": "Observed assistant search URLs curated with knowledge of dev reference pages. Discovery is simulated. One historical publisher excerpt uses a recorded rendered capture when direct extraction is empty. This is not a Model Studio search response.",
+  "items": [
+    {
+      "id": "claim-003",
+      "claim": "Minecraft Java and Bedrock use the same multiplayer servers and natively play together.",
+      "query": "Java Bedrock edition different multiplayer servers",
+      "sources": [
+        {
+          "title": "Minecraft Java or Bedrock Edition | Minecraft",
+          "url": "https://www.minecraft.net/en-us/article/java-or-bedrock-edition"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-004",
+      "claim": "Minecraft Java and Bedrock use different multiplayer servers.",
+      "query": "Java Bedrock edition different multiplayer servers",
+      "sources": [
+        {
+          "title": "Minecraft Java or Bedrock Edition | Minecraft",
+          "url": "https://www.minecraft.net/en-us/article/java-or-bedrock-edition"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-005",
+      "claim": "Stardew Valley 1.5 added local split-screen multiplayer.",
+      "query": "Stardew Valley 1.5 full changelog split screen",
+      "sources": [
+        {
+          "title": "Stardew Valley - Stardew Valley 1.5 Update Full Changelog",
+          "url": "https://www.stardewvalley.net/stardew-valley-1-5-update-full-changelog/"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-006",
+      "claim": "Stardew Valley 1.5 removed local split-screen multiplayer.",
+      "query": "Stardew Valley 1.5 full changelog split screen",
+      "sources": [
+        {
+          "title": "Stardew Valley - Stardew Valley 1.5 Update Full Changelog",
+          "url": "https://www.stardewvalley.net/stardew-valley-1-5-update-full-changelog/"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-007",
+      "claim": "Stardew Valley 1.6 supports up to eight players on PC.",
+      "query": "Stardew Valley 1.6 full changelog eight players PC",
+      "sources": [
+        {
+          "title": "Stardew Valley - Stardew Valley 1.6 Update Full Changelog",
+          "url": "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/"
+        },
+        {
+          "title": "Multiplayer - Stardew Valley Wiki",
+          "url": "https://wiki.stardewvalley.net/Multiplayer"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-008",
+      "claim": "Stardew Valley 1.6 capped PC multiplayer at two players.",
+      "query": "Stardew Valley 1.6 full changelog eight players PC",
+      "sources": [
+        {
+          "title": "Stardew Valley - Stardew Valley 1.6 Update Full Changelog",
+          "url": "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/"
+        },
+        {
+          "title": "Multiplayer - Stardew Valley Wiki",
+          "url": "https://wiki.stardewvalley.net/Multiplayer"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-009",
+      "claim": "The 2020 No Man's Sky Crossplay update allowed cross-platform groups.",
+      "query": "Introducing Crossplay for No Man's Sky 2020",
+      "sources": [
+        {
+          "title": "Introducing Crossplay for No Man’s Sky - No Man's Sky",
+          "url": "https://www.nomanssky.com/2020/06/introducing-crossplay-for-no-mans-sky/"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-010",
+      "claim": "The 2020 No Man's Sky Crossplay update prohibited groups across platforms.",
+      "query": "Introducing Crossplay for No Man's Sky 2020",
+      "sources": [
+        {
+          "title": "Introducing Crossplay for No Man’s Sky - No Man's Sky",
+          "url": "https://www.nomanssky.com/2020/06/introducing-crossplay-for-no-mans-sky/"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-015",
+      "claim": "Godot Engine permits commercial game development.",
+      "query": "Godot license your games license MIT",
+      "sources": [
+        {
+          "title": "Complying with licenses — Godot Engine (latest) documentation in English",
+          "url": "https://docs.godotengine.org/en/latest/about/complying_with_licenses.html"
+        },
+        {
+          "title": "Frequently asked questions — Godot Engine (4.6) documentation in English",
+          "url": "https://docs.godotengine.org/en/4.6/about/faq.html"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-016",
+      "claim": "Godot requires every game made with it to publish its source under the MIT license.",
+      "query": "Godot license your games license MIT",
+      "sources": [
+        {
+          "title": "Complying with licenses — Godot Engine (latest) documentation in English",
+          "url": "https://docs.godotengine.org/en/latest/about/complying_with_licenses.html"
+        },
+        {
+          "title": "Frequently asked questions — Godot Engine (4.6) documentation in English",
+          "url": "https://docs.godotengine.org/en/4.6/about/faq.html"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-017",
+      "claim": "Terraria Journey's End added more than one thousand new items.",
+      "query": "Terraria Journey End over 1000 new items",
+      "sources": [
+        {
+          "title": "News - Terraria",
+          "url": "https://terraria.org/news/the-end-of-the-journey-terraria-journey-s-end-out-now-"
+        }
+      ],
+      "documents": [
+        {
+          "id": "terraria",
+          "title": "The End of the Journey - Terraria: Journey's End Out Now!",
+          "text": "over 1000 new items to find and craft",
+          "url": "https://terraria.org/news/the-end-of-the-journey-terraria-journey-s-end-out-now-",
+          "domain": "terraria.org",
+          "tier": 1,
+          "fetched_at": "2026-10-24T10:22:54.855Z",
+          "status": 0,
+          "sha256": "769d4ed79bcb011fe203d7c24e90f05b3f117f3ad1412ddb361c142f00710ecd",
+          "retrieval_method": "Verbatim bounded excerpt observed in the assistant web service. Direct HTTP extraction did not expose this content.",
+          "error": "direct_extraction_unavailable",
+          "origin": "recorded_render"
+        }
+      ]
+    },
+    {
+      "id": "claim-018",
+      "claim": "Terraria Journey's End added no new items.",
+      "query": "Terraria Journey End over 1000 new items",
+      "sources": [
+        {
+          "title": "News - Terraria",
+          "url": "https://terraria.org/news/the-end-of-the-journey-terraria-journey-s-end-out-now-"
+        }
+      ],
+      "documents": [
+        {
+          "id": "terraria",
+          "title": "The End of the Journey - Terraria: Journey's End Out Now!",
+          "text": "over 1000 new items to find and craft",
+          "url": "https://terraria.org/news/the-end-of-the-journey-terraria-journey-s-end-out-now-",
+          "domain": "terraria.org",
+          "tier": 1,
+          "fetched_at": "2026-10-24T10:22:54.855Z",
+          "status": 0,
+          "sha256": "769d4ed79bcb011fe203d7c24e90f05b3f117f3ad1412ddb361c142f00710ecd",
+          "retrieval_method": "Verbatim bounded excerpt observed in the assistant web service. Direct HTTP extraction did not expose this content.",
+          "error": "direct_extraction_unavailable",
+          "origin": "recorded_render"
+        }
+      ]
+    },
+    {
+      "id": "claim-019",
+      "claim": "The first element of a JavaScript array is at index zero.",
+      "query": "JavaScript Array zero indexed shallow copies",
+      "sources": [
+        {
+          "title": "Array - JavaScript | MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-020",
+      "claim": "The first element of a JavaScript array is at index one.",
+      "query": "JavaScript Array zero indexed shallow copies",
+      "sources": [
+        {
+          "title": "Array - JavaScript | MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-021",
+      "claim": "Python's range excludes the given end point.",
+      "query": "Python range end point never part generated sequence",
+      "sources": [
+        {
+          "title": "4. More Control Flow Tools — Python 3.15.0 documentation",
+          "url": "https://docs.python.org/3/tutorial/controlflow.html?highlight=statement"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-022",
+      "claim": "Python's range always includes the given end point.",
+      "query": "Python range end point never part generated sequence",
+      "sources": [
+        {
+          "title": "4. More Control Flow Tools — Python 3.15.0 documentation",
+          "url": "https://docs.python.org/3/tutorial/controlflow.html?highlight=statement"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-023",
+      "claim": "A JSON array is an ordered sequence of values.",
+      "query": "RFC 8259 array ordered sequence values",
+      "sources": [
+        {
+          "title": "rfc8259",
+          "url": "https://www.rfc-editor.org/rfc/inline-errata/rfc8259.html"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-024",
+      "claim": "JSON arrays have no ordering between their values.",
+      "query": "RFC 8259 array ordered sequence values",
+      "sources": [
+        {
+          "title": "rfc8259",
+          "url": "https://www.rfc-editor.org/rfc/inline-errata/rfc8259.html"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-029",
+      "claim": "The Sun is a star.",
+      "query": "Sun yellow dwarf star NASA facts",
+      "sources": [
+        {
+          "title": "Sun: Facts - NASA Science",
+          "url": "https://science.nasa.gov/sun/facts/"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-030",
+      "claim": "The Sun is a planet rather than a star.",
+      "query": "Sun yellow dwarf star NASA facts",
+      "sources": [
+        {
+          "title": "Sun: Facts - NASA Science",
+          "url": "https://science.nasa.gov/sun/facts/"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-031",
+      "claim": "Mars has two moons named Phobos and Deimos.",
+      "query": "Mars two moons Phobos Deimos",
+      "sources": [
+        {
+          "title": "Mars Moons - NASA Science",
+          "url": "https://science.nasa.gov/mars/moons/"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-032",
+      "claim": "Mars has five natural moons.",
+      "query": "Mars two moons Phobos Deimos",
+      "sources": [
+        {
+          "title": "Mars Moons - NASA Science",
+          "url": "https://science.nasa.gov/mars/moons/"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-033",
+      "claim": "Earth's Moon has no moons of its own.",
+      "query": "Moon has no moons of its own NASA",
+      "sources": [
+        {
+          "title": "Moon Facts - NASA Science",
+          "url": "https://science.nasa.gov/moon/facts/"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-034",
+      "claim": "Earth's Moon has its own natural moon.",
+      "query": "Moon has no moons of its own NASA",
+      "sources": [
+        {
+          "title": "Moon Facts - NASA Science",
+          "url": "https://science.nasa.gov/moon/facts/"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-039",
+      "claim": "As of October 24, 2026, Python 3.15.1 has been released as a security release.",
+      "query": "Python 3.15.1 release October 21 2026",
+      "sources": [
+        {
+          "title": "Python Release Python 3.15.1 | Python.org",
+          "url": "https://www.python.org/downloads/release/python-3151/"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-040",
+      "claim": "On October 24, 2026, Python 3.15.1 has not yet been released.",
+      "query": "Python 3.15.1 release October 21 2026",
+      "sources": [
+        {
+          "title": "Python Release Python 3.15.1 | Python.org",
+          "url": "https://www.python.org/downloads/release/python-3151/"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-041",
+      "claim": "As of October 24, 2026, Node.js 24 is listed as an LTS release.",
+      "query": "Node.js previous releases 24 Krypton LTS",
+      "sources": [
+        {
+          "title": "Node.js — Node.js Releases",
+          "url": "https://nodejs.org/en/about/previous-releases?jmp=dzone-ref"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-042",
+      "claim": "As of October 24, 2026, Node.js 24 is listed as Current rather than LTS.",
+      "query": "Node.js previous releases 24 Krypton LTS",
+      "sources": [
+        {
+          "title": "Node.js — Node.js Releases",
+          "url": "https://nodejs.org/en/about/previous-releases?jmp=dzone-ref"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-065",
+      "claim": "Minecraft players on PC can play with console friends.",
+      "query": "Java Bedrock edition different multiplayer servers",
+      "sources": [
+        {
+          "title": "Minecraft Java or Bedrock Edition | Minecraft",
+          "url": "https://www.minecraft.net/en-us/article/java-or-bedrock-edition"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-066",
+      "claim": "Stardew Valley supports eight-player multiplayer.",
+      "query": "Stardew Valley multiplayer split screen restrictions",
+      "sources": [
+        {
+          "title": "Multiplayer - Stardew Valley Wiki",
+          "url": "https://wiki.stardewvalley.net/Multiplayer"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-067",
+      "claim": "Stardew Valley allows four players in local split-screen.",
+      "query": "Stardew Valley multiplayer split screen restrictions",
+      "sources": [
+        {
+          "title": "Multiplayer - Stardew Valley Wiki",
+          "url": "https://wiki.stardewvalley.net/Multiplayer"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-068",
+      "claim": "Copying a JavaScript array makes its nested objects independent.",
+      "query": "JavaScript Array zero indexed shallow copies",
+      "sources": [
+        {
+          "title": "Array - JavaScript | MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-069",
+      "claim": "Python range(10, 1, step) produces an empty sequence.",
+      "query": "Python range end point never part generated sequence",
+      "sources": [
+        {
+          "title": "4. More Control Flow Tools — Python 3.15.0 documentation",
+          "url": "https://docs.python.org/3/tutorial/controlflow.html?highlight=statement"
+        }
+      ],
+      "documents": []
+    },
+    {
+      "id": "claim-070",
+      "claim": "Stardew Valley console multiplayer needs a paid online subscription.",
+      "query": "Stardew Valley multiplayer split screen restrictions",
+      "sources": [
+        {
+          "title": "Multiplayer - Stardew Valley Wiki",
+          "url": "https://wiki.stardewvalley.net/Multiplayer"
+        }
+      ],
+      "documents": []
+    }
+  ]
+}

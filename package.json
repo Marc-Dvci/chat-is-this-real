@@ -23,6 +23,7 @@
     "setup:twitch": "tsx scripts/setup-twitch.ts",
     "probe:twitch": "tsx scripts/probe-twitch.ts",
     "probe:core": "tsx scripts/probe-core.ts",
+    "probe:engine": "tsx scripts/probe-engine.ts",
     "purge": "tsx scripts/purge.ts",
     "probe:models": "tsx scripts/probe-models.ts",
     "report:models": "tsx scripts/report-models.ts",

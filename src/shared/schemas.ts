@@ -177,6 +177,21 @@ export const historyQuerySchema = z.object({
 export const historyPurgeSchema = z.object({ user_id: z.string().min(1).max(100) });
 export const chatEnvironmentSchema = z.object({ CHAT_RETENTION_DAYS: z.coerce.number().int().min(1).max(90).default(14) });
 export const purgeOptionsSchema = z.object({ user: z.string().regex(/^[a-zA-Z0-9_]{3,25}$/u).transform((value) => value.toLowerCase()) });
+export const sourceTiersSchema = z.object({ official_domains: z.array(z.string()), institutional_domains: z.array(z.string()),
+  institutional_suffixes: z.array(z.string()), press_domains: z.array(z.string()) });
+export const checkStateSchema = z.enum(['queued', 'triage', 'searching', 'reading', 'judging', 'ready', 'not_a_claim', 'failed', 'on_air', 'dismissed']);
+export type CheckState = z.infer<typeof checkStateSchema>;
+export const checkInputSchema = z.object({
+  id: z.string().regex(/^[a-zA-Z0-9_-]{8,80}$/u), claim: z.string().min(1).max(1000),
+  context: z.array(z.object({ id: z.string(), text: z.string().max(1000) })).max(5).default([]),
+  channel: z.object({ title: z.string().max(500), category: z.string().max(100), language: z.string().max(20) })
+    .default({ title: '', category: '', language: 'en' })
+});
+export type CheckInput = z.infer<typeof checkInputSchema>;
+export const engineConfigSchema = z.object({
+  SEARCH_MODE: z.enum(['replay', 'provider']).default('replay'), SEARCH_REPLAY_PATH: z.string().default('fixtures/search/probe.json'),
+  MODELSTUDIO_TOKEN_LIMIT: z.coerce.number().int().min(1000).max(1_000_000).default(900_000)
+});
 
 export const probeOptionsSchema = z.object({
   live: z.boolean(),
@@ -293,9 +308,11 @@ export const nativeAsrSchema = z.object({
 export const sourceDocumentSchema = z.object({
   id: z.string(), url: z.url(), title: z.string(), domain: z.string(),
   tier: z.number().int().min(1).max(4), fetched_at: z.iso.datetime(), status: z.number().int(),
-  sha256: z.string(), text: z.string(), error: z.string().optional()
+  sha256: z.string(), text: z.string(), error: z.string().optional(),
+  origin: z.enum(['live_fetch', 'recorded_render']).default('live_fetch')
 });
 export type SourceDocument = z.infer<typeof sourceDocumentSchema>;
+export const sourceSummarySchema = sourceDocumentSchema.omit({ text: true });
 export const providerChatSchema = z.object({
   choices: z.array(z.object({ message: z.object({ content: z.string().nullable() }) })).min(1),
   usage: z.object({ prompt_tokens: z.number(), completion_tokens: z.number() }).optional()
@@ -331,7 +348,8 @@ export const modelProbeMeasurementsSchema = z.object({
 });
 export const searchReplaySchema = z.object({
   origin: z.literal('host_web_search_curated'), recorded_at: z.iso.datetime(), description: z.string(),
-  items: z.array(z.object({ id: z.string(), claim: z.string(), query: z.string(), sources: z.array(searchSourceSchema).max(6) }))
+  items: z.array(z.object({ id: z.string(), claim: z.string(), query: z.string(), sources: z.array(searchSourceSchema).max(6),
+    documents: z.array(sourceDocumentSchema).max(6).default([]) }))
 });
 export const evaluationSourceCatalogSchema = z.record(z.string(), z.url());
 export const evaluationVerdictSchema = z.enum(['real', 'not_real', 'missing_context', 'unconfirmed', 'not_a_claim']);
@@ -363,4 +381,23 @@ export const evaluationLockSchema = z.object({
 });
 export const evaluationOptionsSchema = z.object({
   suite: z.enum(['claims', 'vod']).default('claims'), split: z.enum(['dev', 'heldout']).default('dev'), verify_lock: z.boolean().default(false)
+});
+export const checkOutcomeSchema = z.object({
+  id: z.string(), type: z.enum(['fact', 'not_a_claim', 'stream_memory']), normalized_claim: z.string(),
+  triage: triageSchema.nullable(), final_verdict: evaluationVerdictSchema, model_verdict: verdictSchema.nullable(),
+  explanation: z.string(), evidence: z.array(evidenceSchema), sources: z.array(sourceDocumentSchema),
+  returned_excerpts: z.number().int().nonnegative(), dropped_excerpts: z.number().int().nonnegative(),
+  sensitive: z.boolean(), reason: z.string().nullable(), created_at: z.iso.datetime(), elapsed_ms: z.number().nonnegative(),
+  cache_hit: z.boolean(), retrieval_mode: z.enum(['replay', 'provider']), calls: z.array(modelUsageSchema), failed: z.boolean().default(false)
+});
+export type CheckOutcome = z.infer<typeof checkOutcomeSchema>;
+export const checkJobSchema = z.object({
+  id: z.string(), request_id: z.string().nullable(), kind: z.enum(['real', 'vod']), state: checkStateSchema,
+  input: checkInputSchema.nullable(), outcome: checkOutcomeSchema.nullable(), reason: z.string().nullable(),
+  created_at: z.iso.datetime(), updated_at: z.iso.datetime()
+});
+export type CheckJob = z.infer<typeof checkJobSchema>;
+export const checkJobRowSchema = z.object({
+  id: z.string(), request_id: z.string().nullable(), kind: z.string(), state: z.string(), input_json: z.string().nullable(),
+  outcome_json: z.string().nullable(), reason: z.string().nullable(), created_at: z.string(), updated_at: z.string()
 });
