@@ -1,0 +1,763 @@
+{
+  "suite": "models-probe",
+  "split": "probe",
+  "sample_count": 10,
+  "created_at": "2026-10-24T10:07:49.647Z",
+  "git_commit": "e90dd2b322291453204090341918b4839f6416a3",
+  "working_tree_dirty": true,
+  "endpoint": "dashscope-intl.aliyuncs.com",
+  "models": {
+    "triage": [
+      "qwen3.8-flash"
+    ],
+    "search": [
+      "qwen3.8-flash"
+    ],
+    "judge": [
+      "qwen3.8-flash"
+    ],
+    "vod": [
+      "qwen3.8-flash"
+    ]
+  },
+  "available_models": [
+    "qwen3.8-flash"
+  ],
+  "search_mode": "replay",
+  "source_selection": "Curated URLs from assistant web searches. Search discovery is simulated, not measured.",
+  "baseline_configuration": {
+    "triage": "qwen3.8-flash",
+    "search": "qwen3.8-flash",
+    "judge": "qwen3.8-flash"
+  },
+  "speech_source": "system speech in the original prerecorded Twitch test",
+  "baseline_latency_ms": [],
+  "replay_latency_ms": [
+    6706.086500000001,
+    4287.9269,
+    6448.8964,
+    9820.259399999999,
+    4938.516099999997,
+    5796.5965,
+    5982.913499999995
+  ],
+  "summary": {
+    "judges": [
+      {
+        "model": "qwen3.8-flash",
+        "expected_verdict_items": 7,
+        "completed_verdict_items": 7,
+        "proposal_matches": 7,
+        "skipped": 0,
+        "errors": 0,
+        "returned_excerpts": 12,
+        "verified_excerpts": 11,
+        "excerpt_verification_rate": 0.9166666666666666
+      }
+    ],
+    "baseline_latency": {
+      "sample_count": 0,
+      "percentile_method": "nearest_rank",
+      "p50_ms": null,
+      "p90_ms": null
+    },
+    "verdict_basis": "Raw model proposals, before final deterministic verdict rules. Missing results do not count as matches."
+  },
+  "estimated_cost_usd": 0.004749880000000001,
+  "cost_basis": "Published list prices; estimates exclude free quota and credit. Provider billing is authoritative.",
+  "rows": [
+    {
+      "id": "availability",
+      "role": "availability",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 1672.3848
+    },
+    {
+      "id": "probe-01",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 2445.9302999999995,
+      "expected_kind": "fact",
+      "kind": "fact",
+      "checkable": true
+    },
+    {
+      "id": "probe-01",
+      "role": "search",
+      "model": "host-search-replay",
+      "status": "ok",
+      "elapsed_ms": 2.1460000000006403,
+      "source_count": 2
+    },
+    {
+      "id": "probe-01",
+      "role": "judge",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 3912.429400000001,
+      "expected_verdict": "real",
+      "verdict": "real",
+      "returned_excerpts": 2,
+      "verified_excerpts": 2
+    },
+    {
+      "id": "probe-02",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 1944.2101000000002,
+      "expected_kind": "fact",
+      "kind": "fact",
+      "checkable": true
+    },
+    {
+      "id": "probe-02",
+      "role": "search",
+      "model": "host-search-replay",
+      "status": "ok",
+      "elapsed_ms": 0.3975000000009459,
+      "source_count": 2
+    },
+    {
+      "id": "probe-02",
+      "role": "judge",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 2158.5746,
+      "expected_verdict": "not_real",
+      "verdict": "not_real",
+      "returned_excerpts": 1,
+      "verified_excerpts": 1
+    },
+    {
+      "id": "probe-03",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 2619.7231999999985,
+      "expected_kind": "fact",
+      "kind": "fact",
+      "checkable": true
+    },
+    {
+      "id": "probe-03",
+      "role": "search",
+      "model": "host-search-replay",
+      "status": "ok",
+      "elapsed_ms": 0.4879000000000815,
+      "source_count": 2
+    },
+    {
+      "id": "probe-03",
+      "role": "judge",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 3403.1257000000005,
+      "expected_verdict": "real",
+      "verdict": "real",
+      "returned_excerpts": 2,
+      "verified_excerpts": 2
+    },
+    {
+      "id": "probe-04",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 5421.5157,
+      "expected_kind": "fact",
+      "kind": "fact",
+      "checkable": true
+    },
+    {
+      "id": "probe-04",
+      "role": "search",
+      "model": "host-search-replay",
+      "status": "ok",
+      "elapsed_ms": 0.4228000000002794,
+      "source_count": 2
+    },
+    {
+      "id": "probe-04",
+      "role": "judge",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 3283.8918999999987,
+      "expected_verdict": "not_real",
+      "verdict": "not_real",
+      "returned_excerpts": 2,
+      "verified_excerpts": 2
+    },
+    {
+      "id": "probe-05",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 2132.2582,
+      "expected_kind": "fact",
+      "kind": "fact",
+      "checkable": true
+    },
+    {
+      "id": "probe-05",
+      "role": "search",
+      "model": "host-search-replay",
+      "status": "ok",
+      "elapsed_ms": 0.4315000000024156,
+      "source_count": 2
+    },
+    {
+      "id": "probe-05",
+      "role": "judge",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 2642.8461000000025,
+      "expected_verdict": "real",
+      "verdict": "real",
+      "returned_excerpts": 1,
+      "verified_excerpts": 0
+    },
+    {
+      "id": "probe-06",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 1869.3531000000003,
+      "expected_kind": "fact",
+      "kind": "fact",
+      "checkable": true
+    },
+    {
+      "id": "probe-06",
+      "role": "search",
+      "model": "host-search-replay",
+      "status": "ok",
+      "elapsed_ms": 0.5064999999958673,
+      "source_count": 2
+    },
+    {
+      "id": "probe-06",
+      "role": "judge",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 3223.386900000005,
+      "expected_verdict": "real",
+      "verdict": "real",
+      "returned_excerpts": 2,
+      "verified_excerpts": 2
+    },
+    {
+      "id": "probe-07",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 2484.106399999997,
+      "expected_kind": "fact",
+      "kind": "fact",
+      "checkable": true
+    },
+    {
+      "id": "probe-07",
+      "role": "search",
+      "model": "host-search-replay",
+      "status": "ok",
+      "elapsed_ms": 0.3960000000006403,
+      "source_count": 2
+    },
+    {
+      "id": "probe-07",
+      "role": "judge",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 3051.7400999999954,
+      "expected_verdict": "not_real",
+      "verdict": "not_real",
+      "returned_excerpts": 2,
+      "verified_excerpts": 2
+    },
+    {
+      "id": "probe-08",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 1732.6338000000032,
+      "expected_kind": "opinion",
+      "kind": "opinion",
+      "checkable": false
+    },
+    {
+      "id": "probe-09",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 2782.853000000003,
+      "expected_kind": "other",
+      "kind": "other",
+      "checkable": false
+    },
+    {
+      "id": "probe-10",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 1921.9379999999946,
+      "expected_kind": "stream_memory",
+      "kind": "stream_memory",
+      "checkable": false
+    },
+    {
+      "id": "speech-0-plain",
+      "role": "asr",
+      "model": "qwen-audio-3.1-asr-flash",
+      "status": "ok",
+      "elapsed_ms": 1897.830399999999,
+      "word_errors": 2,
+      "reference_words": 35,
+      "context": false
+    },
+    {
+      "id": "speech-0-context",
+      "role": "asr",
+      "model": "qwen-audio-3.1-asr-flash",
+      "status": "ok",
+      "elapsed_ms": 1522.1905000000042,
+      "word_errors": 2,
+      "reference_words": 35,
+      "context": true
+    },
+    {
+      "id": "speech-2-plain",
+      "role": "asr",
+      "model": "qwen-audio-3.1-asr-flash",
+      "status": "ok",
+      "elapsed_ms": 1305.8087000000014,
+      "word_errors": 0,
+      "reference_words": 33,
+      "context": false
+    },
+    {
+      "id": "speech-2-context",
+      "role": "asr",
+      "model": "qwen-audio-3.1-asr-flash",
+      "status": "ok",
+      "elapsed_ms": 910.8194000000003,
+      "word_errors": 0,
+      "reference_words": 33,
+      "context": true
+    },
+    {
+      "id": "speech-4-plain",
+      "role": "asr",
+      "model": "qwen-audio-3.1-asr-flash",
+      "status": "ok",
+      "elapsed_ms": 1003.5154000000039,
+      "word_errors": 0,
+      "reference_words": 33,
+      "context": false
+    },
+    {
+      "id": "speech-4-context",
+      "role": "asr",
+      "model": "qwen-audio-3.1-asr-flash",
+      "status": "ok",
+      "elapsed_ms": 1026.5152999999991,
+      "word_errors": 0,
+      "reference_words": 33,
+      "context": true
+    },
+    {
+      "id": "vod-hit",
+      "role": "vod",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 1319.7868000000017,
+      "found": true,
+      "valid_segment_ids": true
+    },
+    {
+      "id": "vod-challenge",
+      "role": "vod",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 1902.1563999999998,
+      "found": true,
+      "valid_segment_ids": true
+    },
+    {
+      "id": "vod-miss",
+      "role": "vod",
+      "model": "qwen3.8-flash",
+      "status": "ok",
+      "elapsed_ms": 3053.2011000000057,
+      "found": false,
+      "valid_segment_ids": true
+    }
+  ],
+  "calls": [
+    {
+      "id": "63a86c42-7396-4b67-a045-d262287da037",
+      "created_at": "2026-10-24T10:06:44.694Z",
+      "role": "availability",
+      "model": "qwen3.8-flash",
+      "latency_ms": 1669.4622,
+      "input_tokens": 60,
+      "output_tokens": 5,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "6f5835b9-8f53-433a-a863-83205628acd0",
+      "created_at": "2026-10-24T10:06:47.142Z",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "latency_ms": 2443.8453000000004,
+      "input_tokens": 267,
+      "output_tokens": 86,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "bcaf2392-8bab-4784-9574-056dbec4af57",
+      "created_at": "2026-10-24T10:06:51.402Z",
+      "role": "judge",
+      "model": "qwen3.8-flash",
+      "latency_ms": 3908.1302000000005,
+      "input_tokens": 2934,
+      "output_tokens": 191,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "c7e8db0e-4c53-4cc3-9f6b-2b5e6e3ba565",
+      "created_at": "2026-10-24T10:06:53.347Z",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "latency_ms": 1943.4323999999997,
+      "input_tokens": 267,
+      "output_tokens": 81,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "8467b4d1-2d3e-4470-93e6-bf456e7be21b",
+      "created_at": "2026-10-24T10:06:55.690Z",
+      "role": "judge",
+      "model": "qwen3.8-flash",
+      "latency_ms": 2155.3158999999996,
+      "input_tokens": 2959,
+      "output_tokens": 116,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "7e1ea1a5-406e-49ef-8447-7a4a4ee6ada5",
+      "created_at": "2026-10-24T10:06:58.310Z",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "latency_ms": 2618.7423,
+      "input_tokens": 265,
+      "output_tokens": 80,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "9643c2e7-5631-484c-aa1b-68a690e64497",
+      "created_at": "2026-10-24T10:07:02.138Z",
+      "role": "judge",
+      "model": "qwen3.8-flash",
+      "latency_ms": 3394.3171,
+      "input_tokens": 3042,
+      "output_tokens": 205,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "fec34911-b1d0-4499-94a5-e9bf53437f23",
+      "created_at": "2026-10-24T10:07:07.561Z",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "latency_ms": 5420.6033000000025,
+      "input_tokens": 266,
+      "output_tokens": 88,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "22a5017c-0561-45bf-a36f-4ea0bcbb589d",
+      "created_at": "2026-10-24T10:07:11.956Z",
+      "role": "judge",
+      "model": "qwen3.8-flash",
+      "latency_ms": 3250.8860999999997,
+      "input_tokens": 3014,
+      "output_tokens": 204,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "44bb89eb-2879-40c3-8bb1-0e5c4ba8281a",
+      "created_at": "2026-10-24T10:07:14.092Z",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "latency_ms": 2131.3362000000016,
+      "input_tokens": 267,
+      "output_tokens": 99,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "13611a5d-1aff-48cb-a674-f7ea2b8505a8",
+      "created_at": "2026-10-24T10:07:16.898Z",
+      "role": "judge",
+      "model": "qwen3.8-flash",
+      "latency_ms": 2641.907100000004,
+      "input_tokens": 2413,
+      "output_tokens": 145,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "dc780926-12a5-45a7-a274-5f962780b636",
+      "created_at": "2026-10-24T10:07:18.767Z",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "latency_ms": 1868.2323999999935,
+      "input_tokens": 268,
+      "output_tokens": 83,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "3d212eb6-5e5b-4611-ad92-715eb56ff94a",
+      "created_at": "2026-10-24T10:07:22.694Z",
+      "role": "judge",
+      "model": "qwen3.8-flash",
+      "latency_ms": 3218.5530999999974,
+      "input_tokens": 2078,
+      "output_tokens": 182,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "afd0682d-5e73-4577-8fd8-e3ea939a6edb",
+      "created_at": "2026-10-24T10:07:25.179Z",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "latency_ms": 2483.6811000000016,
+      "input_tokens": 270,
+      "output_tokens": 97,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "7b3d9200-77e1-40fd-909a-3f919835ea0b",
+      "created_at": "2026-10-24T10:07:28.677Z",
+      "role": "judge",
+      "model": "qwen3.8-flash",
+      "latency_ms": 3046.0498000000007,
+      "input_tokens": 2058,
+      "output_tokens": 177,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "643a0e45-7787-4e0f-bfc5-c859fc2884ce",
+      "created_at": "2026-10-24T10:07:30.410Z",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "latency_ms": 1731.9414000000033,
+      "input_tokens": 267,
+      "output_tokens": 54,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "c473d3bc-aee3-46f4-9621-0c5e2a308799",
+      "created_at": "2026-10-24T10:07:33.193Z",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "latency_ms": 2782.073900000003,
+      "input_tokens": 270,
+      "output_tokens": 61,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "524300d1-6ed2-4708-b9d5-973893b41b28",
+      "created_at": "2026-10-24T10:07:35.115Z",
+      "role": "triage",
+      "model": "qwen3.8-flash",
+      "latency_ms": 1921.2158000000054,
+      "input_tokens": 273,
+      "output_tokens": 72,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "a196d436-385e-438a-9154-8aadbe7f16c2",
+      "created_at": "2026-10-24T10:07:37.322Z",
+      "role": "asr",
+      "model": "qwen-audio-3.1-asr-flash",
+      "latency_ms": 1897.0334000000003,
+      "input_tokens": 189,
+      "output_tokens": 41,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "native"
+    },
+    {
+      "id": "5dbb9605-cda8-4d85-a260-69d75da01a4b",
+      "created_at": "2026-10-24T10:07:38.845Z",
+      "role": "asr",
+      "model": "qwen-audio-3.1-asr-flash",
+      "latency_ms": 1521.1532999999981,
+      "input_tokens": 189,
+      "output_tokens": 41,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "native"
+    },
+    {
+      "id": "d29c495d-b5c5-4436-b08d-fd5f410a9498",
+      "created_at": "2026-10-24T10:07:40.281Z",
+      "role": "asr",
+      "model": "qwen-audio-3.1-asr-flash",
+      "latency_ms": 1304.769100000005,
+      "input_tokens": 189,
+      "output_tokens": 38,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "native"
+    },
+    {
+      "id": "5bd88815-3dba-4052-9f9e-ddc998b9671c",
+      "created_at": "2026-10-24T10:07:41.193Z",
+      "role": "asr",
+      "model": "qwen-audio-3.1-asr-flash",
+      "latency_ms": 910.5282999999981,
+      "input_tokens": 200,
+      "output_tokens": 38,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "native"
+    },
+    {
+      "id": "b12a8f39-a9f3-46cd-8d2f-f0c451623e50",
+      "created_at": "2026-10-24T10:07:42.343Z",
+      "role": "asr",
+      "model": "qwen-audio-3.1-asr-flash",
+      "latency_ms": 1002.8056999999972,
+      "input_tokens": 189,
+      "output_tokens": 36,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "native"
+    },
+    {
+      "id": "0560e104-8242-4b49-b9db-401fb1e543a9",
+      "created_at": "2026-10-24T10:07:43.371Z",
+      "role": "asr",
+      "model": "qwen-audio-3.1-asr-flash",
+      "latency_ms": 1026.0957999999955,
+      "input_tokens": 200,
+      "output_tokens": 36,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "native"
+    },
+    {
+      "id": "aa65fb2b-46aa-4bb0-b1f0-76a7cb4c82b3",
+      "created_at": "2026-10-24T10:07:44.691Z",
+      "role": "vod",
+      "model": "qwen3.8-flash",
+      "latency_ms": 1318.9161999999997,
+      "input_tokens": 340,
+      "output_tokens": 58,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "9469af03-5a07-43c6-afef-e40b5a19c359",
+      "created_at": "2026-10-24T10:07:46.593Z",
+      "role": "vod",
+      "model": "qwen3.8-flash",
+      "latency_ms": 1901.5008000000016,
+      "input_tokens": 340,
+      "output_tokens": 58,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_schema"
+    },
+    {
+      "id": "15c0ddd4-7292-4003-a6ea-76462faa3607",
+      "created_at": "2026-10-24T10:07:48.329Z",
+      "role": "vod",
+      "model": "qwen3.8-flash",
+      "latency_ms": 1734.6889999999985,
+      "input_tokens": 342,
+      "output_tokens": 76,
+      "search_calls": 0,
+      "status": "error",
+      "error_code": "schema_validation",
+      "format": "json_schema"
+    },
+    {
+      "id": "3e9d06d7-914b-48ee-8f2a-70ad5dd4fe95",
+      "created_at": "2026-10-24T10:07:49.646Z",
+      "role": "vod",
+      "model": "qwen3.8-flash",
+      "latency_ms": 1316.8784999999916,
+      "input_tokens": 451,
+      "output_tokens": 41,
+      "search_calls": 0,
+      "status": "ok",
+      "error_code": null,
+      "format": "json_object"
+    }
+  ]
+}

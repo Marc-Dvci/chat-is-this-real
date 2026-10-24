@@ -61,3 +61,35 @@ The [official rules](https://twitchcon-codex.devpost.com/rules), checked on 24 O
 require a working Twitch integration, Codex build evidence, the Codex session ID and a public
 demonstration video. The submission period ends on 2 November 2026 at 14:00 Pacific Time.
 The accessible project must remain free for judging through 15 November 2026.
+
+## M2 preparation
+
+The [model probe](model-probe.md) has a preview mode and requires explicit live opt-in.
+All inference calls use the configured SDK client in `src/llm/client.ts`, including native ASR.
+Structured output disables thinking, uses Zod validation and retries only once for unsupported
+strict output or invalid JSON. Search candidates come from tool sources and citation annotations.
+The search prose is discarded.
+
+The source adapter validates DNS and redirects, pins the checked addresses, caps compressed
+and expanded bodies, extracts readable text and retains useful published captions. A bounded
+NASA source window supplies the evidence-verification regression case. Reserved-address,
+URL, normalization and excerpt-rejection checks pass locally.
+
+The Model Studio CLI sign-in was verified with `bl auth status`; skill and CLI versions matched.
+The user authorized using the available free model allowance. The probe defaults to direct
+reference pages and disables paid search tools. Search discovery and end-to-end latency
+remain pending until search-fee approval or credit is available. The CLI quota query requires
+a separate console login, so the remaining allowance is user-reported rather than CLI-verified.
+The offline audit also prevents source-free judge calls and records skipped judgments.
+Probe summaries retain missing results in their denominators and leave unmeasured rates
+and latency percentiles empty. Regression checks cover those reporting cases.
+The first reference-assisted run exposed irrelevant source windows and confusion between
+verification metadata and the claim date. Passage ranking now weights rare query terms and
+selects several source spans. Judge instructions define verdict labels and separate dates
+from the assertion. The initial diagnostic report is retained rather than discarded.
+The user subsequently requested simulated search and deferred paid search. Search replay
+uses curated URLs from real assistant searches, with live page fetching and model judging.
+The client blocks provider search unless it is explicitly enabled. This revised M2 gate
+keeps provider-search behavior unverified; it allows the build to continue using recorded
+search discovery. Model decisions and the remaining validation limits are documented in
+`docs/model-decisions.md`.

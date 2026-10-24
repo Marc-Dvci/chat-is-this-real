@@ -1,0 +1,33 @@
+{
+  "provenance": {
+    "run": "2026-10-24T09-52-47-628Z",
+    "wire_file": "96e45645-d23a-4aeb-b4ae-bc544707d9fa.json",
+    "model": "qwen3.8-flash",
+    "redactions": "Response and request identifiers only. Audio and credentials omitted."
+  },
+  "response": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "message": {
+          "content": "{\"ok\":true}",
+          "role": "assistant"
+        }
+      }
+    ],
+    "created": 1792835568,
+    "id": "recorded-response",
+    "model": "qwen3.8-flash",
+    "object": "chat.completion",
+    "usage": {
+      "completion_tokens": 5,
+      "prompt_tokens": 60,
+      "prompt_tokens_details": {
+        "cached_tokens": 0,
+        "text_tokens": 60
+      },
+      "total_tokens": 65
+    }
+  }
+}

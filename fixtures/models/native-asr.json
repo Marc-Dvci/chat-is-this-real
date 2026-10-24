@@ -1,0 +1,583 @@
+{
+  "provenance": {
+    "run": "2026-10-24T09-52-47-628Z",
+    "wire_file": "d7a37409-3674-4634-b876-e4f5b5a3c4b4.json",
+    "model": "qwen-audio-3.1-asr-flash",
+    "redactions": "Response and request identifiers only. Audio and credentials omitted."
+  },
+  "response": {
+    "output": {
+      "output": {
+        "request_id": "recorded-request",
+        "sentence": {
+          "begin_time": 160,
+          "channel_id": 0,
+          "end_time": 12600,
+          "sentence_end": true,
+          "sentence_id": 3,
+          "text": "For the next community challenge, I chose a blue robot puzzle. The puzzle has a silver tower and a green bridge. The challenge is about the blue robot puzzle, not a racing game. ",
+          "words": [
+            {
+              "begin_time": 160,
+              "end_time": 400,
+              "fixed": true,
+              "punctuation": "",
+              "text": "For"
+            },
+            {
+              "begin_time": 400,
+              "end_time": 520,
+              "fixed": true,
+              "punctuation": "",
+              "text": " the"
+            },
+            {
+              "begin_time": 520,
+              "end_time": 880,
+              "fixed": true,
+              "punctuation": "",
+              "text": " next"
+            },
+            {
+              "begin_time": 880,
+              "end_time": 1480,
+              "fixed": true,
+              "punctuation": "",
+              "text": " community"
+            },
+            {
+              "begin_time": 1480,
+              "end_time": 2280,
+              "fixed": true,
+              "punctuation": ",",
+              "text": " challenge"
+            },
+            {
+              "begin_time": 2280,
+              "end_time": 2380,
+              "fixed": true,
+              "punctuation": "",
+              "text": " "
+            },
+            {
+              "begin_time": 2380,
+              "end_time": 2480,
+              "fixed": true,
+              "punctuation": "",
+              "text": "I"
+            },
+            {
+              "begin_time": 2480,
+              "end_time": 2720,
+              "fixed": true,
+              "punctuation": "",
+              "text": " chose"
+            },
+            {
+              "begin_time": 2720,
+              "end_time": 2800,
+              "fixed": true,
+              "punctuation": "",
+              "text": " "
+            },
+            {
+              "begin_time": 2800,
+              "end_time": 2880,
+              "fixed": true,
+              "punctuation": "",
+              "text": "a"
+            },
+            {
+              "begin_time": 2880,
+              "end_time": 3160,
+              "fixed": true,
+              "punctuation": "",
+              "text": " blue"
+            },
+            {
+              "begin_time": 3160,
+              "end_time": 3560,
+              "fixed": true,
+              "punctuation": "",
+              "text": " robot"
+            },
+            {
+              "begin_time": 3560,
+              "end_time": 4560,
+              "fixed": true,
+              "punctuation": ".",
+              "text": " puzzle"
+            },
+            {
+              "begin_time": 4720,
+              "end_time": 5000,
+              "fixed": true,
+              "punctuation": "",
+              "text": " The"
+            },
+            {
+              "begin_time": 5000,
+              "end_time": 5280,
+              "fixed": true,
+              "punctuation": "",
+              "text": " puzzle"
+            },
+            {
+              "begin_time": 5280,
+              "end_time": 5440,
+              "fixed": true,
+              "punctuation": "",
+              "text": " has"
+            },
+            {
+              "begin_time": 5440,
+              "end_time": 5540,
+              "fixed": true,
+              "punctuation": "",
+              "text": " "
+            },
+            {
+              "begin_time": 5540,
+              "end_time": 5640,
+              "fixed": true,
+              "punctuation": "",
+              "text": "a"
+            },
+            {
+              "begin_time": 5640,
+              "end_time": 6080,
+              "fixed": true,
+              "punctuation": "",
+              "text": " silver"
+            },
+            {
+              "begin_time": 6080,
+              "end_time": 6360,
+              "fixed": true,
+              "punctuation": "",
+              "text": " tower"
+            },
+            {
+              "begin_time": 6360,
+              "end_time": 6520,
+              "fixed": true,
+              "punctuation": "",
+              "text": " and"
+            },
+            {
+              "begin_time": 6520,
+              "end_time": 6600,
+              "fixed": true,
+              "punctuation": "",
+              "text": " "
+            },
+            {
+              "begin_time": 6600,
+              "end_time": 6680,
+              "fixed": true,
+              "punctuation": "",
+              "text": "a"
+            },
+            {
+              "begin_time": 6680,
+              "end_time": 6960,
+              "fixed": true,
+              "punctuation": "",
+              "text": " green"
+            },
+            {
+              "begin_time": 6960,
+              "end_time": 8000,
+              "fixed": true,
+              "punctuation": ".",
+              "text": " bridge"
+            },
+            {
+              "begin_time": 8200,
+              "end_time": 8480,
+              "fixed": true,
+              "punctuation": "",
+              "text": " The"
+            },
+            {
+              "begin_time": 8480,
+              "end_time": 8800,
+              "fixed": true,
+              "punctuation": "",
+              "text": " challenge"
+            },
+            {
+              "begin_time": 8800,
+              "end_time": 9000,
+              "fixed": true,
+              "punctuation": "",
+              "text": " is"
+            },
+            {
+              "begin_time": 9000,
+              "end_time": 9240,
+              "fixed": true,
+              "punctuation": "",
+              "text": " about"
+            },
+            {
+              "begin_time": 9240,
+              "end_time": 9400,
+              "fixed": true,
+              "punctuation": "",
+              "text": " the"
+            },
+            {
+              "begin_time": 9400,
+              "end_time": 9720,
+              "fixed": true,
+              "punctuation": "",
+              "text": " blue"
+            },
+            {
+              "begin_time": 9720,
+              "end_time": 10120,
+              "fixed": true,
+              "punctuation": "",
+              "text": " robot"
+            },
+            {
+              "begin_time": 10120,
+              "end_time": 10840,
+              "fixed": true,
+              "punctuation": ",",
+              "text": " puzzle"
+            },
+            {
+              "begin_time": 10840,
+              "end_time": 11040,
+              "fixed": true,
+              "punctuation": "",
+              "text": " not"
+            },
+            {
+              "begin_time": 11040,
+              "end_time": 11120,
+              "fixed": true,
+              "punctuation": "",
+              "text": " "
+            },
+            {
+              "begin_time": 11120,
+              "end_time": 11200,
+              "fixed": true,
+              "punctuation": "",
+              "text": "a"
+            },
+            {
+              "begin_time": 11200,
+              "end_time": 11600,
+              "fixed": true,
+              "punctuation": "",
+              "text": " racing"
+            },
+            {
+              "begin_time": 11600,
+              "end_time": 12600,
+              "fixed": true,
+              "punctuation": ". ",
+              "text": " game"
+            }
+          ]
+        },
+        "text": "For the next community challenge, I chose a blue robot puzzle. The puzzle has a silver tower and a green bridge. The challenge is about the blue robot puzzle, not a racing game. "
+      },
+      "request_id": "recorded-request",
+      "sentence": {
+        "begin_time": 160,
+        "channel_id": 0,
+        "end_time": 12600,
+        "sentence_end": true,
+        "sentence_id": 3,
+        "text": "For the next community challenge, I chose a blue robot puzzle. The puzzle has a silver tower and a green bridge. The challenge is about the blue robot puzzle, not a racing game. ",
+        "words": [
+          {
+            "begin_time": 160,
+            "end_time": 400,
+            "fixed": true,
+            "punctuation": "",
+            "text": "For"
+          },
+          {
+            "begin_time": 400,
+            "end_time": 520,
+            "fixed": true,
+            "punctuation": "",
+            "text": " the"
+          },
+          {
+            "begin_time": 520,
+            "end_time": 880,
+            "fixed": true,
+            "punctuation": "",
+            "text": " next"
+          },
+          {
+            "begin_time": 880,
+            "end_time": 1480,
+            "fixed": true,
+            "punctuation": "",
+            "text": " community"
+          },
+          {
+            "begin_time": 1480,
+            "end_time": 2280,
+            "fixed": true,
+            "punctuation": ",",
+            "text": " challenge"
+          },
+          {
+            "begin_time": 2280,
+            "end_time": 2380,
+            "fixed": true,
+            "punctuation": "",
+            "text": " "
+          },
+          {
+            "begin_time": 2380,
+            "end_time": 2480,
+            "fixed": true,
+            "punctuation": "",
+            "text": "I"
+          },
+          {
+            "begin_time": 2480,
+            "end_time": 2720,
+            "fixed": true,
+            "punctuation": "",
+            "text": " chose"
+          },
+          {
+            "begin_time": 2720,
+            "end_time": 2800,
+            "fixed": true,
+            "punctuation": "",
+            "text": " "
+          },
+          {
+            "begin_time": 2800,
+            "end_time": 2880,
+            "fixed": true,
+            "punctuation": "",
+            "text": "a"
+          },
+          {
+            "begin_time": 2880,
+            "end_time": 3160,
+            "fixed": true,
+            "punctuation": "",
+            "text": " blue"
+          },
+          {
+            "begin_time": 3160,
+            "end_time": 3560,
+            "fixed": true,
+            "punctuation": "",
+            "text": " robot"
+          },
+          {
+            "begin_time": 3560,
+            "end_time": 4560,
+            "fixed": true,
+            "punctuation": ".",
+            "text": " puzzle"
+          },
+          {
+            "begin_time": 4720,
+            "end_time": 5000,
+            "fixed": true,
+            "punctuation": "",
+            "text": " The"
+          },
+          {
+            "begin_time": 5000,
+            "end_time": 5280,
+            "fixed": true,
+            "punctuation": "",
+            "text": " puzzle"
+          },
+          {
+            "begin_time": 5280,
+            "end_time": 5440,
+            "fixed": true,
+            "punctuation": "",
+            "text": " has"
+          },
+          {
+            "begin_time": 5440,
+            "end_time": 5540,
+            "fixed": true,
+            "punctuation": "",
+            "text": " "
+          },
+          {
+            "begin_time": 5540,
+            "end_time": 5640,
+            "fixed": true,
+            "punctuation": "",
+            "text": "a"
+          },
+          {
+            "begin_time": 5640,
+            "end_time": 6080,
+            "fixed": true,
+            "punctuation": "",
+            "text": " silver"
+          },
+          {
+            "begin_time": 6080,
+            "end_time": 6360,
+            "fixed": true,
+            "punctuation": "",
+            "text": " tower"
+          },
+          {
+            "begin_time": 6360,
+            "end_time": 6520,
+            "fixed": true,
+            "punctuation": "",
+            "text": " and"
+          },
+          {
+            "begin_time": 6520,
+            "end_time": 6600,
+            "fixed": true,
+            "punctuation": "",
+            "text": " "
+          },
+          {
+            "begin_time": 6600,
+            "end_time": 6680,
+            "fixed": true,
+            "punctuation": "",
+            "text": "a"
+          },
+          {
+            "begin_time": 6680,
+            "end_time": 6960,
+            "fixed": true,
+            "punctuation": "",
+            "text": " green"
+          },
+          {
+            "begin_time": 6960,
+            "end_time": 8000,
+            "fixed": true,
+            "punctuation": ".",
+            "text": " bridge"
+          },
+          {
+            "begin_time": 8200,
+            "end_time": 8480,
+            "fixed": true,
+            "punctuation": "",
+            "text": " The"
+          },
+          {
+            "begin_time": 8480,
+            "end_time": 8800,
+            "fixed": true,
+            "punctuation": "",
+            "text": " challenge"
+          },
+          {
+            "begin_time": 8800,
+            "end_time": 9000,
+            "fixed": true,
+            "punctuation": "",
+            "text": " is"
+          },
+          {
+            "begin_time": 9000,
+            "end_time": 9240,
+            "fixed": true,
+            "punctuation": "",
+            "text": " about"
+          },
+          {
+            "begin_time": 9240,
+            "end_time": 9400,
+            "fixed": true,
+            "punctuation": "",
+            "text": " the"
+          },
+          {
+            "begin_time": 9400,
+            "end_time": 9720,
+            "fixed": true,
+            "punctuation": "",
+            "text": " blue"
+          },
+          {
+            "begin_time": 9720,
+            "end_time": 10120,
+            "fixed": true,
+            "punctuation": "",
+            "text": " robot"
+          },
+          {
+            "begin_time": 10120,
+            "end_time": 10840,
+            "fixed": true,
+            "punctuation": ",",
+            "text": " puzzle"
+          },
+          {
+            "begin_time": 10840,
+            "end_time": 11040,
+            "fixed": true,
+            "punctuation": "",
+            "text": " not"
+          },
+          {
+            "begin_time": 11040,
+            "end_time": 11120,
+            "fixed": true,
+            "punctuation": "",
+            "text": " "
+          },
+          {
+            "begin_time": 11120,
+            "end_time": 11200,
+            "fixed": true,
+            "punctuation": "",
+            "text": "a"
+          },
+          {
+            "begin_time": 11200,
+            "end_time": 11600,
+            "fixed": true,
+            "punctuation": "",
+            "text": " racing"
+          },
+          {
+            "begin_time": 11600,
+            "end_time": 12600,
+            "fixed": true,
+            "punctuation": ". ",
+            "text": " game"
+          }
+        ]
+      },
+      "text": "For the next community challenge, I chose a blue robot puzzle. The puzzle has a silver tower and a green bridge. The challenge is about the blue robot puzzle, not a racing game. ",
+      "usage": {
+        "duration": 13,
+        "input_tokens": 189,
+        "output_tokens": 38,
+        "total_tokens": 227
+      }
+    },
+    "usage": {
+      "duration": 13,
+      "input_tokens": 189,
+      "output_tokens": 38,
+      "total_tokens": 227
+    },
+    "request_id": "recorded-request"
+  }
+}

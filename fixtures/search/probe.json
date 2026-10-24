@@ -1,0 +1,112 @@
+{
+  "origin": "host_web_search_curated",
+  "recorded_at": "2026-10-24T10:02:48Z",
+  "description": "Curated primary-page URLs from actual assistant web searches. This simulates search discovery; it is not a Model Studio search response.",
+  "items": [
+    {
+      "id": "probe-01",
+      "claim": "The Moon is Earth's only natural satellite.",
+      "query": "Moon Earth only natural satellite NASA",
+      "sources": [
+        {
+          "title": "Moon Facts - NASA Science",
+          "url": "https://science.nasa.gov/moon/facts/"
+        },
+        {
+          "title": "Facts About Earth",
+          "url": "https://science.nasa.gov/earth/facts/"
+        }
+      ]
+    },
+    {
+      "id": "probe-02",
+      "claim": "Earth's Moon has a system of rings.",
+      "query": "Moon rings NASA",
+      "sources": [
+        {
+          "title": "Moon Facts - NASA Science",
+          "url": "https://science.nasa.gov/moon/facts/"
+        },
+        {
+          "title": "Facts About Earth",
+          "url": "https://science.nasa.gov/earth/facts/"
+        }
+      ]
+    },
+    {
+      "id": "probe-03",
+      "claim": "JavaScript arrays start at index zero.",
+      "query": "JavaScript Array zero indexed MDN",
+      "sources": [
+        {
+          "title": "Array - JavaScript | MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array"
+        },
+        {
+          "title": "Indexed collections - JavaScript | MDN",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Indexed_collections"
+        }
+      ]
+    },
+    {
+      "id": "probe-04",
+      "claim": "Python's range includes its stop value.",
+      "query": "Python range stop excluded documentation",
+      "sources": [
+        {
+          "title": "Built-in Types — Python 3.15.1 documentation",
+          "url": "https://docs.python.org/3.15/builtins/stdtypes.html"
+        },
+        {
+          "title": "4. More Control Flow Tools — Python 3.15.0 documentation",
+          "url": "https://docs.python.org/3/tutorial/controlflow.html?highlight=statement"
+        }
+      ]
+    },
+    {
+      "id": "probe-05",
+      "claim": "No Man's Sky supports cross-platform multiplayer.",
+      "query": "No Man's Sky introducing crossplay",
+      "sources": [
+        {
+          "title": "Introducing Crossplay for No Man’s Sky - No Man's Sky",
+          "url": "https://www.nomanssky.com/2020/06/introducing-crossplay-for-no-mans-sky/"
+        },
+        {
+          "title": "No Man’s Sky: Next Generation Update - No Man's Sky",
+          "url": "https://www.nomanssky.com/2020/10/no-mans-sky-next-generation-update/"
+        }
+      ]
+    },
+    {
+      "id": "probe-06",
+      "claim": "Godot Engine is available under the MIT license.",
+      "query": "Godot MIT license",
+      "sources": [
+        {
+          "title": "godot/README.md at master · godotengine/godot · GitHub",
+          "url": "https://github.com/godotengine/godot/blob/master/README.md"
+        },
+        {
+          "title": "Frequently asked questions — Godot Engine (4.6) documentation in English",
+          "url": "https://docs.godotengine.org/en/4.6/about/faq.html"
+        }
+      ]
+    },
+    {
+      "id": "probe-07",
+      "claim": "Godot requires developers to pay engine royalties for commercial games.",
+      "query": "Godot MIT royalties commercial",
+      "sources": [
+        {
+          "title": "godot/README.md at master · godotengine/godot · GitHub",
+          "url": "https://github.com/godotengine/godot/blob/master/README.md"
+        },
+        {
+          "title": "Frequently asked questions — Godot Engine (4.6) documentation in English",
+          "url": "https://docs.godotengine.org/en/4.6/about/faq.html"
+        }
+      ]
+    }
+  ]
+}
