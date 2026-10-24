@@ -140,4 +140,11 @@ export class TwitchTokens {
     return [this.config.TWITCH_CLIENT_SECRET, ...Object.values(this.file).flatMap((entry) =>
       typeof entry === 'object' ? [entry.access_token, entry.refresh_token ?? ''] : [])];
   }
+
+  async validateAll(): Promise<void> {
+    for (const role of ['bot', 'broadcaster', 'app'] as const) {
+      this.validated.delete(role);
+      await this.get(role);
+    }
+  }
 }

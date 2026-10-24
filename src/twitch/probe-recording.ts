@@ -24,7 +24,7 @@ export class ProbeRecording {
   }
 }
 
-export async function exportProbeFixtures(report: ProbeReport, secrets: readonly string[]): Promise<number> {
+export async function exportProbeFixtures(report: ProbeReport, secrets: readonly string[], includeDeletion = false): Promise<number> {
   const raw = await readFile(join('data/probe', report.run, 'frames.jsonl'), 'utf8');
   if (Buffer.byteLength(raw) > 50 * 1024 * 1024) throw new Error('Probe capture is too large.');
   const users = new Map<string, string>([[report.broadcaster_id, 'demo_streamer'], [report.bot_id, 'demo_bot']]);
@@ -60,7 +60,7 @@ export async function exportProbeFixtures(report: ProbeReport, secrets: readonly
     if ((key === 'id' || key.endsWith('_id')) && value) {
       return ids.get(value) ?? `recorded-${createHash('sha256').update(value).digest('hex').slice(0, 24)}`;
     }
-    if (key === 'reconnect_url' && value) return 'wss://eventsub.wss.twitch.tv/ws?session=recorded';
+    if ((key === 'reconnect_url' || key === 'recovery_url') && value) return 'wss://eventsub.wss.twitch.tv/ws?session=recorded';
     if (key.endsWith('user_login') || key.endsWith('user_name')) return aliases.get(value) ?? 'demo_viewer';
     if (key === 'text' || key.endsWith('_message_body')) {
       let cleaned = value;
@@ -71,13 +71,17 @@ export async function exportProbeFixtures(report: ProbeReport, secrets: readonly
   }
 
   const selected = [];
+  const scriptedIds = new Set<string>();
   for (const line of raw.split(/\r?\n/).filter(Boolean)) {
     const frame = eventSubEnvelopeSchema.parse(JSON.parse(line));
     if (frame.metadata.message_type === 'notification') {
-      if (frame.payload.subscription?.type !== 'channel.chat.message') continue;
-      const event = twitchChatEventSchema.parse(frame.payload.event);
-      const text = event.message.text.replace(/^(?:@\S+\s+)*/u, '').trim();
-      if (text !== probeClaim && !(text === '!real' && event.reply?.parent_message_body === probeClaim)) continue;
+      if (frame.payload.subscription?.type === 'channel.chat.message') {
+        const event = twitchChatEventSchema.parse(frame.payload.event);
+        const text = event.message.text.replace(/^(?:@\S+\s+)*/u, '').trim();
+        if (text !== probeClaim && !(text === '!real' && event.reply?.parent_message_body === probeClaim)) continue;
+        scriptedIds.add(event.message_id);
+      } else if (!(includeDeletion && frame.payload.subscription?.type === 'channel.chat.message_delete'
+        && typeof frame.payload.event?.message_id === 'string' && scriptedIds.has(frame.payload.event.message_id))) continue;
     }
     discover(frame);
     selected.push(frame);

@@ -22,6 +22,8 @@
     "demo": "tsx scripts/milestone-command.ts demo",
     "setup:twitch": "tsx scripts/setup-twitch.ts",
     "probe:twitch": "tsx scripts/probe-twitch.ts",
+    "probe:core": "tsx scripts/probe-core.ts",
+    "purge": "tsx scripts/purge.ts",
     "probe:models": "tsx scripts/probe-models.ts",
     "report:models": "tsx scripts/report-models.ts",
     "record:test": "tsx scripts/make-test-recording.ts",

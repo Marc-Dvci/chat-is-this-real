@@ -5,7 +5,7 @@ import { rootCertificates } from 'node:tls';
 import { setTimeout as delay } from 'node:timers/promises';
 import { parseArgs } from 'node:util';
 import {
-  testBroadcastSchema, twitchChannelsSchema, twitchEmptyResponseSchema,
+  testBroadcastOptionsSchema, testBroadcastSchema, twitchChannelsSchema, twitchEmptyResponseSchema,
   twitchGamesSchema, twitchIngestsSchema, twitchStreamKeySchema
 } from '../src/shared/schemas.js';
 import { loadTwitchConfig } from '../src/twitch/config.js';
@@ -14,8 +14,9 @@ import { testStreamScopes } from '../src/twitch/oauth.js';
 import { TwitchTokens } from '../src/twitch/tokens.js';
 
 async function broadcast(): Promise<void> {
-  const { values } = parseArgs({ options: { live: { type: 'boolean', default: false } } });
-  if (!values.live) throw new Error('Use --live only when the broadcaster has authorized this prerecorded public test.');
+  const { values } = parseArgs({ options: { live: { type: 'boolean', default: false }, seconds: { type: 'string', default: '1200' } } });
+  const options = testBroadcastOptionsSchema.parse({ live: values.live, seconds: Number(values.seconds) });
+  if (!options.live) throw new Error('Use --live only when the broadcaster has authorized this prerecorded public test.');
   await stat('data/test-stream/recording.mp4');
   const tokens = await TwitchTokens.open(loadTwitchConfig());
   const broadcaster = await tokens.get('broadcaster');
@@ -58,6 +59,7 @@ async function broadcast(): Promise<void> {
   };
   const encoder = spawn('ffmpeg.exe', [
     '-hide_banner', '-loglevel', 'error', '-re', '-i', 'data/test-stream/recording.mp4',
+    '-t', String(options.seconds),
     '-c:v', 'copy', '-c:a', 'aac', '-ar', '48000', '-ac', '2', '-b:a', '128k',
     '-f', 'flv', '-flvflags', 'no_duration_filesize', '-progress', 'pipe:2',
     '-tls_verify', '1', '-ca_file', 'data/test-stream/ca.pem',

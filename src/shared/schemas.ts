@@ -115,12 +115,68 @@ export const twitchChatEventSchema = z.looseObject({
   broadcaster_user_id: z.string(), chatter_user_id: z.string(),
   chatter_user_login: z.string(), chatter_user_name: z.string(),
   message_id: z.string(), message: z.looseObject({ text: z.string() }),
+  badges: z.array(z.object({ set_id: z.string(), id: z.string(), info: z.string().default('') })).default([]),
   source_broadcaster_user_id: z.string().nullable().optional(),
   reply: z.looseObject({
     parent_message_id: z.string(), parent_message_body: z.string(),
     parent_user_id: z.string(), parent_user_login: z.string(), parent_user_name: z.string()
   }).nullable().optional()
 });
+export type TwitchChatEvent = z.infer<typeof twitchChatEventSchema>;
+export const chatSettingsSchema = z.object({
+  history_enabled: z.boolean().default(false), retention_days: z.number().int().min(1).max(90).default(14),
+  permission: z.enum(['moderators', 'vips', 'everyone']).default('moderators'),
+  cooldown_s: z.number().int().min(1).max(3600).default(60),
+  real_command: z.string().regex(/^![a-z][a-z0-9_]{0,20}$/u).default('!real'),
+  vod_command: z.string().regex(/^![a-z][a-z0-9_]{0,20}$/u).default('!vod')
+}).refine((settings) => settings.real_command !== settings.vod_command, 'Commands must have distinct names.');
+export type ChatSettings = z.infer<typeof chatSettingsSchema>;
+export const chatSettingsPatchSchema = z.object({
+  history_enabled: chatSettingsSchema.shape.history_enabled.removeDefault().optional(),
+  retention_days: chatSettingsSchema.shape.retention_days.removeDefault().optional(),
+  permission: chatSettingsSchema.shape.permission.removeDefault().optional(),
+  cooldown_s: chatSettingsSchema.shape.cooldown_s.removeDefault().optional(),
+  real_command: chatSettingsSchema.shape.real_command.removeDefault().optional(),
+  vod_command: chatSettingsSchema.shape.vod_command.removeDefault().optional()
+}).strict();
+export const oauthStartParamsSchema = z.object({ role: z.enum(['broadcaster', 'bot']) });
+export const storedMessageSchema = z.object({
+  id: z.string(), broadcast_id: z.string(), user_id: z.string(), user_login: z.string(), display_name: z.string(),
+  body: z.string().nullable(), badges: z.array(z.object({ set_id: z.string(), id: z.string(), info: z.string() })),
+  parent_id: z.string().nullable(), created_at: z.iso.datetime(), scope: z.enum(['history', 'check']),
+  removed_reason: z.enum(['moderation', 'user_request', 'retention']).nullable()
+});
+export type StoredMessage = z.infer<typeof storedMessageSchema>;
+export const checkRequestSchema = z.object({
+  id: z.string(), kind: z.enum(['real', 'vod']), body: z.string().max(1000), broadcast_id: z.string(),
+  author_user_id: z.string(), original_message_id: z.string(), command_message_id: z.string(),
+  context_ids: z.array(z.string()).max(5), source_message_ids: z.array(z.string()).min(1),
+  created_at: z.iso.datetime(), state: z.enum(['queued', 'cancelled']), source: z.enum(['chat', 'dashboard'])
+});
+export type CheckRequest = z.infer<typeof checkRequestSchema>;
+export const chatDbRowSchema = z.object({
+  id: z.string(), broadcast_id: z.string(), user_id: z.string(), user_login: z.string(), display_name: z.string(),
+  body: z.string().nullable(), badges_json: z.string(), parent_id: z.string().nullable(), created_at: z.string(),
+  scope: z.string(), removed_reason: z.string().nullable()
+});
+export const requestDbRowSchema = z.object({
+  id: z.string(), kind: z.string(), body: z.string(), broadcast_id: z.string(), author_user_id: z.string(),
+  original_message_id: z.string(), command_message_id: z.string(), context_ids_json: z.string(),
+  source_ids_json: z.string(), created_at: z.string(), state: z.string(), source: z.string()
+});
+export const moderationEventSchema = z.object({ broadcaster_user_id: z.string(), message_id: z.string().optional(), target_user_id: z.string().optional() });
+export const removalScopeSchema = z.discriminatedUnion('type', [
+  z.object({ type: z.literal('message'), id: z.string() }), z.object({ type: z.literal('user'), id: z.string() }),
+  z.object({ type: z.literal('stream'), id: z.string() })
+]);
+export type RemovalScope = z.infer<typeof removalScopeSchema>;
+export const historyQuerySchema = z.object({
+  user: z.string().max(100).optional(), stream: z.string().max(100).optional(), q: z.string().max(200).default(''),
+  limit: z.coerce.number().int().min(1).max(200).default(100)
+});
+export const historyPurgeSchema = z.object({ user_id: z.string().min(1).max(100) });
+export const chatEnvironmentSchema = z.object({ CHAT_RETENTION_DAYS: z.coerce.number().int().min(1).max(90).default(14) });
+export const purgeOptionsSchema = z.object({ user: z.string().regex(/^[a-zA-Z0-9_]{3,25}$/u).transform((value) => value.toLowerCase()) });
 
 export const probeOptionsSchema = z.object({
   live: z.boolean(),
@@ -146,7 +202,8 @@ export const probeReportSchema = z.object({
     observed_vod_offset_s: z.number().nonnegative(), method: z.literal('video_timecode_match')
   }).optional(),
   clap_wall_ms: z.number().optional(), clap_unadjusted_offset_s: z.number().optional(),
-  observed_clap_offset_s: z.number().nonnegative().optional(), correction_s: z.number().optional()
+  observed_clap_offset_s: z.number().nonnegative().optional(), correction_s: z.number().optional(),
+  core_request_created: z.boolean().optional(), moderated_text_removed: z.boolean().optional(), acknowledgement_sent: z.boolean().optional(), acknowledgement_ms: z.number().nonnegative().optional()
 });
 export type ProbeReport = z.infer<typeof probeReportSchema>;
 
@@ -170,6 +227,7 @@ export const testBroadcastSchema = z.object({
   stream_id: z.string().optional(), stream_started_at: z.iso.datetime({ offset: true }).optional(),
   ended_at: z.iso.datetime().optional()
 });
+export const testBroadcastOptionsSchema = z.object({ live: z.boolean(), seconds: z.number().int().min(60).max(1200).default(1200) });
 
 export const modelConfigSchema = z.object({
   DASHSCOPE_API_KEY: z.string().min(1),

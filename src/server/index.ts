@@ -4,7 +4,7 @@ import { loadLocalEnv } from '../shared/env.js';
 
 loadLocalEnv();
 const config = serverConfigSchema.parse({ PORT: process.env.PORT });
-const app = buildApp();
+const app = buildApp({ databasePath: 'data/chat.db' });
 
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {
   process.once(signal, () => {
