@@ -1,6 +1,6 @@
 import type { DatabaseSync } from 'node:sqlite';
 import type { CheckService } from '../check/service.js';
-import type { ChatSettings, CheckInput, StoredMessage } from '../shared/schemas.js';
+import type { ChatSettings, CheckInput, RemovalScope, StoredMessage } from '../shared/schemas.js';
 import { companionStateSchema, twitchChannelInfoSchema, twitchVideosSchema } from '../shared/schemas.js';
 import { ChatStore } from '../store/chat-store.js';
 import { RequestStore } from '../store/request-store.js';
@@ -22,14 +22,16 @@ export class LiveSession {
   private notice = 'twitch_disconnected';
   private channel: CheckInput['channel'] = { title: '', category: '', language: 'en' };
   private readonly buffer = new LiveBuffer();
-  private removed: ((ids: string[]) => void) | undefined;
+  private removed: ((ids: string[], scope: RemovalScope) => void) | undefined;
+  private observed: ((message: StoredMessage) => void) | undefined;
   constructor(private readonly db: DatabaseSync, private readonly checks: CheckService) {}
 
   status() { return { connected: this.runtime?.isConnected() ?? false, notice: this.notice, live_stream_id: this.runtime?.liveStreamId() ?? null }; }
   currentStreamId(): string | undefined { return this.runtime?.liveStreamId(); }
   channelContext(): CheckInput['channel'] { return this.channel; }
   configure(settings: ChatSettings): void { this.runtime?.core.configure(settings); }
-  onRemoval(handler: (ids: string[]) => void): void { this.removed = handler; }
+  onRemoval(handler: (ids: string[], scope: RemovalScope) => void): void { this.removed = handler; }
+  onMessage(handler: (message: StoredMessage) => void): void { this.observed = handler; }
   messages(db: DatabaseSync): StoredMessage[] {
     return this.buffer.list(new ChatStore(db), this.currentStreamId());
   }
@@ -82,10 +84,10 @@ export class LiveSession {
         this.checks.enqueue(request, this.channel);
         if (!new SettingsStore(this.db).get().overlay_enabled) void this.publisher?.acknowledge(request.id).catch(() => { this.notice = 'twitch_publication_failed'; });
       },
-      onMessage: (message) => this.buffer.put(message),
+      onMessage: (message) => { this.buffer.put(message); if (message.user_id !== bot.user_id) this.observed?.(message); },
       onRemoved: (ids, scope) => {
         this.buffer.remove(scope);
-        this.checks.cancel(ids); this.removed?.(ids);
+        this.checks.cancel(ids); this.removed?.(ids, scope);
       }, onNotice: (code) => { this.notice = code; }
     });
     const runtime = new TwitchRuntime(core, helix, (code) => { this.notice = code; });

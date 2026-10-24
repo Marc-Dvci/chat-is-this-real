@@ -16,6 +16,11 @@ Use Settings to purge a viewer, or run `npm run purge -- --user <login>` locally
 clears stored text and copied request text. It does not delete messages from Twitch itself.
 The optional live-test deletion permission is used only for messages sent by that test.
 
+Voting stores a viewer identifier and one choice per check to prevent duplicate calls.
+Points are derived from those choices. Purging a viewer removes their votes and points.
+Round records expire with their retained check requests. Names remain in the private desk;
+the overlay leaderboard shows anonymous ranks.
+
 The dashboard binds to loopback. Mutations require its session header and a matching origin.
 The history API does not permit a foreign host or expose files from `data/`.
 

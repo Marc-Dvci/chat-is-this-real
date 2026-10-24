@@ -26,7 +26,8 @@ export function buildApp(options: { db?: DatabaseSync; databasePath?: string; de
   const desk = registerDashboardRoutes(app, db, checks);
   registerHistoryRoutes(app, db, {
     onSettings: (value) => { checks.settings(value); desk.settings(value); options.onSettings?.(value); },
-    onRemoved: (ids) => { checks.removed(ids); desk.removed(); options.onRemoved?.(ids); }
+    onRemoved: (ids) => { checks.removed(ids); desk.removed(); options.onRemoved?.(ids); },
+    onPurge: (userId) => desk.purge(userId)
   });
   registerWebRoutes(app);
 

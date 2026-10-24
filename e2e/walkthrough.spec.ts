@@ -20,7 +20,7 @@ test('walkthrough: the review desk, every route and the 380 px OBS dock', async 
     await expect(page.locator('.check-detail')).toHaveAttribute('data-state', 'ready');
   };
   try {
-    await page.goto('/'); await expect(page.getByRole('heading', { name: 'Show the receipts.' })).toBeVisible();
+    await page.goto('/'); await expect(page.getByRole('heading', { name: 'Show the receipts.' })).toBeVisible(); await page.getByRole('button', { name: 'Reset demo', exact: true }).click(); await expect(page.locator('.check-queue li')).toHaveCount(8);
     await capture('desk-wide'); await axe();
     const moon = page.locator('.check-select').filter({ hasText: 'The Sun is a star.' }); await moon.click();
     await expect(page.locator('.check-detail .result-stamp')).toHaveText('REAL');

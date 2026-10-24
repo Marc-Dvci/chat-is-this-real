@@ -1,5 +1,5 @@
 import type { DatabaseSync } from 'node:sqlite';
-import { checkJobRowSchema, checkJobSchema, checkOutcomeSchema, vodOutcomeSchema, type CheckInput, type CheckJob, type CheckOutcome, type CheckState, type ClipResult, type VodOutcome } from '../shared/schemas.js';
+import { checkJobRowSchema, checkJobSchema, checkOutcomeSchema, screeningSchema, vodOutcomeSchema, type CheckInput, type CheckJob, type CheckOutcome, type CheckState, type ClipResult, type VodOutcome, type Triage } from '../shared/schemas.js';
 import { transaction } from './database.js';
 
 export class CheckStore {
@@ -15,6 +15,7 @@ export class CheckStore {
         outcome_json TEXT NOT NULL, expires_at INTEGER NOT NULL
       ) STRICT;
       CREATE TABLE IF NOT EXISTS clip_attempts (job_id TEXT PRIMARY KEY REFERENCES check_jobs(id) ON DELETE CASCADE,created_at TEXT NOT NULL) STRICT;
+      CREATE TABLE IF NOT EXISTS check_screenings (job_id TEXT PRIMARY KEY REFERENCES check_jobs(id) ON DELETE CASCADE,data_json TEXT NOT NULL) STRICT;
       CREATE TRIGGER IF NOT EXISTS request_cancel_check AFTER UPDATE OF state ON requests WHEN new.state='cancelled' BEGIN
         UPDATE check_jobs SET input_json=NULL,outcome_json=NULL,state='failed',reason='source_removed',updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now') WHERE request_id=new.id;
         DELETE FROM check_cache WHERE origin_request_id=new.id;
@@ -60,6 +61,8 @@ export class CheckStore {
   list(): CheckJob[] {
     return this.db.prepare('SELECT id FROM check_jobs ORDER BY created_at DESC LIMIT 200').all().map((row) => this.get(String(row.id))).filter((job): job is CheckJob => !!job);
   }
+  screened(id: string, value: Triage): void { this.db.prepare('INSERT INTO check_screenings VALUES(?,?) ON CONFLICT(job_id) DO UPDATE SET data_json=excluded.data_json').run(id, JSON.stringify(screeningSchema.parse(value))); }
+  screening(id: string) { const row = this.db.prepare('SELECT data_json FROM check_screenings WHERE job_id=?').get(id); return row ? screeningSchema.parse(JSON.parse(String(row.data_json))) : undefined; }
   getCache(key: string): CheckOutcome | undefined {
     this.db.prepare('DELETE FROM check_cache WHERE expires_at<=?').run(Date.now());
     const found = this.db.prepare('SELECT outcome_json FROM check_cache WHERE cache_key=?').get(key);

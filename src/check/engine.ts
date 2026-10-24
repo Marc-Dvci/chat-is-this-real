@@ -18,7 +18,7 @@ export type OutcomeCache = { get: (key: string) => CheckOutcome | undefined; put
 export class CheckEngine {
   constructor(readonly model: ModelClient, private readonly cache?: OutcomeCache) {}
 
-  async run(input: CheckInput, options: { signal?: AbortSignal; onState?: (state: CheckState) => void; skipCache?: boolean } = {}): Promise<CheckOutcome> {
+  async run(input: CheckInput, options: { signal?: AbortSignal; onState?: (state: CheckState) => void; onTriage?: (value: Triage) => void; skipCache?: boolean } = {}): Promise<CheckOutcome> {
     const value = checkInputSchema.parse(input);
     const config = engineConfigSchema.parse(process.env);
     const started = performance.now(), firstCall = this.model.calls.length;
@@ -44,6 +44,7 @@ export class CheckEngine {
       triage = await this.model.structured('triage', this.model.config.MODEL_TRIAGE, triageSchema, triageInstructions, {
         claim: value.claim, viewer_context_only: value.context, channel: value.channel
       }, signal);
+      options.onTriage?.({ ...triage, sensitive: triage.sensitive || needsSensitiveReview(value.claim) });
       normalized = triage.normalized_claim || value.claim;
       if (triage.kind === 'stream_memory') return finish({ type: 'stream_memory', final_verdict: 'not_a_claim', reason: 'route_vod' });
       if (triage.kind !== 'fact') {

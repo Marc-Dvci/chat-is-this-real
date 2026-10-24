@@ -18,7 +18,7 @@ it('replays recorded results, projects public evidence and clears an active sour
   expect(JSON.stringify(result)).not.toContain('input_json');
   const shown = await app.inject({ method: 'POST', url: '/api/presentation', headers, payload: { action: 'show_check', id } });
   expect(shown.statusCode).toBe(200);
-  expect(overlayViewSchema.parse(shown.json()).presentation).toMatchObject({ phase: 'dwell', job_id: id });
+  expect(overlayViewSchema.parse(shown.json()).presentation).toMatchObject({ phase: 'reveal', job_id: id });
   expect((await app.inject({ method: 'POST', url: `/api/checks/${id}/post`, headers, payload: {} })).json()).toEqual({ posted: true, simulated: true });
   const purge = await app.inject({ method: 'POST', url: '/api/history/purge', headers, payload: { user_login: 'demo_viewer_1' } });
   expect(purge.statusCode).toBe(200);
