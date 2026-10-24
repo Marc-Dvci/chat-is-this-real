@@ -23,6 +23,10 @@ Local acceptance passed: clean install, typecheck, lint, unit tests, production 
 Playwright process check, npm dependency audit and a scan for fragments of loaded secrets.
 Temporarily changing the health route made its entry-point test fail; restoring it made the suite pass.
 On Windows, Playwright needs access outside the Codex sandbox to shut down its child server.
+Startup loads the local `.env` before validating configuration; exported variables take precedence.
+The process regression test verifies both cases using isolated temporary directories.
+On 24 October 2026, the user deferred manual milestone reviews until the end of the build.
+Automated checks and milestone PRs continue throughout the build.
 
 ## Acceptance gates
 

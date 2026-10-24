@@ -1,6 +1,8 @@
 import { buildApp } from './app.js';
 import { serverConfigSchema } from '../shared/schemas.js';
+import { loadLocalEnv } from '../shared/env.js';
 
+loadLocalEnv();
 const config = serverConfigSchema.parse({ PORT: process.env.PORT });
 const app = buildApp();
 
