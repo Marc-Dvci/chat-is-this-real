@@ -16,6 +16,8 @@ Node.js 22 LTS is the CI baseline; the local installation is Node.js 24.
 Vitest runs at most four workers. Playwright runs one worker and uses headless mode.
 The workspace-local npm cache avoids writing to the machine's restricted global cache.
 CI actions are pinned to immutable release commits. Gitleaks uses its Node.js 24 action runtime.
+The secret-scan job has read access to pull-request commits so it scans both push and PR events.
+The scanner version is pinned independently of the action's older default.
 
 Local acceptance passed: clean install, typecheck, lint, unit tests, production build,
 Playwright process check, npm dependency audit and a scan for fragments of loaded secrets.
