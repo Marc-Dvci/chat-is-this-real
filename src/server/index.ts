@@ -16,8 +16,8 @@ for (const signal of ['SIGINT', 'SIGTERM'] as const) {
 }
 
 try {
-  // The dashboard controls publishing, so it stays on the local machine.
-  const address = await app.listen({ host: '127.0.0.1', port: config.PORT });
+  // Containers opt in to an internal interface; ordinary launches stay on loopback.
+  const address = await app.listen({ host: config.DASHBOARD_HOST, port: config.PORT });
   console.info(`Chat Is This Real${demo ? ' recorded demo' : ''}: ${address}/`);
 } catch {
   console.error('Could not start the local server. Check PORT and whether it is already in use.');

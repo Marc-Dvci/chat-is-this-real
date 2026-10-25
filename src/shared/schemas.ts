@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 export const serverConfigSchema = z.object({
-  PORT: z.coerce.number().int().min(1).max(65535).default(4747), DEMO_DATABASE_PATH: z.string().min(1).optional()
+  PORT: z.coerce.number().int().min(1).max(65535).default(4747), DEMO_DATABASE_PATH: z.string().min(1).optional(),
+  DASHBOARD_HOST: z.enum(['127.0.0.1', '0.0.0.0']).default('127.0.0.1')
 });
 
 export const healthSchema = z.object({
