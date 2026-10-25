@@ -1,0 +1,76 @@
+{
+    "suite":  "deployment-static",
+    "deployment":  {
+                       "deployed_at":  "2026-10-25T14:03:12.886Z",
+                       "url":  "https://chat-is-this-real.pages.dev/",
+                       "project":  "chat-is-this-real",
+                       "git_commit":  "05b5c447f2e36dd2e9dc8e65d0707c7d8474bc02",
+                       "deployment_id":  "f9935073-34eb-404c-a503-d7db03b61c85",
+                       "static_only":  true,
+                       "functions":  0,
+                       "bindings":  0,
+                       "files":  41,
+                       "cost_basis":  "Cloudflare Pages static asset requests are free and unlimited on both account plans. Direct local upload; no cloud builds, Functions or storage bindings.",
+                       "pricing_source":  "https://developers.cloudflare.com/pages/functions/pricing/"
+                   },
+    "production_acceptance":  {
+                                  "passed":  true,
+                                  "created_at":  "2026-10-25T14:05:10.246Z",
+                                  "base":  "https://chat-is-this-real.pages.dev/",
+                                  "hosting":  "Static Pages assets, without Functions or bindings",
+                                  "scripted_voters":  true,
+                                  "http":  [
+                                               {
+                                                   "path":  "/",
+                                                   "status":  200
+                                               },
+                                               {
+                                                   "path":  "/demo/",
+                                                   "status":  200
+                                               },
+                                               {
+                                                   "path":  "/demo/library",
+                                                   "status":  200
+                                               },
+                                               {
+                                                   "path":  "/demo/settings",
+                                                   "status":  200
+                                               },
+                                               {
+                                                   "path":  "/demo/overlay",
+                                                   "status":  200
+                                               },
+                                               {
+                                                   "path":  "/demo/r/demo-check-showcase-fr",
+                                                   "status":  200
+                                               },
+                                               {
+                                                   "path":  "/api/session",
+                                                   "status":  404
+                                               },
+                                               {
+                                                   "path":  "/.env",
+                                                   "status":  404
+                                               },
+                                               {
+                                                   "path":  "/data/tokens.json",
+                                                   "status":  404
+                                               }
+                                           ],
+                                  "browser_errors":  [
+
+                                                     ],
+                                  "external_requests":  [
+
+                                                        ],
+                                  "backend_requests":  [
+
+                                                       ]
+                              },
+    "upload_guard_mutation":  {
+                                  "passed":  true,
+                                  "mutation":  "Unexpected _worker.js added to the actual generated asset directory",
+                                  "restored":  true,
+                                  "cloud_write_attempted":  false
+                              }
+}

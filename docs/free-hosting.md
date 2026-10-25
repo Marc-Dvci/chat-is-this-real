@@ -1,5 +1,10 @@
 # Free public demo
 
+The [project site](https://chat-is-this-real.pages.dev/) and
+[recorded demo](https://chat-is-this-real.pages.dev/demo/) are live. The
+[deployment report](../eval/results/deployment-static.json) records the uploaded commit,
+static-only configuration, production browser checks and upload-guard mutation.
+
 I publish the keyless demo as static Cloudflare Pages assets. The review desk, transcript,
 votes and overlay run in the browser’s shared SQLite worker. The upload contains HTML,
 JavaScript, WebAssembly, fonts and recorded public demo data. It includes no Pages
@@ -28,6 +33,11 @@ records its path in `.cache/pages-build.json`. The home page lives at `/`; the k
 desk, Library, Settings and overlay live under `/demo/`. A Pages rewrite serves demo
 receipt links. An explicit static 404 prevents private API or credential paths from
 falling back to the dashboard. CSP permits the browser SQLite WebAssembly worker.
+
+The receipt rewrite targets an extensionless HTML shell with an explicit content type.
+This preserves the requested receipt URL through Pages canonicalization. The probe
+requires that original URL and a visible public receipt, rather than matching a verdict
+elsewhere in the review desk.
 
 ## Production acceptance
 
