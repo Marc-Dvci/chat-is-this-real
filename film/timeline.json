@@ -1,0 +1,41 @@
+{
+  "title": "Chat Is This Real",
+  "bpm": 128,
+  "beats_per_bar": 4,
+  "total_bars": 88,
+  "scenes": [
+    { "id": "hook", "start_bar": 0, "end_bar": 4, "headline": "CHAT, IS THIS REAL?", "label": "THE CONVERSATION" },
+    { "id": "intro", "start_bar": 4, "end_bar": 10, "headline": "SHOW THE RECEIPTS.", "label": "CHAT, IS THIS REAL?" },
+    { "id": "claim", "start_bar": 10, "end_bar": 28, "headline": "TAKE. MEET RECEIPT.", "label": "01 / CHECK THE CLAIM" },
+    { "id": "votes", "start_bar": 28, "end_bar": 40, "headline": "CHAT CALLED IT.", "label": "02 / MAKE THE CALL" },
+    { "id": "vod", "start_bar": 40, "end_bar": 58, "headline": "ROLL THE VOD.", "label": "03 / STREAM MEMORY" },
+    { "id": "languages", "start_bar": 58, "end_bar": 66, "headline": "CHAT SPEAKS. RECEIPTS ANSWER.", "label": "FR + ES / RECORDED SHOWCASE" },
+    { "id": "control", "start_bar": 66, "end_bar": 73, "headline": "YOUR STREAM. YOUR CALL.", "label": "KEEP THE CONTEXT" },
+    { "id": "codex", "start_bar": 73, "end_bar": 82, "headline": "BUILT WITH CODEX.", "label": "AGENT INSTRUCTIONS / AUDIT / FIX" },
+    { "id": "outro", "start_bar": 82, "end_bar": 88, "headline": "CHAT, IS THIS REAL?", "label": "SHOW THE RECEIPTS. CHECK THE VOD." }
+  ],
+  "captions": [
+    { "start_bar": 0, "end_bar": 4, "text": "Chat has takes. Bring the receipts." },
+    { "start_bar": 4, "end_bar": 10, "text": "Chat Is This Real: sourced checks and stream memory for Twitch." },
+    { "start_bar": 10, "end_bar": 14, "text": "Select a message. Start a check." },
+    { "start_bar": 14, "end_bar": 18, "text": "Review the source and a verified, verbatim excerpt." },
+    { "start_bar": 18, "end_bar": 23, "text": "The model proposes. Code decides the verdict." },
+    { "start_bar": 23, "end_bar": 28, "text": "Approve what goes on stream and into chat." },
+    { "start_bar": 28, "end_bar": 32, "text": "1 = REAL. 2 = NOT REAL. The first vote counts." },
+    { "start_bar": 32, "end_bar": 36, "text": "Voting closes before the approved reveal." },
+    { "start_bar": 36, "end_bar": 40, "text": "A directional verdict awards points. Scripted demo voters." },
+    { "start_bar": 40, "end_bar": 44, "text": "You said that earlier? Check the VOD." },
+    { "start_bar": 44, "end_bar": 48, "text": "A stored quote. Its time in the stream. A real Twitch clip." },
+    { "start_bar": 48, "end_bar": 52, "text": "Original prerecorded test stream. System narration." },
+    { "start_bar": 52, "end_bar": 58, "text": "A miss shows what was indexed, with its gaps." },
+    { "start_bar": 58, "end_bar": 62, "text": "French chat. Spanish chat. The same source checks." },
+    { "start_bar": 62, "end_bar": 66, "text": "New examples. Recorded model runs. Verbatim receipts." },
+    { "start_bar": 66, "end_bar": 70, "text": "Keep the context. Select messages together." },
+    { "start_bar": 70, "end_bar": 73, "text": "Review on the desk or in the narrow OBS dock." },
+    { "start_bar": 73, "end_bar": 77, "text": "Built with OpenAI Codex, from the agent instructions to the audit." },
+    { "start_bar": 77, "end_bar": 80, "text": "The audit caught lost count and platform tokens in retrieval." },
+    { "start_bar": 80, "end_bar": 82, "text": "A recorded-source regression now catches that bug." },
+    { "start_bar": 82, "end_bar": 86, "text": "Show the receipts. Check the VOD. Your stream. Your call." },
+    { "start_bar": 86, "end_bar": 88, "text": "Play the recorded demo. Link on the project page." }
+  ]
+}

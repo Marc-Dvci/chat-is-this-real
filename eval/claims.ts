@@ -7,11 +7,13 @@ import { ModelClient } from '../src/llm/client.js';
 import { loadModelConfig } from '../src/llm/config.js';
 import { engineConfigSchema, evaluationClaimSchema, sourceSummarySchema } from '../src/shared/schemas.js';
 import { claimMetrics, type ClaimMeasurement } from './metrics.js';
+import { verifyFrozenEngine } from './freeze.js';
 
 const execute = promisify(execFile);
 export async function runClaims(split: 'dev' | 'heldout'): Promise<void> {
   if (process.env.LIVE !== '1') throw new Error('Set LIVE=1 to run a live evaluation.');
   if (split === 'heldout' && process.env.ALLOW_HELDOUT_RUN !== '1') throw new Error('Heldout evaluation is reserved for M11.');
+  if (split === 'heldout') await verifyFrozenEngine();
   const run = new Date().toISOString().replace(/[:.]/gu, '-');
   const path = `eval/results/claims-${split}-${run}.json`;
   const items = (await readFile('eval/claims.jsonl', 'utf8')).trim().split('\n').flatMap((line) => {
