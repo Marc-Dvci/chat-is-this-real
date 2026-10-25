@@ -1,12 +1,14 @@
 # Submission handoff
 
 The code, local demo, launch film and gallery are ready for final review. Public publication
-uses the account approvals listed below. The final validation and quickstart reports are
-linked here as those checks finish.
+uses the account approvals listed below. [Final checks](docs/final-audit.md) passed, including
+124 unit tests and six browser checks. The [clean-clone quickstart](docs/quickstart-measurement.md)
+completed in 17.78 seconds on this machine, using local Git as the clone source.
 
 ## Review files
 
-- Film: `data/submission/chat-is-this-real-launch.mp4`, 2:45, 2560×1440, 30 fps.
+- Film: `data/submission/chat-is-this-real-launch.mp4`, 2:45, 2560×1440, 30 fps;
+  encoded audio measured -14.01 LUFS and -2.21 dBTP.
 - Captions: `data/submission/chat-is-this-real-en.srt`; thumbnail beside the MP4.
 - Gallery: `docs/gallery/01-cover.png` through `12-latency.png`, all 2400×1600.
 - [Gallery captions](CAPTIONS.md), [form fields and upload instructions](docs/SUBMISSION.md),
