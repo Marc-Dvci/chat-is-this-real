@@ -34,3 +34,11 @@ Stateful features can retain data until deleted. Text checks send the
 claim, selected context and retrieved source text. Transcription sends audio chunks. Paid
 provider search is disabled unless explicitly enabled after approval; replay mode uses
 recorded source URLs and labels simulated discovery.
+
+Publishing a receipt sends its reviewed claim, verdict, verified excerpts and source links
+to Cloudflare KV for 30 days. VOD receipts contain the stored quote, time and coverage.
+Public pages omit chat account identifiers and redact handles in claim text. Anyone with
+a public receipt link can read it. Source removal queues remote deletion and persists
+retries locally; the dashboard shows pending removals. Regional KV propagation can take
+up to 60 seconds. Already loaded pages and third-party copies cannot be recalled.
+The [public receipt setup](public-pages.md) describes signing and deployment status.

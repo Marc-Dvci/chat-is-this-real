@@ -6,14 +6,15 @@ import { TwitchHttpError } from './tokens.js';
 
 export class TwitchPublisher {
   constructor(readonly helix: TwitchHelix, readonly requests: RequestStore, private readonly liveStream: () => string | undefined,
-    private readonly notice: (code: string) => void) {}
+    private readonly notice: (code: string) => void, private readonly eligible: (id: string, kind: 'ack' | 'result' | 'clip') => boolean = () => true) {}
 
   async acknowledge(requestId: string): Promise<void> { await this.send(requestId, 'ack', 'Checking...'); }
   async reply(requestId: string, formattedText: string): Promise<void> { await this.send(requestId, 'result', formattedText); }
+  async clipReply(requestId: string, formattedText: string): Promise<void> { await this.send(requestId, 'clip', formattedText); }
 
-  private async send(requestId: string, kind: 'ack' | 'result', text: string): Promise<void> {
+  private async send(requestId: string, kind: 'ack' | 'result' | 'clip', text: string): Promise<void> {
     const request = this.requests.get(requestId);
-    if (!request || request.state === 'cancelled' || this.liveStream() !== request.broadcast_id) throw new Error('Publication requires the current broadcaster-started stream.');
+    if (!request || request.state === 'cancelled' || this.liveStream() !== request.broadcast_id || !this.eligible(requestId, kind)) throw new Error('Publication requires the current broadcaster-started stream.');
     const safe = formatChat(text, this.helix.tokens.loadedSecrets());
     const reserved = this.requests.db.prepare("INSERT OR IGNORE INTO publications(request_id,kind,status) VALUES(?,?,'sending')").run(requestId, kind);
     if (!reserved.changes) return;
@@ -24,7 +25,7 @@ export class TwitchPublisher {
         ...(request.source === 'chat' ? { reply_parent_message_id: request.original_message_id } : {}), message: safe };
       const send = async (role: 'app' | 'bot') => {
         await this.helix.requireStream(request.broadcast_id);
-        if (this.liveStream() !== request.broadcast_id || this.requests.get(requestId)?.state === 'cancelled') throw new Error('Publication was cancelled.');
+        if (this.liveStream() !== request.broadcast_id || this.requests.get(requestId)?.state === 'cancelled' || !this.eligible(requestId, kind)) throw new Error('Publication was cancelled.');
         return this.helix.request(role, 'POST', '/chat/messages', twitchChatSentSchema, { ...body, ...(role === 'app' ? { for_source_only: true } : {}) });
       };
       let response;

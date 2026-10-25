@@ -10,15 +10,18 @@ import { publicText } from './public-result.js';
 import { PresentationControl } from './presentation-control.js';
 import { registerEventStream } from './event-stream.js';
 import { seedDemo } from '../demo/seed.js';
+import { PublicPublisher } from './public-publisher.js';
 import type { registerCheckRoutes } from './check-routes.js';
 import { formatChat } from '../shared/format-chat.js';
-import { buildNotFoundReply, buildVodReply } from '../shared/reply-text.js';
+import { buildCheckReply, buildNotFoundReply, buildVodReply } from '../shared/reply-text.js';
 import { vodTimestampUrl } from '../vod/clips.js';
 
-export function registerDashboardRoutes(app: FastifyInstance, db: DatabaseSync, control: ReturnType<typeof registerCheckRoutes>) {
+export function registerDashboardRoutes(app: FastifyInstance, db: DatabaseSync, control: ReturnType<typeof registerCheckRoutes>, publicOptions: { config?: unknown; transport?: typeof fetch } = {}) {
   const settings = new SettingsStore(db), chat = new ChatStore(db), requests = new RequestStore(db);
   const presenter = new PresentationControl(db, control), { presentation, results } = presenter;
   const demo = Boolean(control.catalog);
+  const publisher = new PublicPublisher(db, control.service.store, results, { ...publicOptions, disabled: demo });
+  const unsubscribe = control.service.subscribe((job) => { if (job.reason === 'source_removed') publisher.revoke([job.id]); });
   let usageVersion = '', usage: ModelUsage[] = [];
   const removed = () => presenter.removed();
   const overlay = () => {
@@ -53,7 +56,7 @@ export function registerDashboardRoutes(app: FastifyInstance, db: DatabaseSync, 
     const at = heartbeat?.success && heartbeat.data.broadcast_id === control.session.currentStreamId() ? heartbeat.data.captured_at : null;
     const messages = control.session.messages(db);
     return deskSnapshotSchema.parse({ demo, messages, checks: control.service.store.list().map((job) => checkViewSchema.parse(job)),
-      requests: requests.list(), settings: settings.get(), overlay: overlay(), twitch: control.session.status(),
+      requests: requests.list(), settings: settings.get(), overlay: overlay(), twitch: control.session.status(), public_pages: publisher.state(),
       companion: { state: demo ? 'recorded' : !at ? 'waiting' : Date.now() - Date.parse(at) > 45_000 ? 'stale' : 'current', last_chunk_at: at },
       scores: presenter.votes.scores(control.session.currentStreamId() ?? '').map((score) => ({ ...score, display_name: messages.find((message) => message.user_id === score.user_id)?.display_name ?? 'Viewer' })),
       models: { recorded: demo, calls: selected.length, search_calls: selected.reduce((sum, call) => sum + call.search_calls, 0), last: selected.at(-1) ?? null },
@@ -83,6 +86,18 @@ export function registerDashboardRoutes(app: FastifyInstance, db: DatabaseSync, 
     const params = checkIdParamsSchema.safeParse(request.params), job = params.success ? control.service.store.get(params.data.id) : undefined;
     if (!job) return reply.code(404).send({ error: 'Result not found.' });
     try { return results.project(job); } catch { return reply.code(409).send({ error: 'The stored result cannot be verified.' }); }
+  });
+  app.post('/api/checks/:id/publish', async (request, reply) => {
+    const params = checkIdParamsSchema.safeParse(request.params), approval = postCheckSchema.safeParse(request.body ?? {});
+    const job = params.success ? control.service.store.get(params.data.id) : undefined;
+    if (!job || !approval.success) return reply.code(404).send({ error: 'Choose a completed check.' });
+    if (job.outcome?.type === 'fact' && job.outcome.sensitive && !approval.data.sensitive_confirmed) return reply.code(409).send({ error: 'Confirm the sensitive claim before publishing it.' });
+    try {
+      if (!['ready', 'on_air'].includes(job.state)) throw new Error('Choose a completed check.');
+      results.project(job);
+      return demo ? { url: `http://${request.headers.host}/r/${job.id}`, simulated: true } : { url: await publisher.publish(job.id), simulated: false };
+    }
+    catch (error) { return reply.code(409).send({ error: error instanceof Error ? error.message : 'Public publishing is unavailable.' }); }
   });
   app.get('/api/history/context', async (request, reply) => {
     const query = historyContextSchema.safeParse(request.query);
@@ -125,13 +140,23 @@ export function registerDashboardRoutes(app: FastifyInstance, db: DatabaseSync, 
         chat.put({ id: `demo-reply-${randomUUID()}`, broadcast_id: 'demo-stream', user_id: 'demo-bot', user_login: 'demo_bot', display_name: 'demo_bot', body: formatChat(text), badges: [], parent_id: null, created_at: new Date().toISOString(), scope: 'history', removed_reason: null });
         return { posted: true, simulated: true };
       }
-      if (result.type !== 'vod') return reply.code(409).send({ error: 'Connect public result pages before posting fact checks.' });
-      const text = result.found && result.offset_s !== null && result.vod_id ? buildVodReply(result.offset_s, result.quote, result.clip?.clip_url ?? vodTimestampUrl(result.vod_id, result.offset_s))
+      let text: string;
+      if (result.type === 'fact') {
+        const address = new URL(await publisher.publish(job.id));
+        const id = address.pathname.slice('/r/'.length);
+        const stance = result.verdict === 'real' ? 'supports' : result.verdict === 'not_real' ? 'contradicts' : undefined;
+        const evidence = result.evidence.find((item) => !stance || item.stance === stance);
+        text = buildCheckReply(result.verdict, result.explanation, result.sources.find((source) => source.id === evidence?.source_id)?.url, id, address.origin);
+      } else text = result.found && result.offset_s !== null && result.vod_id ? buildVodReply(result.offset_s, result.quote, result.clip?.clip_url ?? vodTimestampUrl(result.vod_id, result.offset_s))
         : buildNotFoundReply(result.coverage[0]?.start_s ?? 0, result.coverage[0]?.end_s ?? 0);
+      const current = control.service.store.get(job.id);
+      if (!current?.input || !['ready', 'on_air'].includes(current.state)) return reply.code(409).send({ error: 'This check was cancelled before posting.' });
       if (!await control.session.postStored(job.id, text)) return reply.code(409).send({ error: 'Twitch did not accept the reply. Check the current stream.' });
+      if (result.type === 'vod' && !result.clip?.clip_url) await control.session.postClip(job.id);
       return { posted: true, simulated: false };
     } catch { return reply.code(409).send({ error: 'The reply was blocked. Check the stored evidence and stream.' }); }
   });
-  app.addHook('onClose', async () => presenter.close());
+  app.addHook('onReady', async () => publisher.sweep());
+  app.addHook('onClose', async () => { unsubscribe(); presenter.close(); await publisher.close(); });
   return { removed, purge: (userId: string) => presenter.purge(userId), settings: (value: ChatSettings) => presenter.configure(value) };
 }

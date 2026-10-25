@@ -5,6 +5,9 @@
   "description": "Sourced checks and stream memory for Twitch.",
   "type": "module",
   "license": "MIT",
+  "overrides": {
+    "miniflare": { "undici": "7.30.1" }
+  },
   "engines": {
     "node": "^22.13.0 || ^24.0.0"
   },
@@ -22,6 +25,10 @@
     "eval:verify": "tsx eval/run.ts --verify-lock",
     "demo": "npm run build && node dist/server/index.js --demo",
     "setup:twitch": "tsx scripts/setup-twitch.ts",
+    "setup:public": "tsx scripts/setup-public.ts",
+    "worker:dev": "wrangler dev --config worker/wrangler.toml --local --ip 127.0.0.1 --port 8787 --persist-to .cache/worker-state",
+    "worker:check": "wrangler deploy --config worker/wrangler.toml --dry-run --outdir .cache/worker-build",
+    "worker:deploy": "wrangler deploy --config worker/wrangler.toml",
     "probe:twitch": "tsx scripts/probe-twitch.ts",
     "probe:core": "tsx scripts/probe-core.ts",
     "probe:engine": "tsx scripts/probe-engine.ts",
@@ -62,6 +69,7 @@
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.0",
     "vite": "8.3.5",
-    "vitest": "5.0.5"
+    "vitest": "5.0.5",
+    "wrangler": "4.152.0"
   }
 }

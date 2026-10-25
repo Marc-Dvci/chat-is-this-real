@@ -2,20 +2,13 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { formatChat } from '../shared/format-chat.js';
 import { twitchClipCreatedSchema, twitchVideosSchema, type ClipResult, type VodOutcome } from '../shared/schemas.js';
 import { TwitchHelix } from '../twitch/helix.js';
+import { canonicalClipUrl, vodTimestampUrl } from '../shared/vod-links.js';
+export { canonicalClipUrl, vodTimestampUrl } from '../shared/vod-links.js';
 
-export function vodTimestampUrl(vodId: string, offset: number): string {
-  if (!/^\d+$/u.test(vodId) || !Number.isFinite(offset) || offset < 0) throw new Error('Invalid stored VOD reference.');
-  const seconds = Math.floor(offset);
-  return `https://www.twitch.tv/videos/${vodId}?t=${Math.floor(seconds / 3600)}h${Math.floor(seconds / 60) % 60}m${seconds % 60}s`;
-}
 export function clipWindow(start: number, finish: number): { duration: number; end: number } {
   if (!Number.isFinite(start) || !Number.isFinite(finish) || start < 0 || finish < start) throw new Error('Invalid stored quote interval.');
   const duration = Math.min(60, Math.max(30, Math.ceil(finish - start + 16)));
   return { duration, end: Math.max(duration, Math.ceil(finish + 8)) };
-}
-export function canonicalClipUrl(id: string): string {
-  if (!/^[a-zA-Z0-9_-]{1,200}$/u.test(id)) throw new Error('Invalid Twitch clip identifier.');
-  return `https://clips.twitch.tv/${id}`;
 }
 
 export async function createVodClip(helix: TwitchHelix, outcome: VodOutcome, options: {

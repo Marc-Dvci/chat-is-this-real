@@ -66,7 +66,10 @@ export function registerCheckRoutes(app: FastifyInstance, db: DatabaseSync, cata
     const reserved = db.prepare('INSERT OR IGNORE INTO clip_attempts VALUES(?,?)').run(job.id, new Date().toISOString());
     if (!reserved.changes) return { started: false, clip: outcome.clip };
     const abort = new AbortController();
-    const done = createVodClip(helix, outcome, { signal: abort.signal, onUpdate: (value) => checks.store.setClip(job.id, value) })
+    const done = createVodClip(helix, outcome, { signal: abort.signal, onUpdate: (value) => {
+      checks.store.setClip(job.id, value);
+      if (value.state === 'ready') void session.postClip(job.id).catch(() => undefined);
+    } })
       .then(() => undefined).catch(() => {
         checks.store.setClip(job.id, { state: 'fallback', clip_id: null, clip_url: null, vod_url: vodTimestampUrl(outcome.vod_id!, outcome.offset_s!), reason: 'clip_unavailable' });
       }).finally(() => { clips.delete(job.id); });
