@@ -18,7 +18,7 @@ I turn chat's claims and “you said that earlier” moments into evidence the s
 
 | Open it | Where |
 |---|---|
-| Recorded demo, no keys | [Local quickstart](#quickstart) · [Browser demo](docs/demo.md) |
+| Recorded demo, no keys | [Play online](https://chat-is-this-real.pages.dev/demo/) · [Project site](https://chat-is-this-real.pages.dev/) · [Local quickstart](#quickstart) |
 | Launch film and submission assets | [Submission package](docs/SUBMISSION.md) |
 | Built with OpenAI Codex | [Session, milestones and PRs](docs/BUILT_WITH_CODEX.md) |
 | Final measurement | ${count(held)} heldout verdicts; ${held.metrics.wrong_direction_errors} reversed verdicts; [full reports](docs/final-evaluation.md) |
@@ -160,8 +160,9 @@ Qualification and stance interpretation can still be wrong, so approval is essen
 Default free search replay covers its catalogue; other claims fail privately until live
 discovery is configured. Speech measurements use the original prerecorded system narration.
 The live vote probe observed one eligible real voter; the three-viewer flow uses scripted
-browser voters. Cloud deployment, public video upload and account access are final publication
-steps recorded in [the handoff](HANDOFF.md).
+browser voters. The [public demo](https://chat-is-this-real.pages.dev/demo/) uses free static
+Pages hosting. Signed receipt hosting requires separately verified Free-plan configuration.
+Video upload and repository access are recorded in [the handoff](HANDOFF.md).
 
 ## Quickstart
 

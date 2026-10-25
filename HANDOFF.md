@@ -5,6 +5,11 @@ uses the account approvals listed below. [Final checks](docs/final-audit.md) pas
 124 unit tests and six browser checks. The [clean-clone quickstart](docs/quickstart-measurement.md)
 completed in 17.78 seconds on this machine, using local Git as the clone source.
 
+The [project site](https://chat-is-this-real.pages.dev/) and [keyless demo](https://chat-is-this-real.pages.dev/demo/)
+are deployed as free static Pages assets. The upload has no Functions, storage bindings,
+model credentials or paid inference. [Hosting details](docs/free-hosting.md) record the
+cost boundary and browser acceptance.
+
 ## Review files
 
 - Film: `data/submission/chat-is-this-real-launch.mp4`, 2:45, 2560×1440, 30 fps;
@@ -21,10 +26,10 @@ completed in 17.78 seconds on this machine, using local Git as the clone source.
 
 ## Final publication choices
 
-1. Approve the Cloudflare account and deployment of the prepared Worker, static launch
-   page and keyless `/demo/`. The signing key already exists locally in ignored files.
-   Set it as a Worker secret without putting it in chat or command history. Verify the
-   public demo, receipt revocation and production Twitch embed after deployment.
+1. The static launch page and keyless `/demo/` are deployed. The separate signed receipt
+   Worker requires verified Workers Free limits before deployment. Its signing key stays
+   local. A future Worker deployment must verify public receipt removal and its Twitch
+   embed; this static Pages site uses browser-local demo receipts.
 2. Review the caption-led film. The original score and system-narrated test clip are
    included. [Marc’s narration script](film/voiceover.md) is ready for an optional voice pass;
    the supplied build plan calls for Marc’s narration. A voice pass needs a new audio mix
@@ -36,9 +41,9 @@ completed in 17.78 seconds on this machine, using local Git as the clone source.
    Add the published website and video addresses and the main session ID. Check the
    submitted page as a signed-out visitor.
 
-The user’s AGENTS.md requires approval before deployment. No public website or video
-address is invented here. Public posting, account invitations and final submission remain
-explicit publication actions for the final review.
+The user approved deployment with a zero-cost constraint. Static Pages hosting satisfies
+that constraint on both account plans. Video upload, account invitations and final
+submission remain explicit publication actions for the final review.
 
 ## Evidence scope
 

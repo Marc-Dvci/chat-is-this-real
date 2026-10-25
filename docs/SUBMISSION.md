@@ -6,10 +6,12 @@
 - Tagline: **Give chat a verdict, a source and the VOD receipts.**
 - Repository: https://github.com/Marc-Dvci/chat-is-this-real
 - Main Codex session: `01a16cc3-1a5e-7d23-81c2-c9de487cc7fd`
-- About the project: [ready-to-review draft](DEVPOST.md), 1445 words.
+- About the project: [ready-to-review draft](DEVPOST.md), 1449 words.
 - Built with: OpenAI Codex, Alibaba Cloud Model Studio, Qwen, the Twitch API, EventSub, OBS, Cloudflare Workers, SQLite, TypeScript, React.
 - Gallery: [manifest](gallery/manifest.json) and [captions](../CAPTIONS.md). Use its numbered images in order.
-- Video and website fields: use the public links recorded in [the handoff](../HANDOFF.md) after publication.
+- Website: https://chat-is-this-real.pages.dev/
+- Interactive demo: https://chat-is-this-real.pages.dev/demo/
+- Video: use the public YouTube link in [the handoff](../HANDOFF.md) after upload.
 
 ## Video upload
 
@@ -42,7 +44,7 @@ For a local run, install Node.js 24 LTS and run `npm ci`, then `npm run demo`. O
 
 ## Publication review
 
-Approve the Cloudflare account/deployment, public YouTube upload and repository access at the final review. A private repository must be shared with the contest testing address listed in the official rules; choose that access or make the repository public. Keep the free keyless demo available through the judging period.
+The static Cloudflare demo is deployed. Approve the public YouTube upload and repository access at the final review. A private repository must be shared with the contest testing address listed in the official rules; choose that access or make the repository public. Keep the free keyless demo available through the judging period.
 
 After publishing, verify every website, repository and image link in a clean signed-out browser, confirm the video is public and playable, and enter the main build session ID in its own form field. Check the submitted Devpost page as a visitor.
 

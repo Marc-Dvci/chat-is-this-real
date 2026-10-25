@@ -6,6 +6,8 @@ I lead AI for the Internal Audit function at a major French bank. Evidence is pa
 
 Chat Is This Real combines sourced claim checks, chat votes and stream memory in one streamer-controlled flow. In the original prerecorded Twitch test, it recovered a promise made about five minutes earlier in the same broadcast and returned a playable clip. I built the project with OpenAI Codex. Its frozen checker matched 23 of 24 heldout verdicts with 0 reversed verdicts, using curated search discovery and live page fetching and inference.
 
+[Play the recorded demo](https://chat-is-this-real.pages.dev/demo/).
+
 ## What it does
 
 ### Innovation and idea

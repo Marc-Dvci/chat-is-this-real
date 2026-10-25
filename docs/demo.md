@@ -31,5 +31,7 @@ walkthrough checks the actual Workers runtime, both views, a complete vote and r
 source receipts, desktop and 380 px layouts, accessibility and no backend or external
 requests. The local walkthrough also covers history, caption import, Settings and purge.
 
-The production Worker is prepared but has not been deployed. Its account approval and
-live public address remain for final review. Local Workers tests require no cloud login.
+The [public demo](https://chat-is-this-real.pages.dev/demo/) runs on static Cloudflare Pages.
+[Free hosting](free-hosting.md) records its upload guard, cost boundary and production checks.
+The signed receipt Worker is a separate optional service. Local Workers tests require no
+cloud login.

@@ -12,14 +12,19 @@ for (const name of ['assets', 'font-licenses', 'demo-data.json', 'demo-proof.jso
 }
 const home = await readFile('web-dist/home.html', 'utf8'), desk = await readFile('web-dist/index.html', 'utf8'), overlay = await readFile('web-dist/overlay.html', 'utf8');
 await writeFile(`${directory}/index.html`, home);
-for (const page of ['index', 'library', 'settings', 'receipt-shell']) await writeFile(`${directory}/demo/${page}.html`, desk);
+for (const page of ['index', 'library', 'settings']) await writeFile(`${directory}/demo/${page}.html`, desk);
+await writeFile(`${directory}/demo/receipt-shell`, desk);
 await writeFile(`${directory}/demo/overlay.html`, overlay);
-await writeFile(`${directory}/_redirects`, '/demo/r/* /demo/receipt-shell.html 200\n');
+await writeFile(`${directory}/_redirects`, '/demo/r/* /demo/receipt-shell 200\n');
 await writeFile(`${directory}/_headers`, `/*
   X-Content-Type-Options: nosniff
   Referrer-Policy: no-referrer
   Cache-Control: no-store
   Content-Security-Policy: default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; frame-src 'self' https://clips.twitch.tv; object-src 'none'; base-uri 'none'; frame-ancestors 'self'
+/demo/r/*
+  Content-Type: text/html; charset=utf-8
+/demo/receipt-shell
+  Content-Type: text/html; charset=utf-8
 `);
 await writeFile(`${directory}/404.html`, '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Page unavailable | Chat Is This Real</title><body><main><h1>This page is unavailable.</h1><p><a href="/demo/">Open the recorded demo</a></p></main></body></html>');
 async function files(path: string): Promise<string[]> {

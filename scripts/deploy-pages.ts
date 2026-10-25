@@ -19,7 +19,7 @@ for (const item of manifest.files as unknown[]) { const entry = object(item); if
 if (paths.length !== expected.size || paths.length > 20000) throw new Error('The upload file list changed.');
 for (const path of paths) {
   const relative = path.slice(directory.length + 1).replaceAll('\\', '/');
-  if (/(?:^|\/)(?:functions|_worker\.js|_routes\.json|\.[^/]+)(?:\/|$)/u.test(relative)) throw new Error('The upload contains a forbidden executable or private path.');
+  if (/(?:^|\/)(?:functions|_worker\.js|_routes\.json|\.[^/]+)(?:\/|$)/iu.test(relative)) throw new Error('The upload contains a forbidden executable or private path.');
   const bytes = await readFile(path); if (bytes.length > 25 * 1024 * 1024 || expected.get(relative) !== createHash('sha256').update(bytes).digest('hex')) throw new Error('An asset changed or exceeds the free upload limit.');
   assertNoSecretFragments(bytes.toString('utf8'), loadedSecrets());
 }
@@ -29,6 +29,7 @@ const identity = object(JSON.parse((await cli(['whoami', '--json'])).stdout));
 if (identity.loggedIn !== true || !Array.isArray(identity.accounts) || identity.accounts.length !== 1) throw new Error('Sign in to the intended single Cloudflare account first.');
 const account = object(identity.accounts[0]); if (typeof account.id !== 'string' || !/^[a-f0-9]{32}$/u.test(account.id)) throw new Error('Invalid deployment account.');
 const authentication = object(JSON.parse((await cli(['auth', 'token', '--json'])).stdout)); if (typeof authentication.token !== 'string') throw new Error('A token-based Cloudflare authorization is required.');
+for (const path of paths) assertNoSecretFragments((await readFile(path)).toString('utf8'), loadedSecrets([authentication.token]));
 await mkdir('data/deploy', { recursive: true });
 async function request(path: string, method = 'GET', value?: unknown) {
   const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${account.id}/pages${path}`, {

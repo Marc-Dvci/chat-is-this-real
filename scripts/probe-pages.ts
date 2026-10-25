@@ -11,7 +11,7 @@ let passed = false;
 const browser = await chromium.launch({ headless: true });
 try {
   for (const [path, expected] of [['/', 200], ['/demo/', 200], ['/demo/library', 200], ['/demo/settings', 200], ['/demo/overlay', 200], ['/demo/r/demo-check-showcase-fr', 200], ['/api/session', 404], ['/.env', 404], ['/data/tokens.json', 404]] as const) {
-    const response = await fetch(new URL(path, address)); checks.push({ path, status: response.status }); expect(response.status).toBe(expected);
+    const response = await fetch(new URL(path, address), { redirect: 'manual' }); checks.push({ path, status: response.status }); expect(response.status).toBe(expected);
     if (path === '/demo/') expect(response.headers.get('content-security-policy')).toContain("'wasm-unsafe-eval'");
   }
   const context = await browser.newContext({ viewport: { width: 1536, height: 1100 }, reducedMotion: 'reduce' });
@@ -41,7 +41,10 @@ try {
     await page.goto(new URL(`/demo/${path}`, address).href); await expect(page.getByRole('heading', { name: heading, exact: true })).toBeVisible(); await scan();
   }
   await page.setViewportSize({ width: 380, height: 900 }); await page.screenshot({ path: `${directory}/settings-dock.png`, fullPage: true });
-  await page.goto(new URL('/demo/r/demo-check-showcase-fr', address).href); await expect(page.locator('.result-stamp')).toHaveText('REAL'); await scan();
+  const receipt = new URL('/demo/r/demo-check-showcase-fr', address).href;
+  await page.goto(receipt); await expect(page).toHaveURL(receipt); await expect(page.locator('.public-page')).toBeVisible();
+  await expect(page.locator('.public-page h1')).toContainText('stardew sur PC');
+  await expect(page.locator('.public-page .result-stamp')).toBeVisible(); await expect(page.locator('.public-page .result-stamp')).toHaveText('REAL'); await scan();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(380);
   await page.screenshot({ path: `${directory}/receipt-dock.png`, fullPage: true });
   expect(requests.filter((request) => new URL(request).origin !== address.origin)).toEqual([]);

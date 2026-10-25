@@ -64,9 +64,11 @@ storage failure, repeated uploads and source removal during an upload.
 `e2e/public-pages.spec.ts` uses Wrangler's actual local runtime with KV and built assets.
 It checks desktop and 380 px layouts, accessibility and browser errors.
 
-The local runtime and deployment bundle have passed. No public deployment or cloud account
-has been approved yet. The public URL and a production Twitch embed remain acceptance
-checks after that approval. No claim of a deployed public link is made here.
+The local runtime and deployment bundle have passed. The [keyless public demo](https://chat-is-this-real.pages.dev/demo/)
+uses static Pages hosting with no Functions or storage bindings. Its demo receipt views
+run in the browser. This signed Worker remains a separate optional deployment: verify
+Workers Free and KV limits before enabling it. [Free hosting](free-hosting.md) explains
+the deployed demo’s cost boundary and production acceptance.
 
 References: [Wrangler configuration](https://developers.cloudflare.com/workers/wrangler/configuration/),
 [KV writes and propagation](https://developers.cloudflare.com/kv/api/write-key-value-pairs/),
