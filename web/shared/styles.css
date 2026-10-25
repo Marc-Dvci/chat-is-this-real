@@ -8,3 +8,5 @@
 @media(max-width:899px){.overlay-controls{max-width:240px;gap:9px 12px}.overlay-controls>.button{font-size:8px;padding:3px 7px}.overlay-controls>.button svg{width:13px}}
 @media(max-width:449px){.overlay-controls{max-width:155px}.overlay-controls>.button{font-size:8px;gap:4px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+.replay-disclosure{margin:18px 0 24px;color:var(--muted);font-size:12px;letter-spacing:.03em}.published-link{display:inline-flex;align-items:center;gap:8px;margin:0 0 16px;color:var(--cyan)}.vod-links,.clip-actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}.clip-player{margin:20px 0}.clip-player iframe{display:block;border:0;margin-top:12px;max-width:100%;width:100%;min-width:400px;min-height:300px;aspect-ratio:16/9}

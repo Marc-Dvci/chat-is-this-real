@@ -544,6 +544,7 @@ export const deskSnapshotSchema = z.object({ demo: z.boolean(), messages: z.arra
   twitch: z.object({ connected: z.boolean(), notice: z.string(), live_stream_id: z.string().nullable() }),
   companion: z.object({ state: z.enum(['recorded', 'waiting', 'current', 'stale']), last_chunk_at: z.iso.datetime().nullable() }),
   scores: z.array(z.object({ user_id: z.string(), display_name: z.string(), points: z.number().int().positive() })).default([]),
+  public_pages: z.lazy(() => publicPagesStateSchema).default({ configured: false, pending_removals: 0, links: [] }),
   models: z.object({ recorded: z.boolean(), calls: z.number(), search_calls: z.number(), last: modelUsageSchema.nullable() }),
   indexed_s: z.number().nonnegative(), samples: z.array(z.object({ key: z.string(), kind: z.enum(['real', 'vod']), text: z.string() }))
 });
@@ -568,3 +569,19 @@ export const overlayLiveReportSchema = z.object({ suite: z.literal('overlay-live
   reason: z.string().nullable().default(null),
   bot_filtered: z.boolean(), duplicate_rejected: z.boolean(), approval_held: z.boolean(), score_once: z.boolean(),
   source: z.literal('Authorized prerecorded stream'), fixture: z.string().nullable(), result: publicResultSchema.nullable() });
+export const resultSigningKeySchema = z.string().regex(/^[a-f0-9]{64}$/u);
+export const publicBaseSchema = z.url().refine((value) => { const url = new URL(value); return url.protocol === 'https:' && !url.username && !url.password && !url.search && !url.hash && url.pathname === '/'; }, 'Use the HTTPS origin of the result site.');
+export const publicConfigSchema = z.object({
+  RESULTS_BASE_URL: z.preprocess((value) => value === '' ? undefined : value, publicBaseSchema.optional()),
+  RESULTS_SIGNING_KEY: z.preprocess((value) => value === '' ? undefined : value, resultSigningKeySchema.optional())
+});
+export const publishBodySchema = z.object({ result: publicResultSchema }).strict();
+export const publicStoredSchema = z.object({ result: publicResultSchema, created_at: z.iso.datetime(), expires_at: z.iso.datetime() });
+export const publicRevokedSchema = z.object({ revoked: z.literal(true) }).strict();
+export const publicReceiptSchema = z.object({ id: z.string().regex(/^[a-zA-Z0-9]{10}$/u), url: z.url(), expires_at: z.iso.datetime() });
+export const publicLinkSchema = z.object({ job_id: z.string(), result_id: z.string(), url: z.string(), status: z.enum(['pending', 'ready', 'revoke_pending', 'revoked']),
+  nonce: z.string(), body_json: z.string().nullable(), payload_hash: z.string(), base_url: z.string(), expires_at: z.string(), reason: z.string().nullable(), last_attempt_ms: z.number() });
+export type PublicLink = z.infer<typeof publicLinkSchema>;
+export const publicPagesStateSchema = z.object({ configured: z.boolean(), pending_removals: z.number().int().nonnegative(),
+  links: z.array(z.object({ job_id: z.string(), url: z.string(), status: publicLinkSchema.shape.status })) });
+export const publishedLinkResponseSchema = z.object({ url: z.url(), simulated: z.boolean() });

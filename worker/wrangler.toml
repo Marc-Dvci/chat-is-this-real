@@ -1,0 +1,21 @@
+name = "chat-is-this-real"
+main = "index.ts"
+compatibility_date = "2026-10-24"
+workers_dev = true
+preview_urls = false
+
+[secrets]
+required = ["RESULTS_SIGNING_KEY"]
+
+[[kv_namespaces]]
+binding = "RESULTS"
+
+[assets]
+directory = "../web-dist"
+binding = "ASSETS"
+html_handling = "none"
+not_found_handling = "none"
+run_worker_first = ["/api/*", "/r/*", "/", "/demo", "/demo/*", "/favicon.ico"]
+
+[observability]
+enabled = false

@@ -30,6 +30,9 @@ jobs:
       - run: npm run eval:verify
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
+      - run: npm run worker:check
+        env:
+          WRANGLER_SEND_METRICS: 'false'
 
   secrets:
     runs-on: ubuntu-latest

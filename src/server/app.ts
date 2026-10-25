@@ -12,7 +12,7 @@ import { registerWebRoutes } from './web-routes.js';
 import { loadDemoCatalog } from '../demo/replay.js';
 import { seedDemo } from '../demo/seed.js';
 
-export function buildApp(options: { db?: DatabaseSync; databasePath?: string; demo?: boolean; onSettings?: (settings: ChatSettings) => void; onRemoved?: (requestIds: string[]) => void } = {}) {
+export function buildApp(options: { db?: DatabaseSync; databasePath?: string; demo?: boolean; publicOptions?: { config?: unknown; transport?: typeof fetch }; onSettings?: (settings: ChatSettings) => void; onRemoved?: (requestIds: string[]) => void } = {}) {
   const app = Fastify({
     logger: false,
     bodyLimit: 1_048_576
@@ -23,7 +23,7 @@ export function buildApp(options: { db?: DatabaseSync; databasePath?: string; de
   if (!options.db) app.addHook('onClose', async () => db.close());
   installDashboardSecurity(app);
   const checks = registerCheckRoutes(app, db, catalog);
-  const desk = registerDashboardRoutes(app, db, checks);
+  const desk = registerDashboardRoutes(app, db, checks, options.publicOptions);
   registerHistoryRoutes(app, db, {
     onSettings: (value) => { checks.settings(value); desk.settings(value); options.onSettings?.(value); },
     onRemoved: (ids) => { checks.removed(ids); desk.removed(); options.onRemoved?.(ids); },

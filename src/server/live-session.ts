@@ -12,6 +12,7 @@ import { TwitchHelix } from '../twitch/helix.js';
 import { TwitchPublisher } from '../twitch/publisher.js';
 import { TwitchRuntime } from '../twitch/runtime.js';
 import { TwitchTokens } from '../twitch/tokens.js';
+import { canonicalClipUrl } from '../shared/vod-links.js';
 
 export class LiveSession {
   private runtime: TwitchRuntime | undefined;
@@ -56,6 +57,12 @@ export class LiveSession {
     await this.publisher.reply(requestId, text);
     return this.db.prepare("SELECT status FROM publications WHERE request_id=? AND kind='result'").get(requestId)?.status === 'sent';
   }
+  async postClip(requestId: string): Promise<void> {
+    const job = this.checks.store.get(requestId), clip = job?.outcome?.type === 'vod' ? job.outcome.clip : null;
+    if (!this.publisher || clip?.state !== 'ready' || !clip.clip_id || clip.clip_url !== canonicalClipUrl(clip.clip_id) ||
+      this.db.prepare("SELECT status FROM publications WHERE request_id=? AND kind='result'").get(requestId)?.status !== 'sent') return;
+    await this.publisher.clipReply(requestId, `Clip: ${canonicalClipUrl(clip.clip_id)}`);
+  }
 
   async connect(): Promise<void> {
     if (this.starting) return this.starting;
@@ -93,7 +100,10 @@ export class LiveSession {
     const runtime = new TwitchRuntime(core, helix, (code) => { this.notice = code; });
     this.runtime = runtime;
     this.helix = helix;
-    this.publisher = new TwitchPublisher(helix, requests, () => runtime.liveStreamId(), (code) => { this.notice = code; });
+    this.publisher = new TwitchPublisher(helix, requests, () => runtime.liveStreamId(), (code) => { this.notice = code; }, (id, kind) => {
+      const job = this.checks.store.get(id);
+      return Boolean(job?.input && job.reason !== 'source_removed' && (kind === 'ack' ? job.state !== 'dismissed' : ['ready', 'on_air'].includes(job.state)));
+    });
     await runtime.start();
     if (generation !== this.generation) runtime.stop();
   }

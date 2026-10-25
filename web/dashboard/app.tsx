@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { checkJobSchema, messageListSchema, overlayViewSchema, type CheckView, type StoredMessage } from '../../src/shared/schemas.js';
+import { checkJobSchema, messageListSchema, overlayViewSchema, publishedLinkResponseSchema, type CheckView, type StoredMessage } from '../../src/shared/schemas.js';
 import { copyText, errorMessage, mutate, readApi } from '../shared/api.js';
 import { Badge, Button, Dialog, Icon } from '../shared/ui.js';
 import { ChatPanel } from './chat.js';
@@ -20,7 +20,8 @@ function Desk() {
   const [message, setMessage] = useState<string | null>(null), [check, setCheck] = useState<string | null>(null), [viewer, setViewer] = useState<string | null>(null);
   const [historyIds, setHistoryIds] = useState<string[]>([]), [context, setContext] = useState<StoredMessage[] | null>(null);
   const [composer, setComposer] = useState<'real' | 'vod' | null>(null), [text, setText] = useState(''), [toast, setToast] = useState(''), [busy, setBusy] = useState(false);
-  const [confirmation, setConfirmation] = useState<{ job: CheckView; action: 'show' | 'post' } | null>(null), [help, setHelp] = useState(false);
+  const [confirmation, setConfirmation] = useState<{ job: CheckView; action: 'show' | 'post' | 'link' } | null>(null), [help, setHelp] = useState(false), [sharedLink, setSharedLink] = useState('');
+  const [clipReview, setClipReview] = useState<CheckView | null>(null);
   const navigate = (path: string) => { history.pushState({}, '', path); setRoute(path); };
   useEffect(() => { const pop = () => setRoute(location.pathname); addEventListener('popstate', pop); return () => removeEventListener('popstate', pop); }, []);
   useEffect(() => { if (!toast) return; const timer = setTimeout(() => setToast(''), 5000); return () => clearTimeout(timer); }, [toast]);
@@ -37,13 +38,20 @@ function Desk() {
     if (job.outcome?.type === 'fact' && job.outcome.sensitive && !confirmed) { setConfirmation({ job, action: 'post' }); return; }
     void run(() => mutate(`/api/checks/${job.id}/post`, { sensitive_confirmed: confirmed }), data?.demo ? 'Scripted reply added to demo chat.' : 'Reply sent to Twitch.');
   };
+  const copy = (job: CheckView, confirmed = false) => {
+    if (job.outcome?.type === 'fact' && job.outcome.sensitive && !confirmed) { setConfirmation({ job, action: 'link' }); return; }
+    void run(async () => {
+      const address = data?.demo ? `${location.origin}/r/${job.id}` : publishedLinkResponseSchema.parse(await mutate(`/api/checks/${job.id}/publish`, { sensitive_confirmed: confirmed })).url;
+      try { await copyText(address); setToast('Result link copied.'); } catch { setSharedLink(address); }
+    });
+  };
   const hide = useCallback(() => { void run(() => mutate('/api/presentation', { action: 'hide' }), 'Overlay hidden.'); }, [run]);
   const openViewer = (id: string) => { setViewer(id); setTab('viewer'); };
   const currentMessages = context ?? data?.messages ?? [];
   useEffect(() => {
     const key = (event: KeyboardEvent) => {
       const target = event.target;
-      if (target instanceof HTMLElement && (target.closest('input,textarea,select,[contenteditable="true"],dialog') || event.ctrlKey || event.altKey || event.metaKey) || composer || confirmation || help || route !== '/') return;
+      if (target instanceof HTMLElement && (target.closest('input,textarea,select,[contenteditable="true"],dialog') || event.ctrlKey || event.altKey || event.metaKey) || composer || confirmation || clipReview || sharedLink || help || route !== '/') return;
       const ids = tab === 'viewer' ? historyIds : message ? [message] : [];
       if (['ArrowDown', 'ArrowUp'].includes(event.key)) {
         event.preventDefault(); const rows = [...currentMessages].reverse(); const index = rows.findIndex((item) => item.id === message);
@@ -55,7 +63,7 @@ function Desk() {
       else if (event.key === 'Escape') { setViewer(null); setTab('chat'); setMessage(null); }
     };
     addEventListener('keydown', key); return () => removeEventListener('keydown', key);
-  }, [tab, historyIds, message, currentMessages, check, data, composer, confirmation, help, route, hide, checkMessages, show, showMessages]);
+  }, [tab, historyIds, message, currentMessages, check, data, composer, confirmation, clipReview, sharedLink, help, route, hide, checkMessages, show, showMessages]);
   const openComposer = (kind: 'real' | 'vod') => { setText(''); setComposer(kind); };
   if (!data) return <main className="loading-page"><span className="wordmark">CHAT, IS THIS REAL?</span><p role="status">{error || 'Opening the review booth…'}</p></main>;
   const overlayOn = data.settings.overlay_enabled, model = data.models.last;
@@ -71,7 +79,7 @@ function Desk() {
       <div className="desk-toolbar"><div><span className="eyebrow">YOUR STREAM. YOUR CALL.</span><h1>Show the receipts.</h1></div><div className="overlay-controls"><label className="inline-switch"><input type="checkbox" role="switch" checked={overlayOn} onChange={(event) => void run(() => mutate('/api/settings', { overlay_enabled: event.target.checked }, 'PATCH'))}/>Overlay</label><label className="inline-switch"><input type="checkbox" role="switch" checked={data.settings.votes_enabled} onChange={(event) => void run(() => mutate('/api/settings', { votes_enabled: event.target.checked }, 'PATCH'))}/>Votes</label><Button icon="bars" onClick={() => void run(() => mutate('/api/settings', { leaderboard_enabled: !data.settings.leaderboard_enabled }, 'PATCH'))}>{data.settings.leaderboard_enabled ? 'Hide leaderboard' : 'Leaderboard'}</Button><Button icon="hide" onClick={hide}>Hide now <kbd>H</kbd></Button></div></div>
       <div className="dock-tabs" role="tablist" aria-label="Review panels">{['chat', 'checks', 'viewer'].map((name) => <button key={name} role="tab" aria-selected={tab === name} onClick={() => setTab(name)}>{name === 'chat' ? 'Chat' : name === 'checks' ? 'Checks' : 'Viewer'}{name === 'checks' && <span>{data.checks.filter((item) => item.state === 'ready').length}</span>}</button>)}</div>
       <main className={`review-layout ${viewer ? 'has-viewer' : ''} tab-${tab}`}><ChatPanel messages={currentMessages} requests={data.requests} selected={message} onSelect={(id) => { setMessage(id); setTab('chat'); }} onViewer={openViewer} onCheck={checkMessages} onShow={showMessages} context={Boolean(context)} onLive={() => setContext(null)}/>
-        <ChecksPanel data={data} selected={check} onSelect={(id) => { setCheck(id); setTab('checks'); }} onNew={() => openComposer('real')} onShow={show} onPost={post} onCopy={(job) => void run(() => copyText(`${location.origin}/r/${job.id}`), 'Result link copied.')} onDismiss={(job) => void run(() => mutate(`/api/checks/${job.id}/dismiss`), 'Check dismissed.')} onViewer={openViewer}/>
+        <ChecksPanel data={data} selected={check} onSelect={(id) => { setCheck(id); setTab('checks'); }} onNew={() => openComposer('real')} onShow={show} onPost={post} onCopy={copy} onClip={setClipReview} onDismiss={(job) => void run(() => mutate(`/api/checks/${job.id}/dismiss`), 'Check dismissed.')} onViewer={openViewer}/>
         {viewer ? <ViewerPanel userId={viewer} requests={data.requests} onClose={() => { setViewer(null); setTab('chat'); }} onCheck={checkMessages} onShow={showMessages} onSelection={setHistoryIds} onContext={(id) => void run(async () => { setContext((await readApi(`/api/history/context?id=${encodeURIComponent(id)}`, messageListSchema)).messages); setMessage(id); setTab('chat'); })}/> : <aside className="viewer-placeholder"><Icon name="users" size={30}/><h2>Know the context.</h2><p>Select a username to see their stored messages and check the whole conversation.</p></aside>}
       </main></>}
     <footer className="app-footer"><span>CHAT, IS THIS REAL? <b>THE REPLAY BOOTH</b></span><a href="/overlay" target="_blank" rel="noreferrer">OBS overlay <Icon name="external" size={12}/></a><button onClick={() => setHelp(true)}>Shortcuts <kbd>?</kbd></button></footer>
@@ -79,7 +87,9 @@ function Desk() {
     {composer && <Dialog title={composer === 'vod' ? 'Check the VOD' : 'Check a claim'} onClose={() => setComposer(null)}><p className="muted">{composer === 'vod' ? 'Find a quote or promise in your indexed streams.' : 'Review the evidence before you put the result on stream.'}</p><form onSubmit={(event) => { event.preventDefault(); void run(async () => { const job = checkJobSchema.parse(await mutate('/api/checks', { kind: composer, claim: text })); setCheck(job.id); setTab('checks'); navigate('/'); setComposer(null); }); }}><label className="field"><span>{composer === 'vod' ? 'What are you looking for?' : 'The claim'}</span><textarea required maxLength={1000} rows={4} value={text} onChange={(event) => setText(event.target.value)} placeholder={composer === 'vod' ? 'Did you promise fifty push-ups?' : 'Enter the message you want to check'}/></label>
       {data.demo && <div className="recorded-examples"><span className="section-label">Recorded examples</span>{data.samples.filter((sample) => sample.kind === composer).map((sample) => <button key={sample.key} type="button" onClick={() => setText(sample.text)}>{sample.text}<Icon name="arrow" size={14}/></button>)}</div>}
       <footer className="dialog-actions"><Button onClick={() => setComposer(composer === 'real' ? 'vod' : 'real')}>{composer === 'real' ? 'Switch to VOD' : 'Switch to claim'}</Button><Button type="submit" tone="primary" icon="check" disabled={!text.trim() || busy}>Start check</Button></footer></form></Dialog>}
-    {confirmation && <Dialog title="Confirm a sensitive claim" onClose={() => setConfirmation(null)}><p>This claim needs an extra review before it reaches viewers.</p><blockquote>{confirmation.job.input?.claim}</blockquote><footer className="dialog-actions"><Button onClick={() => setConfirmation(null)}>Keep private</Button><Button tone="primary" onClick={() => { const value = confirmation; setConfirmation(null); if (value.action === 'show') show(value.job, true); else post(value.job, true); }}>Confirm and {confirmation.action === 'show' ? 'show' : 'post'}</Button></footer></Dialog>}
+    {confirmation && <Dialog title="Confirm a sensitive claim" onClose={() => setConfirmation(null)}><p>This claim needs an extra review before it reaches viewers.</p><blockquote>{confirmation.job.input?.claim}</blockquote><footer className="dialog-actions"><Button onClick={() => setConfirmation(null)}>Keep private</Button><Button tone="primary" onClick={() => { const value = confirmation; setConfirmation(null); if (value.action === 'show') show(value.job, true); else if (value.action === 'post') post(value.job, true); else copy(value.job, true); }}>Confirm and {confirmation.action === 'show' ? 'show' : confirmation.action === 'post' ? 'post' : 'publish link'}</Button></footer></Dialog>}
+    {clipReview?.outcome?.type === 'vod' && <Dialog title={clipReview.outcome.clip?.clip_url ? 'Your Twitch clip' : 'Create a Twitch clip'} onClose={() => setClipReview(null)}><blockquote className="vod-quote">“{clipReview.outcome.quote}”</blockquote><p>{clipReview.outcome.clip?.clip_url ? 'This clip was created from the stored moment.' : 'This creates a public clip on the connected broadcaster’s Twitch channel. The VOD link stays available while Twitch processes it.'}</p><footer className="dialog-actions"><Button onClick={() => setClipReview(null)}>{clipReview.outcome.clip?.clip_url ? 'Back to the desk' : 'Cancel'}</Button>{clipReview.outcome.clip?.clip_url ? <a className="button primary" href={clipReview.outcome.clip.clip_url} target="_blank" rel="noreferrer">Open Twitch clip <Icon name="external" size={14}/></a> : <Button tone="primary" disabled={busy || data.demo || !data.twitch.connected} onClick={() => void run(async () => { await mutate(`/api/checks/${clipReview.id}/clip`, { confirmed: true }); setClipReview(null); }, 'Clip requested. The VOD link is ready while Twitch processes it.')}>Create public clip</Button>}</footer></Dialog>}
+    {sharedLink && <Dialog title="Your receipt is ready" onClose={() => setSharedLink('')}><label className="field"><span>Result link</span><input readOnly value={sharedLink} onFocus={(event) => event.target.select()}/></label><footer className="dialog-actions"><Button icon="copy" onClick={() => void copyText(sharedLink).then(() => setToast('Result link copied.')).catch(() => setToast('Select the link to copy it.'))}>Copy link</Button><a className="button primary" href={sharedLink} target="_blank" rel="noreferrer">Open result page <Icon name="external" size={14}/></a></footer></Dialog>}
     {help && <Dialog title="Keep your hands on the stream" onClose={() => setHelp(false)}><dl className="shortcut-list">{[['↑ / ↓', 'Select a message'], ['C', 'Check the selection'], ['V', 'Find it in the VOD'], ['S', 'Show the selection on stream'], ['H', 'Hide the overlay'], ['Esc', 'Close the viewer panel']].map(([key, label]) => <div key={key}><dt><kbd>{key}</kbd></dt><dd>{label}</dd></div>)}</dl><p className="fine-print">Shortcuts pause while you type or use a dialog.</p><Button tone="primary" onClick={() => setHelp(false)}>Back to the desk</Button></Dialog>}
   </div>;
 }
