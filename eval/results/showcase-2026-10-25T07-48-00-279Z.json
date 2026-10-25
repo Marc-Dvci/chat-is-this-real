@@ -1,0 +1,989 @@
+{
+  "suite": "showcase",
+  "split": "showcase-not-evaluation",
+  "created_at": "2026-10-25T07:48:59.246Z",
+  "git_commit": "d816fa06156ec9ac64d219a5e4e77633bfeeed5c",
+  "working_tree_dirty": true,
+  "discovery": "Curated assistant search replay. Source fetching and inference are live. Paid search disabled.",
+  "planned_repetitions": 3,
+  "rows": [
+    {
+      "key": "showcase-en",
+      "text": "java + bedrock can play together on the same servers now, no mods needed Pog",
+      "language": "en",
+      "repetition": 1,
+      "outcome": {
+        "id": "05d67257-ab3d-48f9-be83-a58ebc202e87",
+        "type": "fact",
+        "normalized_claim": "Java Edition and Bedrock Edition players can play together on the same servers without mods.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Java Edition and Bedrock Edition players can play together on the same servers without mods.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Minecraft Java and Bedrock crossplay without mods official status",
+            "Does Minecraft support native cross-play between Java and Bedrock editions"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "not_real",
+        "explanation": "The source explicitly states Java and Bedrock use different servers and cannot play together.",
+        "evidence": [
+          {
+            "source_id": "05d67257-ab3d-48f9-be83-a58ebc202e87-source-0",
+            "excerpt": "While both editions support online multiplayer, they use different servers. This means that Java and Bedrock players can’t play together – so make sure to ask your friends which version they have.",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "05d67257-ab3d-48f9-be83-a58ebc202e87-source-0",
+            "url": "https://www.minecraft.net/en-us/article/java-or-bedrock-edition",
+            "title": "The Difference between Java and Bedrock Editions",
+            "domain": "www.minecraft.net",
+            "tier": 1,
+            "fetched_at": "2026-10-25T07:48:02.590Z",
+            "status": 200,
+            "sha256": "8bf3cb3c7f3dc4ee0af038bff3d850e3cad5fd5702ca312fafa41c2270f1cd88",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-25T07:48:06.239Z",
+        "elapsed_ms": 5923.5233,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "cc78b269-1248-451d-8e8f-1a86e3a29024",
+            "created_at": "2026-10-25T07:48:02.588Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2263.9873000000002,
+            "input_tokens": 301,
+            "output_tokens": 103,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "25f97613-bd8a-4cef-a93f-f70eacd9bd17",
+            "created_at": "2026-10-25T07:48:06.225Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 3452.3222,
+            "input_tokens": 1726,
+            "output_tokens": 112,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-fr",
+      "text": "stardew sur PC c'est jusqu'à 8 joueurs maintenant 👀",
+      "language": "fr",
+      "repetition": 1,
+      "outcome": {
+        "id": "e77e458c-ec3f-4b30-969b-8beace9eb38d",
+        "type": "fact",
+        "normalized_claim": "Stardew Valley on PC currently supports up to 8 players in multiplayer.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Stardew Valley on PC currently supports up to 8 players in multiplayer.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Stardew Valley PC multiplayer max players update",
+            "Stardew Valley 1.6 multiplayer player limit",
+            "Does Stardew Valley support 8 players on PC"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "The official 1.6 changelog explicitly states PC multiplayer now supports up to 8 players.",
+        "evidence": [
+          {
+            "source_id": "e77e458c-ec3f-4b30-969b-8beace9eb38d-source-0",
+            "excerpt": "Multiplayer changes You can now have up to 8 players on PC.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "e77e458c-ec3f-4b30-969b-8beace9eb38d-source-0",
+            "url": "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/",
+            "title": "Stardew Valley 1.6 Update Full Changelog",
+            "domain": "www.stardewvalley.net",
+            "tier": 1,
+            "fetched_at": "2026-10-25T07:48:08.652Z",
+            "status": 200,
+            "sha256": "9429db7408f82885a3c81f1397109d4a214177fa5b4673055b7a7834018b9c27",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-25T07:48:12.204Z",
+        "elapsed_ms": 5963.712299999999,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "d352182a-9fdc-4818-9a33-9484837589db",
+            "created_at": "2026-10-25T07:48:08.651Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2403.3951000000006,
+            "input_tokens": 299,
+            "output_tokens": 110,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "0e9f8ce2-1bf1-4acf-b656-7b8eb3494517",
+            "created_at": "2026-10-25T07:48:12.164Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 3112.3963000000003,
+            "input_tokens": 1803,
+            "output_tokens": 92,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-es",
+      "text": "los arrays de JavaScript empiezan en 1, segurisimo 💀",
+      "language": "es",
+      "repetition": 1,
+      "outcome": {
+        "id": "b8420bcb-655c-4786-98f1-3c25c3e52076",
+        "type": "fact",
+        "normalized_claim": "JavaScript arrays are indexed starting from 1.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "JavaScript arrays are indexed starting from 1.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "JavaScript array indexing start value",
+            "Are JavaScript arrays zero-indexed or one-indexed"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "not_real",
+        "explanation": "MDN explicitly states JavaScript arrays are zero-indexed, starting at 0.",
+        "evidence": [
+          {
+            "source_id": "b8420bcb-655c-4786-98f1-3c25c3e52076-source-0",
+            "excerpt": "JavaScript arrays are zero-indexed: the first element of an array is at index 0, the second is at index 1, and so on — and the last element is at the value of the array's length property minus 1.",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "b8420bcb-655c-4786-98f1-3c25c3e52076-source-0",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+            "title": "Array - JavaScript | MDN",
+            "domain": "developer.mozilla.org",
+            "tier": 1,
+            "fetched_at": "2026-10-25T07:48:14.083Z",
+            "status": 200,
+            "sha256": "23f9ed1e7f29dedc5812cf216500aabb0f5f32e8b26f4d9542595b9411c42f9f",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-25T07:48:18.077Z",
+        "elapsed_ms": 5872.7973999999995,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "aadd61f3-da6e-446f-a92c-4f9c4132c03b",
+            "created_at": "2026-10-25T07:48:14.082Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1873.8469000000005,
+            "input_tokens": 300,
+            "output_tokens": 84,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "8f13d5ff-91a3-4152-9aa6-0df55ca91bb9",
+            "created_at": "2026-10-25T07:48:18.056Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 3783.025700000002,
+            "input_tokens": 1720,
+            "output_tokens": 129,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-vod",
+      "text": "you said 50 pushups for 100 subs earlier... receipts?? KEKW",
+      "language": "en",
+      "repetition": 1,
+      "outcome": {
+        "id": "ca02a3f6-8b8c-4c6e-9f1c-0937805b698e",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "9f2cf383-1373-41ad-8f52-59b85fce1ebc"
+        ],
+        "quote": "In this scripted example, I said I would do 50 pushups if we reached 100 subscribers. The promise is 50 pushups for 100 subscribers. This sentence is here so the stream memory tool can find a number expressed as. ",
+        "offset_s": 56.098,
+        "end_s": 70.914,
+        "broadcast_id": "318112017508",
+        "vod_id": "2909537829",
+        "broadcast_title": "Chat Is This Real | prerecorded development test",
+        "broadcast_started_at": "2026-10-24T15:29:17Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318112017508",
+            "start_s": 0,
+            "end_s": 95.90599999999999,
+            "segment_count": 3,
+            "gaps": []
+          },
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": {
+          "state": "ready",
+          "clip_id": "CoweringImportantDoveBlargNaut-9Hy84ssXIb0yeh7v",
+          "clip_url": "https://clips.twitch.tv/CoweringImportantDoveBlargNaut-9Hy84ssXIb0yeh7v",
+          "vod_url": "https://www.twitch.tv/videos/2909537829?t=0h0m56s",
+          "reason": null
+        },
+        "reason": null,
+        "created_at": "2026-10-25T07:48:19.767Z",
+        "elapsed_ms": 1688.2488999999987,
+        "calls": [
+          {
+            "id": "18024378-a450-4e65-b755-c3193926f2a1",
+            "created_at": "2026-10-25T07:48:19.766Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1682.4274000000005,
+            "input_tokens": 529,
+            "output_tokens": 69,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-en",
+      "text": "java + bedrock can play together on the same servers now, no mods needed Pog",
+      "language": "en",
+      "repetition": 2,
+      "outcome": {
+        "id": "df50ab7a-3dbc-4d13-a091-e6b2df857016",
+        "type": "fact",
+        "normalized_claim": "Java Edition and Bedrock Edition players can play together on the same servers without mods.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Java Edition and Bedrock Edition players can play together on the same servers without mods.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Minecraft Java and Bedrock crossplay without mods server support",
+            "Does Minecraft Java edition connect to Bedrock servers natively",
+            "Minecraft crossplay requirements Java Bedrock no plugins"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "not_real",
+        "explanation": "The source explicitly states Java and Bedrock use different servers and cannot play together.",
+        "evidence": [
+          {
+            "source_id": "df50ab7a-3dbc-4d13-a091-e6b2df857016-source-0",
+            "excerpt": "While both editions support online multiplayer, they use different servers. This means that Java and Bedrock players can’t play together – so make sure to ask your friends which version they have.",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "df50ab7a-3dbc-4d13-a091-e6b2df857016-source-0",
+            "url": "https://www.minecraft.net/en-us/article/java-or-bedrock-edition",
+            "title": "The Difference between Java and Bedrock Editions",
+            "domain": "www.minecraft.net",
+            "tier": 1,
+            "fetched_at": "2026-10-25T07:48:22.916Z",
+            "status": 200,
+            "sha256": "8bf3cb3c7f3dc4ee0af038bff3d850e3cad5fd5702ca312fafa41c2270f1cd88",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-25T07:48:26.622Z",
+        "elapsed_ms": 6853.8706999999995,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "5894a383-887a-49e3-b35d-4c9163268748",
+            "created_at": "2026-10-25T07:48:22.915Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 3143.6232999999993,
+            "input_tokens": 301,
+            "output_tokens": 114,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "7d1d90d4-5783-401b-b4de-92c8decd54a7",
+            "created_at": "2026-10-25T07:48:26.612Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 3532.1676000000007,
+            "input_tokens": 1685,
+            "output_tokens": 111,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-fr",
+      "text": "stardew sur PC c'est jusqu'à 8 joueurs maintenant 👀",
+      "language": "fr",
+      "repetition": 2,
+      "outcome": {
+        "id": "4b70bf3a-5082-4ba7-aecd-5d284ed12429",
+        "type": "fact",
+        "normalized_claim": "Stardew Valley on PC supports up to 8 players.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Stardew Valley on PC supports up to 8 players.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Stardew Valley PC multiplayer max player count update",
+            "Does Stardew Valley support 8 players on PC"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "The 1.6 update changelog explicitly states that up to 8 players are now supported on PC in multiplayer.",
+        "evidence": [
+          {
+            "source_id": "4b70bf3a-5082-4ba7-aecd-5d284ed12429-source-0",
+            "excerpt": "Multiplayer changes You can now have up to 8 players on PC. Many improvements for multiplayer performance and stability.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "4b70bf3a-5082-4ba7-aecd-5d284ed12429-source-0",
+            "url": "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/",
+            "title": "Stardew Valley 1.6 Update Full Changelog",
+            "domain": "www.stardewvalley.net",
+            "tier": 1,
+            "fetched_at": "2026-10-25T07:48:28.831Z",
+            "status": 200,
+            "sha256": "9429db7408f82885a3c81f1397109d4a214177fa5b4673055b7a7834018b9c27",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-25T07:48:33.249Z",
+        "elapsed_ms": 6626.368000000002,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "830aacc3-0ba5-4f9b-99a0-a33e2e5951da",
+            "created_at": "2026-10-25T07:48:28.829Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2201.475699999999,
+            "input_tokens": 299,
+            "output_tokens": 94,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "af7f4604-ee48-415b-95f7-96bc741fd401",
+            "created_at": "2026-10-25T07:48:33.214Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 4001.114899999997,
+            "input_tokens": 1665,
+            "output_tokens": 103,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-es",
+      "text": "los arrays de JavaScript empiezan en 1, segurisimo 💀",
+      "language": "es",
+      "repetition": 2,
+      "outcome": {
+        "id": "86567853-964e-4f29-8ed7-935f0379a16a",
+        "type": "fact",
+        "normalized_claim": "JavaScript arrays start at index 1.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "JavaScript arrays start at index 1.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "JavaScript array indexing start value",
+            "does JavaScript array start at 0 or 1"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "not_real",
+        "explanation": "MDN explicitly states JavaScript arrays are zero-indexed, with the first element at index 0.",
+        "evidence": [
+          {
+            "source_id": "86567853-964e-4f29-8ed7-935f0379a16a-source-0",
+            "excerpt": "JavaScript arrays are zero-indexed: the first element of an array is at index 0, the second is at index 1, and so on — and the last element is at the value of the array's length property minus 1.",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "86567853-964e-4f29-8ed7-935f0379a16a-source-0",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+            "title": "Array - JavaScript | MDN",
+            "domain": "developer.mozilla.org",
+            "tier": 1,
+            "fetched_at": "2026-10-25T07:48:35.325Z",
+            "status": 200,
+            "sha256": "23f9ed1e7f29dedc5812cf216500aabb0f5f32e8b26f4d9542595b9411c42f9f",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-25T07:48:39.162Z",
+        "elapsed_ms": 5911.012500000004,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "ec2ee32c-6a56-4a0a-b352-e6a28677a7bd",
+            "created_at": "2026-10-25T07:48:35.324Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2068.559500000003,
+            "input_tokens": 300,
+            "output_tokens": 83,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "e31c3f07-d5f9-4de2-b214-583035d3e87e",
+            "created_at": "2026-10-25T07:48:39.127Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 3644.732400000001,
+            "input_tokens": 1893,
+            "output_tokens": 133,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-vod",
+      "text": "you said 50 pushups for 100 subs earlier... receipts?? KEKW",
+      "language": "en",
+      "repetition": 2,
+      "outcome": {
+        "id": "882cfdd4-3678-436c-97c4-d5dcb427e6c7",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "9f2cf383-1373-41ad-8f52-59b85fce1ebc"
+        ],
+        "quote": "In this scripted example, I said I would do 50 pushups if we reached 100 subscribers. The promise is 50 pushups for 100 subscribers. This sentence is here so the stream memory tool can find a number expressed as. ",
+        "offset_s": 56.098,
+        "end_s": 70.914,
+        "broadcast_id": "318112017508",
+        "vod_id": "2909537829",
+        "broadcast_title": "Chat Is This Real | prerecorded development test",
+        "broadcast_started_at": "2026-10-24T15:29:17Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318112017508",
+            "start_s": 0,
+            "end_s": 95.90599999999999,
+            "segment_count": 3,
+            "gaps": []
+          },
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": {
+          "state": "ready",
+          "clip_id": "CoweringImportantDoveBlargNaut-9Hy84ssXIb0yeh7v",
+          "clip_url": "https://clips.twitch.tv/CoweringImportantDoveBlargNaut-9Hy84ssXIb0yeh7v",
+          "vod_url": "https://www.twitch.tv/videos/2909537829?t=0h0m56s",
+          "reason": null
+        },
+        "reason": null,
+        "created_at": "2026-10-25T07:48:40.595Z",
+        "elapsed_ms": 1431.8671000000031,
+        "calls": [
+          {
+            "id": "fd255e34-d5d1-47f2-a255-5564bb9d199b",
+            "created_at": "2026-10-25T07:48:40.594Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1425.3375000000015,
+            "input_tokens": 529,
+            "output_tokens": 69,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-en",
+      "text": "java + bedrock can play together on the same servers now, no mods needed Pog",
+      "language": "en",
+      "repetition": 3,
+      "outcome": {
+        "id": "86cdfcb5-6bc3-43e5-94de-cc3eb20fb5c1",
+        "type": "fact",
+        "normalized_claim": "Java Edition and Bedrock Edition players can join the same Minecraft servers without mods.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Java Edition and Bedrock Edition players can join the same Minecraft servers without mods.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Minecraft Java Bedrock crossplay official support no mods",
+            "Minecraft Realms Java Bedrock crossplay requirements",
+            "Does Minecraft Java and Bedrock play together on third party servers"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "not_real",
+        "explanation": "The source explicitly states Java and Bedrock use different servers and cannot play together.",
+        "evidence": [
+          {
+            "source_id": "86cdfcb5-6bc3-43e5-94de-cc3eb20fb5c1-source-0",
+            "excerpt": "While both editions support online multiplayer, they use different servers. This means that Java and Bedrock players can’t play together – so make sure to ask your friends which version they have.",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "86cdfcb5-6bc3-43e5-94de-cc3eb20fb5c1-source-0",
+            "url": "https://www.minecraft.net/en-us/article/java-or-bedrock-edition",
+            "title": "The Difference between Java and Bedrock Editions",
+            "domain": "www.minecraft.net",
+            "tier": 1,
+            "fetched_at": "2026-10-25T07:48:42.369Z",
+            "status": 200,
+            "sha256": "8bf3cb3c7f3dc4ee0af038bff3d850e3cad5fd5702ca312fafa41c2270f1cd88",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-25T07:48:46.167Z",
+        "elapsed_ms": 5570.3387,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "0e78bbd2-9db8-4c97-ac2d-1c8c032f8c25",
+            "created_at": "2026-10-25T07:48:42.368Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1767.4193999999989,
+            "input_tokens": 301,
+            "output_tokens": 117,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "240335b7-6e9c-48f6-a452-e96f4102d942",
+            "created_at": "2026-10-25T07:48:46.159Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 3675.8148,
+            "input_tokens": 1682,
+            "output_tokens": 110,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-fr",
+      "text": "stardew sur PC c'est jusqu'à 8 joueurs maintenant 👀",
+      "language": "fr",
+      "repetition": 3,
+      "outcome": {
+        "id": "d754b5f9-b291-40c2-8ba9-e2e7115e4158",
+        "type": "fact",
+        "normalized_claim": "Stardew Valley on PC supports up to 8 players.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Stardew Valley on PC supports up to 8 players.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Stardew Valley PC max multiplayer players",
+            "Stardew Valley update 1.6 multiplayer count"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "The 1.6 update changelog explicitly states PC multiplayer now supports up to 8 players.",
+        "evidence": [
+          {
+            "source_id": "d754b5f9-b291-40c2-8ba9-e2e7115e4158-source-0",
+            "excerpt": "Multiplayer changes You can now have up to 8 players on PC. Many improvements for multiplayer performance and stability.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "d754b5f9-b291-40c2-8ba9-e2e7115e4158-source-0",
+            "url": "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/",
+            "title": "Stardew Valley 1.6 Update Full Changelog",
+            "domain": "www.stardewvalley.net",
+            "tier": 1,
+            "fetched_at": "2026-10-25T07:48:48.301Z",
+            "status": 200,
+            "sha256": "9429db7408f82885a3c81f1397109d4a214177fa5b4673055b7a7834018b9c27",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-25T07:48:51.865Z",
+        "elapsed_ms": 5696.473399999995,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "8ec39a63-3264-47c8-a86e-9eb00f80b5b3",
+            "created_at": "2026-10-25T07:48:48.300Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2127.285499999998,
+            "input_tokens": 299,
+            "output_tokens": 97,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "be860301-6f5d-489d-be5f-675e2a69b5be",
+            "created_at": "2026-10-25T07:48:51.826Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 3147.7465999999986,
+            "input_tokens": 1829,
+            "output_tokens": 102,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-es",
+      "text": "los arrays de JavaScript empiezan en 1, segurisimo 💀",
+      "language": "es",
+      "repetition": 3,
+      "outcome": {
+        "id": "054d7dad-ca80-4298-bb87-93f0bfa95ca5",
+        "type": "fact",
+        "normalized_claim": "JavaScript arrays are 1-indexed.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "JavaScript arrays are 1-indexed.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "JavaScript array indexing starts at 0 or 1",
+            "MDN JavaScript Array index"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "not_real",
+        "explanation": "MDN explicitly states JavaScript arrays are zero-indexed, with the first element at index 0.",
+        "evidence": [
+          {
+            "source_id": "054d7dad-ca80-4298-bb87-93f0bfa95ca5-source-0",
+            "excerpt": "JavaScript arrays are zero-indexed: the first element of an array is at index 0, the second is at index 1, and so on — and the last element is at the value of the array's length property minus 1.",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "054d7dad-ca80-4298-bb87-93f0bfa95ca5-source-0",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+            "title": "Array - JavaScript | MDN",
+            "domain": "developer.mozilla.org",
+            "tier": 1,
+            "fetched_at": "2026-10-25T07:48:53.901Z",
+            "status": 200,
+            "sha256": "23f9ed1e7f29dedc5812cf216500aabb0f5f32e8b26f4d9542595b9411c42f9f",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-25T07:48:57.744Z",
+        "elapsed_ms": 5876.7047999999995,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "3ff367c9-8f2e-4053-a674-e078bc4b0936",
+            "created_at": "2026-10-25T07:48:53.900Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2028.3392000000022,
+            "input_tokens": 300,
+            "output_tokens": 85,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "7f690783-e113-4d49-abf4-0531395487f5",
+            "created_at": "2026-10-25T07:48:57.722Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 3658.244200000001,
+            "input_tokens": 1851,
+            "output_tokens": 127,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-vod",
+      "text": "you said 50 pushups for 100 subs earlier... receipts?? KEKW",
+      "language": "en",
+      "repetition": 3,
+      "outcome": {
+        "id": "c41be217-d8df-4d9a-b333-ea0645cc0c89",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "9f2cf383-1373-41ad-8f52-59b85fce1ebc"
+        ],
+        "quote": "In this scripted example, I said I would do 50 pushups if we reached 100 subscribers. The promise is 50 pushups for 100 subscribers. This sentence is here so the stream memory tool can find a number expressed as. ",
+        "offset_s": 56.098,
+        "end_s": 70.914,
+        "broadcast_id": "318112017508",
+        "vod_id": "2909537829",
+        "broadcast_title": "Chat Is This Real | prerecorded development test",
+        "broadcast_started_at": "2026-10-24T15:29:17Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318112017508",
+            "start_s": 0,
+            "end_s": 95.90599999999999,
+            "segment_count": 3,
+            "gaps": []
+          },
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": {
+          "state": "ready",
+          "clip_id": "CoweringImportantDoveBlargNaut-9Hy84ssXIb0yeh7v",
+          "clip_url": "https://clips.twitch.tv/CoweringImportantDoveBlargNaut-9Hy84ssXIb0yeh7v",
+          "vod_url": "https://www.twitch.tv/videos/2909537829?t=0h0m56s",
+          "reason": null
+        },
+        "reason": null,
+        "created_at": "2026-10-25T07:48:59.232Z",
+        "elapsed_ms": 1485.555800000002,
+        "calls": [
+          {
+            "id": "addaccbc-1afa-4930-824e-470f55e6c871",
+            "created_at": "2026-10-25T07:48:59.231Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1480.0445000000036,
+            "input_tokens": 529,
+            "output_tokens": 69,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    }
+  ]
+}

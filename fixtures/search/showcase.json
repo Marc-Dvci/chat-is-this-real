@@ -1,0 +1,28 @@
+{
+  "origin": "host_web_search_curated",
+  "recorded_at": "2026-10-25T07:35:00.000Z",
+  "description": "Primary source URLs found with assistant search for newly authored film examples. Discovery is simulated; source fetching and model inference are real. These are not evaluation items.",
+  "items": [
+    {
+      "id": "showcase-en",
+      "claim": "java + bedrock can play together on the same servers now, no mods needed Pog",
+      "query": "Minecraft Java Bedrock native crossplay different multiplayer servers",
+      "sources": [{ "title": "Minecraft Java or Bedrock Edition", "url": "https://www.minecraft.net/en-us/article/java-or-bedrock-edition" }],
+      "documents": []
+    },
+    {
+      "id": "showcase-fr",
+      "claim": "stardew sur PC c'est jusqu'à 8 joueurs maintenant 👀",
+      "query": "Stardew Valley 1.6 update 8 players PC multiplayer",
+      "sources": [{ "title": "Stardew Valley 1.6 Update Full Changelog", "url": "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/" }],
+      "documents": []
+    },
+    {
+      "id": "showcase-es",
+      "claim": "los arrays de JavaScript empiezan en 1, segurisimo 💀",
+      "query": "JavaScript Array first element zero indexed",
+      "sources": [{ "title": "Array | MDN", "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" }],
+      "documents": []
+    }
+  ]
+}

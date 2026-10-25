@@ -79,7 +79,7 @@ export class CheckEngine {
       options.onState?.('judging');
       const proposal = await this.model.structured('judge', this.model.config.MODEL_JUDGE, judgeSchema, judgeInstructions, {
         original_claim: value.claim, normalized_claim: normalized, sources: sources.map((source) => ({ source_id: source.id, url: source.url, tier: source.tier,
-          title: source.title, fetched_at: source.fetched_at, capture_mode: source.origin, text: sourceWindow(source.text, [normalized, ...triage?.search_queries ?? []]) }))
+          title: source.title, fetched_at: source.fetched_at, capture_mode: source.origin, text: sourceWindow(source.text, [value.claim, normalized, ...triage?.search_queries ?? []]) }))
       }, signal);
       signal.throwIfAborted();
       const decision = evaluateProposal(proposal, sources);

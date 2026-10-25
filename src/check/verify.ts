@@ -44,8 +44,9 @@ export function verifyEvidence(evidence: readonly Evidence[], sources: readonly 
 
 export function sourceWindow(text: string, queries: readonly string[], size = 6000): string {
   if (text.length <= size) return text;
-  const words = [...new Set(normalizeText(queries.join(' ')).match(/[\p{L}\p{N}]{3,}/gu) ?? [])]
-    .filter((word) => !['the', 'and', 'for', 'are', 'was', 'with', 'does', 'from', 'that', 'this', 'what', 'how'].includes(word));
+  // Counts and short platform names can distinguish the relevant passage in another language.
+  const words = [...new Set(normalizeText(queries.join(' ')).match(/[\p{L}\p{N}]+/gu) ?? [])]
+    .filter((word) => /^\p{N}+$/u.test(word) || word.length >= 2 && !['the', 'and', 'for', 'are', 'was', 'with', 'does', 'from', 'that', 'this', 'what', 'how', 'is', 'it', 'of', 'to', 'in', 'on', 'an', 'as', 'de', 'la', 'le', 'les', 'los', 'en', 'et', 'sur', 'est', 'es', 'un', 'une'].includes(word));
   if (!words.length) return text.slice(0, size);
   const passageSize = Math.min(1400, size);
   const passages = Array.from({ length: Math.ceil(text.length / Math.max(1, Math.floor(passageSize / 2))) }, (_, index) => {

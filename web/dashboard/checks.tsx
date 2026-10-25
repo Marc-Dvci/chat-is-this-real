@@ -3,6 +3,7 @@ import type { CheckView, DeskSnapshot, PublicResult } from '../../src/shared/sch
 import { Badge, Button, Icon, shortTime, verdictLabel } from '../shared/ui.js';
 import { ResultEvidence } from './result.js';
 import { Votes } from './votes.js';
+import { pagePath } from '../shared/paths.js';
 
 export function privateResultView(job: CheckView): PublicResult | null {
   const value = job.outcome; if (!value || !job.input || value.failed) return null;
@@ -50,12 +51,12 @@ export function ChecksPanel({ data, selected, onSelect, onNew, onShow, onPost, o
       {result?.type === 'vod' && result.found && result.vod_id && <div className="clip-actions"><Button icon="play" disabled={!usable || result.clip?.state === 'pending' || !result.clip?.clip_url && (data.demo || !data.twitch.connected || Boolean(result.clip))} onClick={() => onClip(job)}>{result.clip?.clip_url ? 'Clip details' : result.clip?.state === 'pending' ? 'Twitch is processing the clip' : result.clip ? 'VOD link available' : 'Create Twitch clip'}</Button></div>}
       {publicLink && <a className="published-link" href={publicLink.url} target="_blank" rel="noreferrer">Public receipt <Icon name="external" size={13}/></a>}
       {!data.demo && !data.public_pages.configured && <p className="fine-print">Connect public receipts in Settings to share fact checks in chat.</p>}
-      <div className="preview-toggle"><button className="text-button" aria-expanded={preview} onClick={() => setPreview(!preview)}><Icon name="play" size={15}/>{preview ? 'Close overlay preview' : 'Preview overlay'}</button><a href="/overlay" target="_blank" rel="noreferrer" aria-label="Open overlay in a new tab"><Icon name="external" size={16}/></a></div>{preview && <OverlayPreview/>}
+      <div className="preview-toggle"><button className="text-button" aria-expanded={preview} onClick={() => setPreview(!preview)}><Icon name="play" size={15}/>{preview ? 'Close overlay preview' : 'Preview overlay'}</button><a href={pagePath('/overlay')} target="_blank" rel="noreferrer" aria-label="Open overlay in a new tab"><Icon name="external" size={16}/></a></div>{preview && <OverlayPreview/>}
     </article> : <div className="empty-state"><Icon name="check" size={36}/><h3>Your next check starts here</h3><p>Select a chat message or enter a claim to review.</p><Button tone="primary" onClick={onNew}>Create a check</Button></div>}<Votes data={data}/>
   </section>;
 }
 function OverlayPreview() {
   const element = useRef<HTMLDivElement>(null), [width, setWidth] = useState(0);
   useEffect(() => { if (!element.current) return; const observer = new ResizeObserver((entries) => setWidth(entries[0]?.contentRect.width ?? 0)); observer.observe(element.current); return () => observer.disconnect(); }, []);
-  return <div className="overlay-preview" ref={element} style={{ height: width * 9 / 16 }}><iframe title="Overlay preview" src="/overlay" width="1920" height="1080" style={{ transform: `scale(${width / 1920})` }}/></div>;
+  return <div className="overlay-preview" ref={element} style={{ height: width * 9 / 16 }}><iframe title="Overlay preview" src={pagePath('/overlay')} width="1920" height="1080" style={{ transform: `scale(${width / 1920})` }}/></div>;
 }

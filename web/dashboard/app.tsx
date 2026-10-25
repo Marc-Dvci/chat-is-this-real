@@ -9,25 +9,26 @@ import { ResultPage } from './result.js';
 import { Settings } from './settings.js';
 import { useDesk } from './use-desk.js';
 import { ViewerPanel } from './viewer.js';
+import { pagePath, routePath } from '../shared/paths.js';
 
 export function App() {
-  const resultId = /^\/r\/([^/]+)$/.exec(location.pathname)?.[1];
+  const resultId = /^\/r\/([^/]+)$/.exec(routePath())?.[1];
   return resultId ? <ResultPage id={resultId}/> : <Desk/>;
 }
 function Desk() {
   const { data, error, refresh } = useDesk();
-  const [route, setRoute] = useState(location.pathname), [tab, setTab] = useState('chat');
-  const [message, setMessage] = useState<string | null>(null), [check, setCheck] = useState<string | null>(null), [viewer, setViewer] = useState<string | null>(null);
+  const [route, setRoute] = useState(routePath()), [tab, setTab] = useState('chat');
+  const [message, setMessage] = useState<string | null>(null), [check, setCheck] = useState<string | null>(() => { const sample = new URLSearchParams(location.search).get('sample'); return sample && /^[a-z0-9-]{1,60}$/u.test(sample) ? `demo-check-${sample}` : null; }), [viewer, setViewer] = useState<string | null>(null);
   const [historyIds, setHistoryIds] = useState<string[]>([]), [context, setContext] = useState<StoredMessage[] | null>(null);
   const [composer, setComposer] = useState<'real' | 'vod' | null>(null), [text, setText] = useState(''), [toast, setToast] = useState(''), [busy, setBusy] = useState(false);
   const [confirmation, setConfirmation] = useState<{ job: CheckView; action: 'show' | 'post' | 'link' } | null>(null), [help, setHelp] = useState(false), [sharedLink, setSharedLink] = useState('');
   const [clipReview, setClipReview] = useState<CheckView | null>(null);
-  const navigate = (path: string) => { history.pushState({}, '', path); setRoute(path); };
-  useEffect(() => { const pop = () => setRoute(location.pathname); addEventListener('popstate', pop); return () => removeEventListener('popstate', pop); }, []);
+  const navigate = (path: string) => { history.pushState({}, '', pagePath(path)); setRoute(path); };
+  useEffect(() => { const pop = () => setRoute(routePath()); addEventListener('popstate', pop); return () => removeEventListener('popstate', pop); }, []);
   useEffect(() => { if (!toast) return; const timer = setTimeout(() => setToast(''), 5000); return () => clearTimeout(timer); }, [toast]);
   const run = useCallback(async (task: () => Promise<unknown>, success?: string) => { setBusy(true); try { await task(); await refresh(); if (success) setToast(success); } catch (caught) { setToast(errorMessage(caught)); } finally { setBusy(false); } }, [refresh]);
   const checkMessages = useCallback((ids: string[], kind: 'real' | 'vod') => {
-    void run(async () => { const job = checkJobSchema.parse(await mutate('/api/checks', { kind, message_ids: ids })); setCheck(job.id); setTab('checks'); setRoute('/'); history.pushState({}, '', '/'); });
+    void run(async () => { const job = checkJobSchema.parse(await mutate('/api/checks', { kind, message_ids: ids })); setCheck(job.id); setTab('checks'); setRoute('/'); history.pushState({}, '', pagePath('/')); });
   }, [run]);
   const showMessages = useCallback((ids: string[]) => { void run(() => mutate('/api/presentation', { action: 'show_message', message_ids: ids }), 'Message is on stream.'); }, [run]);
   const show = useCallback((job: CheckView, confirmed = false) => {
@@ -41,7 +42,7 @@ function Desk() {
   const copy = (job: CheckView, confirmed = false) => {
     if (job.outcome?.type === 'fact' && job.outcome.sensitive && !confirmed) { setConfirmation({ job, action: 'link' }); return; }
     void run(async () => {
-      const address = data?.demo ? `${location.origin}/r/${job.id}` : publishedLinkResponseSchema.parse(await mutate(`/api/checks/${job.id}/publish`, { sensitive_confirmed: confirmed })).url;
+      const address = data?.demo ? `${location.origin}${pagePath(`/r/${job.id}`)}` : publishedLinkResponseSchema.parse(await mutate(`/api/checks/${job.id}/publish`, { sensitive_confirmed: confirmed })).url;
       try { await copyText(address); setToast('Result link copied.'); } catch { setSharedLink(address); }
     });
   };
@@ -68,8 +69,8 @@ function Desk() {
   if (!data) return <main className="loading-page"><span className="wordmark">CHAT, IS THIS REAL?</span><p role="status">{error || 'Opening the review booth…'}</p></main>;
   const overlayOn = data.settings.overlay_enabled, model = data.models.last;
   return <div className="desk-shell" aria-busy={busy} data-presentation-state={data.overlay.presentation.phase} data-presentation-job-id={data.overlay.presentation.job_id ?? ''}>
-    <header className="app-header"><a className="wordmark" href="/" onClick={(event) => { event.preventDefault(); navigate('/'); }}><span className="brand-symbol">?</span><span>CHAT, IS<br/>THIS REAL?</span></a>
-      <nav aria-label="Main navigation">{[['/', 'Review desk', 'check'], ['/library', 'Library', 'library'], ['/settings', 'Settings', 'settings']].map(([path, label, icon]) => <a key={path} href={path} aria-current={route === path ? 'page' : undefined} onClick={(event) => { event.preventDefault(); navigate(path ?? '/'); }}><Icon name={icon ?? 'check'}/><span>{label}</span></a>)}</nav>
+    <header className="app-header"><a className="wordmark" href={pagePath('/')} onClick={(event) => { event.preventDefault(); navigate('/'); }}><span className="brand-symbol">?</span><span>CHAT, IS<br/>THIS REAL?</span></a>
+      <nav aria-label="Main navigation">{[['/', 'Review desk', 'check'], ['/library', 'Library', 'library'], ['/settings', 'Settings', 'settings']].map(([path, label, icon]) => <a key={path} href={pagePath(path ?? '/')} aria-current={route === path ? 'page' : undefined} onClick={(event) => { event.preventDefault(); navigate(path ?? '/'); }}><Icon name={icon ?? 'check'}/><span>{label}</span></a>)}</nav>
       <div className="header-end">{data.demo && <Badge tone="demo">RECORDED DEMO</Badge>}<button className="icon-button" aria-label="Keyboard shortcuts" onClick={() => setHelp(true)}><Icon name="help"/></button><Button icon="chat" disabled={busy} onClick={() => void run(() => mutate(`/api/twitch/${data.twitch.connected ? 'disconnect' : 'connect'}`), data.demo ? 'Demo connection updated.' : 'Twitch connection updated.')}>{data.twitch.connected ? 'Disconnect' : 'Connect Twitch'}</Button></div>
     </header>
     <div className="status-strip"><span className={data.twitch.connected ? 'status connected' : 'status'}><i/>{data.demo ? 'Recorded session' : data.twitch.connected ? 'Twitch connected' : 'Twitch disconnected'}</span><span><Icon name="clock" size={13}/>{Math.floor(data.indexed_s / 60)} min indexed{data.companion.state === 'recorded' ? '' : data.companion.last_chunk_at ? ` · ${Math.max(0, Math.floor((Date.now() - Date.parse(data.companion.last_chunk_at)) / 1000))}s since audio${data.companion.state === 'stale' ? ' · stale' : ''}` : ' · waiting for audio'}</span><span className="model-status"><Icon name="bars" size={13}/>{data.models.recorded ? 'Recorded model runs' : model ? `${model.status} · ${(model.latency_ms / 1000).toFixed(1)}s` : 'No model calls today'}<b>{data.models.calls} calls · {data.models.search_calls} searches</b></span><span className="privacy-status"><Icon name="shield" size={13}/>{data.settings.history_enabled ? `${data.settings.retention_days}-day history` : 'History off'}</span></div>
@@ -82,7 +83,7 @@ function Desk() {
         <ChecksPanel data={data} selected={check} onSelect={(id) => { setCheck(id); setTab('checks'); }} onNew={() => openComposer('real')} onShow={show} onPost={post} onCopy={copy} onClip={setClipReview} onDismiss={(job) => void run(() => mutate(`/api/checks/${job.id}/dismiss`), 'Check dismissed.')} onViewer={openViewer}/>
         {viewer ? <ViewerPanel userId={viewer} requests={data.requests} onClose={() => { setViewer(null); setTab('chat'); }} onCheck={checkMessages} onShow={showMessages} onSelection={setHistoryIds} onContext={(id) => void run(async () => { setContext((await readApi(`/api/history/context?id=${encodeURIComponent(id)}`, messageListSchema)).messages); setMessage(id); setTab('chat'); })}/> : <aside className="viewer-placeholder"><Icon name="users" size={30}/><h2>Know the context.</h2><p>Select a username to see their stored messages and check the whole conversation.</p></aside>}
       </main></>}
-    <footer className="app-footer"><span>CHAT, IS THIS REAL? <b>THE REPLAY BOOTH</b></span><a href="/overlay" target="_blank" rel="noreferrer">OBS overlay <Icon name="external" size={12}/></a><button onClick={() => setHelp(true)}>Shortcuts <kbd>?</kbd></button></footer>
+    <footer className="app-footer"><span>CHAT, IS THIS REAL? <b>THE REPLAY BOOTH</b></span><a href={pagePath('/overlay')} target="_blank" rel="noreferrer">OBS overlay <Icon name="external" size={12}/></a><button onClick={() => setHelp(true)}>Shortcuts <kbd>?</kbd></button></footer>
     <div className={`toast ${toast ? 'visible' : ''}`} role="status" aria-live="polite">{toast && <><Icon name="check"/>{toast}<button className="icon-button" aria-label="Dismiss notification" onClick={() => setToast('')}><Icon name="close"/></button></>}</div>
     {composer && <Dialog title={composer === 'vod' ? 'Check the VOD' : 'Check a claim'} onClose={() => setComposer(null)}><p className="muted">{composer === 'vod' ? 'Find a quote or promise in your indexed streams.' : 'Review the evidence before you put the result on stream.'}</p><form onSubmit={(event) => { event.preventDefault(); void run(async () => { const job = checkJobSchema.parse(await mutate('/api/checks', { kind: composer, claim: text })); setCheck(job.id); setTab('checks'); navigate('/'); setComposer(null); }); }}><label className="field"><span>{composer === 'vod' ? 'What are you looking for?' : 'The claim'}</span><textarea required maxLength={1000} rows={4} value={text} onChange={(event) => setText(event.target.value)} placeholder={composer === 'vod' ? 'Did you promise fifty push-ups?' : 'Enter the message you want to check'}/></label>
       {data.demo && <div className="recorded-examples"><span className="section-label">Recorded examples</span>{data.samples.filter((sample) => sample.kind === composer).map((sample) => <button key={sample.key} type="button" onClick={() => setText(sample.text)}>{sample.text}<Icon name="arrow" size={14}/></button>)}</div>}

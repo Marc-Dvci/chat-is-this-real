@@ -1,9 +1,14 @@
 import type { z } from 'zod';
 import { dashboardSessionSchema } from '../../src/shared/schemas.js';
+import { staticDemo } from './paths.js';
+
+async function apiFetch(path: string, init?: RequestInit): Promise<Response> {
+  return staticDemo() ? (await import('../demo/client.js')).demoFetch(path, init) : fetch(path, init);
+}
 
 let token: Promise<string> | undefined;
 export async function readApi<T>(path: string, schema: z.ZodType<T>, signal?: AbortSignal): Promise<T> {
-  const response = await fetch(path, { ...(signal ? { signal } : {}) });
+  const response = await apiFetch(path, { ...(signal ? { signal } : {}) });
   if (!response.ok) throw new Error(await errorText(response));
   return schema.parse(await response.json());
 }
@@ -13,7 +18,7 @@ async function errorText(response: Response): Promise<string> {
 }
 export async function mutate(path: string, body: unknown = {}, method = 'POST'): Promise<unknown> {
   token ??= readApi('/api/session', dashboardSessionSchema).then((session) => session.csrf_token);
-  const response = await fetch(path, { method, headers: { 'Content-Type': 'application/json', 'x-dashboard-token': await token }, body: JSON.stringify(body) });
+  const response = await apiFetch(path, { method, headers: { 'Content-Type': 'application/json', 'x-dashboard-token': await token }, body: JSON.stringify(body) });
   if (!response.ok) { if (response.status === 403) token = undefined; throw new Error(await errorText(response)); }
   return response.json();
 }

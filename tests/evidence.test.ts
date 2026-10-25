@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import { expect, it } from 'vitest';
-import { sourceDocumentSchema } from '../src/shared/schemas.js';
+import { demoCatalogSchema, sourceDocumentSchema } from '../src/shared/schemas.js';
 import { sourceWindow, verifyEvidence } from '../src/check/verify.js';
 import { normalizeText } from '../src/shared/text-normalize.js';
 
@@ -28,4 +28,14 @@ it('selects a relevant later passage without letting repeated generic terms domi
   expect(selected).toContain(source.text);
   expect(selected.length).toBeLessThanOrEqual(6000);
   expect(sourceWindow(text, [], 250)).toHaveLength(250);
+});
+it('preserves a one-digit count and short platform name when selecting a passage for French chat', async () => {
+  const catalog = demoCatalogSchema.parse(JSON.parse(await readFile('fixtures/demo/showcase.json', 'utf8')));
+  const item = catalog.cases.find((entry) => entry.key === 'showcase-fr');
+  if (!item || item.outcome.type !== 'fact') throw new Error('Missing recorded gaming check.');
+  const source = item.outcome.sources.find((entry) => entry.url.includes('stardew-valley-1-6-update-full-changelog'));
+  if (!source) throw new Error('Missing recorded changelog.');
+  const window = sourceWindow(source.text, ["stardew sur PC c'est jusqu'à 8 joueurs maintenant 👀"]);
+  expect(window).toContain('You can now have up to 8 players on PC.');
+  expect(window.length).toBeLessThanOrEqual(6000);
 });

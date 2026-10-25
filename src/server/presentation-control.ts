@@ -1,4 +1,4 @@
-import type { DatabaseSync } from 'node:sqlite';
+import type { SqliteStore } from '../store/sqlite.js';
 import type { ChatSettings, CheckJob, StoredMessage } from '../shared/schemas.js';
 import { ChatStore } from '../store/chat-store.js';
 import { RequestStore } from '../store/request-store.js';
@@ -6,7 +6,14 @@ import { SettingsStore } from '../store/settings-store.js';
 import { PresentationStore } from '../store/presentation-store.js';
 import { VoteTally } from '../votes/tally.js';
 import { PublicResults, publicText } from './public-result.js';
-import type { registerCheckRoutes } from './check-routes.js';
+import type { CheckQueue } from '../check/queue.js';
+import type { RemovalScope } from '../shared/schemas.js';
+
+export interface PresentationRuntime {
+  service: Pick<CheckQueue, 'store' | 'subscribe'>;
+  session: { currentStreamId(): string | undefined; onMessage(handler: (message: StoredMessage) => void): void;
+    onRemoval(handler: (ids: string[], scope: RemovalScope) => void): void };
+}
 
 export class PresentationControl {
   readonly presentation: PresentationStore;
@@ -19,13 +26,13 @@ export class PresentationControl {
   private approved = new Set<string>();
   private readonly unsubscribe: () => void;
   private readonly timer: ReturnType<typeof setInterval>;
-  constructor(db: DatabaseSync, private readonly control: ReturnType<typeof registerCheckRoutes>) {
+  constructor(db: SqliteStore, private readonly control: PresentationRuntime) {
     this.settings = new SettingsStore(db); this.chat = new ChatStore(db); this.requests = new RequestStore(db);
     this.presentation = new PresentationStore(db); this.results = new PublicResults(db); this.votes = new VoteTally(db);
     this.unsubscribe = control.service.subscribe((job) => this.changed(job));
     control.session.onMessage((message) => this.observe(message));
     control.session.onRemoval((_ids, scope) => { this.votes.remove(scope); this.removed(); });
-    this.timer = setInterval(() => this.tick(), 100); this.timer.unref();
+    this.timer = setInterval(() => this.tick(), 100); this.timer.unref?.();
   }
   observe(message: StoredMessage): boolean { return this.active ? this.votes.vote(message) : false; }
   waitingForReview(): boolean { return Boolean(this.active && !this.approved.has(this.active) && this.control.service.store.get(this.active)?.state === 'ready'); }

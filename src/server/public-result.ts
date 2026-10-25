@@ -1,5 +1,5 @@
-import { createHash } from 'node:crypto';
-import type { DatabaseSync } from 'node:sqlite';
+import { sha256Text } from '../shared/sha256.js';
+import type { SqliteStore } from '../store/sqlite.js';
 import { publicResultSchema, sourceSummarySchema, type CheckJob, type PublicResult } from '../shared/schemas.js';
 import { assertNoSecretFragments } from '../shared/format-chat.js';
 import { cleanModelExplanation } from '../shared/reply-text.js';
@@ -17,7 +17,7 @@ export function publicText(text: string): string {
 }
 export class PublicResults {
   private readonly facts = new Map<string, { updated: string; value: PublicResult }>();
-  constructor(private readonly db: DatabaseSync) {}
+  constructor(private readonly db: SqliteStore) {}
   project(job: CheckJob): PublicResult {
     const outcome = job.outcome;
     if (!outcome || !job.input || outcome.failed || job.reason === 'source_removed' || outcome.type === 'not_a_claim' || outcome.type === 'stream_memory') throw new Error('This check cannot be published.');
@@ -33,7 +33,7 @@ export class PublicResults {
       const cached = this.facts.get(job.id);
       if (cached?.updated === job.updated_at) value = cached.value;
       else {
-        if (outcome.sources.some((source) => source.sha256 !== createHash('sha256').update(source.text).digest('hex'))) throw new Error('Stored source text changed.');
+        if (outcome.sources.some((source) => source.sha256 !== sha256Text(source.text))) throw new Error('Stored source text changed.');
         const evidence = verifyEvidence(outcome.evidence, outcome.sources);
         const verdict = decideVerdict(outcome.model_verdict, evidence.verified);
         if (evidence.dropped || verdict !== outcome.final_verdict) throw new Error('The stored evidence no longer verifies.');
