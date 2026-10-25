@@ -61,11 +61,13 @@ jobs:
         run: |
           set -euo pipefail
           docker run --detach --name chat-is-this-real-check --publish 127.0.0.1:4748:4747 chat-is-this-real:test node dist/server/index.js --demo
-          trap 'docker rm --force chat-is-this-real-check' EXIT
+          trap 'docker logs chat-is-this-real-check; docker rm --force chat-is-this-real-check' EXIT
+          ready=0
           for attempt in {1..30}; do
-            if curl --fail --silent http://127.0.0.1:4748/api/health > /tmp/chat-is-this-real-health.json; then break; fi
+            if curl --fail --silent http://127.0.0.1:4748/api/health > /tmp/chat-is-this-real-health.json; then ready=1; break; fi
             sleep 1
           done
+          if [ "$ready" != 1 ]; then exit 1; fi
           node -e "const fs=require('node:fs');const h=JSON.parse(fs.readFileSync('/tmp/chat-is-this-real-health.json','utf8'));if(h.status!=='ok')process.exit(1)"
           curl --fail --silent http://127.0.0.1:4748/ > /tmp/chat-is-this-real-index.html
           grep -q '/assets/' /tmp/chat-is-this-real-index.html
