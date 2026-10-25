@@ -2,7 +2,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { chromium, type Page } from '@playwright/test';
 import { buildApp } from '../src/server/app.js';
 import { loadDemoCatalog } from '../src/demo/replay.js';
-import { checkJobSchema } from '../src/shared/schemas.js';
+import { checkJobSchema, deskSnapshotSchema } from '../src/shared/schemas.js';
 
 const directory = `data/film/capture-${Date.now()}`; await mkdir(directory, { recursive: true, mode: 0o700 });
 const app = buildApp({ demo: true }), browser = await chromium.launch({ headless: true });
@@ -41,6 +41,10 @@ try {
   }
   mark('votes-cast'); await click(page.getByRole('button', { name: 'Show on stream', exact: true })); mark('reveal-approved');
   await page.locator(`.check-detail[data-check-id="${job.id}"][data-state="on_air"]`).waitFor({ timeout: 30_000 }); mark('vote-revealed');
+  const proof = deskSnapshotSchema.parse(await (await page.request.get(`${address}/api/desk`)).json());
+  await writeFile(`${directory}/vote-proof.json`, JSON.stringify({ source: 'Actual recorded browser demo; scripted voters.', votes: proof.overlay.votes, result: proof.overlay.result, scores: proof.scores }, null, 2));
+  const factOverlay = await context.newPage(); await factOverlay.goto(`${address}/overlay`); await factOverlay.locator('.broadcast-stamp').filter({ hasText: 'NOT REAL' }).waitFor();
+  await factOverlay.screenshot({ path: `${directory}/overlay-fact.png`, omitBackground: true }); await factOverlay.close();
   await hold(4000); await page.screenshot({ path: `${directory}/vote-result.png`, fullPage: false });
   await click(page.getByRole('button', { name: 'Hide now' }));
   await click(page.locator('.check-select').filter({ hasText: 'you said 50 pushups for 100 subs earlier' }));

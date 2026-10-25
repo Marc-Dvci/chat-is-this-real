@@ -15,6 +15,7 @@ COPY --from=build --chown=node:node /app/node_modules ./node_modules
 COPY --from=build --chown=node:node /app/dist ./dist
 COPY --from=build --chown=node:node /app/web-dist ./web-dist
 COPY --from=build --chown=node:node /app/fixtures ./fixtures
+COPY --from=build --chown=node:node /app/config ./config
 RUN mkdir /app/data && chown node:node /app/data
 USER node
 EXPOSE 4747

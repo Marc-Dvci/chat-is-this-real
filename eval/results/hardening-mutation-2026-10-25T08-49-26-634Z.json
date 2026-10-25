@@ -1,0 +1,12 @@
+{
+  "suite": "hardening-mutation",
+  "created_at": "2026-10-25T08:49:26.612Z",
+  "git_commit": "66e22ef070ecc3687694a0a972ada44e5a5f3654",
+  "fixture": "fixtures/demo/showcase.json",
+  "mutation": "Restore the pre-fix source passage selector from ace2b3c.",
+  "mutation_detected": true,
+  "mutant_exit_code": 1,
+  "restored_byte_for_byte": true,
+  "restored_exit_code": 0,
+  "source_sha256": "14465cda33aef43837ceecb37af00fbda58b06736e7e2f1812da395cec64a7e4"
+}

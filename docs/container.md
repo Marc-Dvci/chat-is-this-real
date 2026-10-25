@@ -7,7 +7,8 @@ uploaded media imports and runs as the unprivileged `node` user.
 The official Node LTS image is pinned by version and manifest digest. The builder installs
 locked dependencies, verifies the recorded demo during the web build and removes development
 dependencies. The runtime contains compiled code, web assets, recorded fixtures and a writable
-data directory. `.dockerignore` excludes credentials, local databases, recordings and caches.
+data directory. The runtime also includes the public source-tier configuration.
+`.dockerignore` excludes credentials, local databases, recordings and caches.
 
 ```sh
 docker build --tag chat-is-this-real .
