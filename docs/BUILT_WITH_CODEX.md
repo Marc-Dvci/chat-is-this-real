@@ -22,3 +22,14 @@ The build follows `../02_BUILD_PLAN.md`. Each completed milestone links its chec
 The log records 12 milestone implementations. The final acceptance has 124 passing unit tests and 6 passing browser checks. [The manual audit register](review-findings.json) documents 16 addressed findings with code and regression or probe evidence. [The final audit](final-audit.md) links the mutation, frozen evaluation, asset validation and repository checks.
 
 Main build session: `01a16cc3-1a5e-7d23-81c2-c9de487cc7fd`. The separately recorded CLI session supplements this main thread. GitHub review requests are recorded on the PRs; a request does not establish that a bot review completed.
+
+## Static deployment
+
+The user approved deployment with a zero-cost constraint. The
+[public demo](https://chat-is-this-real.pages.dev/demo/) uses static Cloudflare Pages,
+with no Functions, storage bindings or inference credentials. The actual Pages runtime
+and production browser checks cover voting, both views, multilingual results, mobile
+receipts and accessibility. Screenshot review caught a canonical redirect in receipt
+links; the corrected probe requires the retained URL and visible receipt page.
+[The deployment report](../eval/results/deployment-static.json) preserves the acceptance
+and the upload mutation that rejects an added Worker entry point before cloud access.
