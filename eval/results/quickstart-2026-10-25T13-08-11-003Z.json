@@ -1,0 +1,29 @@
+{
+  "suite": "clean-clone",
+  "passed": true,
+  "created_at": "2026-10-25T13:08:28.783Z",
+  "git_commit": "a74c35b30e182a9a39f4b3492845093c209eb900",
+  "node": "v24.13.1",
+  "platform": "win32",
+  "steps": [
+    {
+      "name": "clone",
+      "elapsed_ms": 778.3388
+    },
+    {
+      "name": "install",
+      "elapsed_ms": 12636.4267
+    },
+    {
+      "name": "build",
+      "elapsed_ms": 3612.2672999999977
+    },
+    {
+      "name": "ready",
+      "elapsed_ms": 690.1765999999989
+    }
+  ],
+  "total_ms": 17779.596899999997,
+  "mode": "Fresh local Git clone, fresh workspace npm cache, npm ci and npm run build, then the compiled keyless demo. No .env or model/Twitch credentials.",
+  "recorded_checks_loaded": 12
+}

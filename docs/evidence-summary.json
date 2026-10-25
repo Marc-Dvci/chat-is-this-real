@@ -1,0 +1,159 @@
+{
+  "engine": "c5f6bdc68d0b15d5197e6375772302a8de3fdd06",
+  "dev": {
+    "file": "claims-dev-2026-10-25T09-42-12-643Z.json",
+    "suite": "claims",
+    "split": "dev",
+    "sample_count": 48,
+    "attempted_items": 48,
+    "git_commit": "58a98810dc9304c74678138c99028606b108eeba",
+    "working_tree_dirty": false,
+    "models": {
+      "judge": "qwen3.8-max"
+    },
+    "retrieval_mode": "replay",
+    "metrics": {
+      "verdict_agreement": {
+        "matched": 45,
+        "total": 48
+      },
+      "by_category": {
+        "gaming": {
+          "matched": 12,
+          "total": 12,
+          "attempted": 12
+        },
+        "programming": {
+          "matched": 6,
+          "total": 6,
+          "attempted": 6
+        },
+        "science": {
+          "matched": 6,
+          "total": 6,
+          "attempted": 6
+        },
+        "time_sensitive": {
+          "matched": 4,
+          "total": 4,
+          "attempted": 4
+        },
+        "not_claim": {
+          "matched": 7,
+          "total": 7,
+          "attempted": 7
+        },
+        "injection": {
+          "matched": 7,
+          "total": 7,
+          "attempted": 7
+        },
+        "missing_context": {
+          "matched": 3,
+          "total": 6,
+          "attempted": 6
+        }
+      },
+      "wrong_direction_errors": 0,
+      "injection_directional_errors": 0,
+      "injection_coverage": {
+        "attempted": 7,
+        "total": 7
+      },
+      "not_a_claim": {
+        "true_positive": 14,
+        "predicted": 14,
+        "expected": 14
+      },
+      "excerpts": {
+        "verified": 43,
+        "returned": 43
+      },
+      "latency_ms": {
+        "sample_count": 48,
+        "p50": 5666.744900000001,
+        "p90": 7654.4038
+      },
+      "failed_items": 0,
+      "not_attempted": 0
+    }
+  },
+  "heldout": {
+    "file": "claims-heldout-2026-10-25T09-46-52-504Z.json",
+    "suite": "claims",
+    "split": "heldout",
+    "sample_count": 24,
+    "attempted_items": 24,
+    "git_commit": "5eef735d942d89b64e33da6e71df7a0fe8f00ed7",
+    "working_tree_dirty": false,
+    "models": {
+      "judge": "qwen3.8-max"
+    },
+    "retrieval_mode": "replay",
+    "metrics": {
+      "verdict_agreement": {
+        "matched": 23,
+        "total": 24
+      },
+      "by_category": {
+        "gaming": {
+          "matched": 6,
+          "total": 6,
+          "attempted": 6
+        },
+        "programming": {
+          "matched": 4,
+          "total": 4,
+          "attempted": 4
+        },
+        "science": {
+          "matched": 4,
+          "total": 4,
+          "attempted": 4
+        },
+        "time_sensitive": {
+          "matched": 2,
+          "total": 2,
+          "attempted": 2
+        },
+        "not_claim": {
+          "matched": 3,
+          "total": 3,
+          "attempted": 3
+        },
+        "injection": {
+          "matched": 3,
+          "total": 3,
+          "attempted": 3
+        },
+        "missing_context": {
+          "matched": 1,
+          "total": 2,
+          "attempted": 2
+        }
+      },
+      "wrong_direction_errors": 0,
+      "injection_directional_errors": 0,
+      "injection_coverage": {
+        "attempted": 3,
+        "total": 3
+      },
+      "not_a_claim": {
+        "true_positive": 6,
+        "predicted": 6,
+        "expected": 6
+      },
+      "excerpts": {
+        "verified": 19,
+        "returned": 20
+      },
+      "latency_ms": {
+        "sample_count": 24,
+        "p50": 5256.340100000001,
+        "p90": 6018.212700000004
+      },
+      "failed_items": 0,
+      "not_attempted": 0
+    }
+  }
+}
