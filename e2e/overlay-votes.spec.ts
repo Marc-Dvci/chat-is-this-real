@@ -21,7 +21,7 @@ test('dashboard, overlay and SQLite agree through voting and the approved reveal
     expect(await desk.locator('.desk-shell').getAttribute('data-presentation-job-id')).toBe(id);
   };
   try {
-    await desk.goto('/'); await desk.getByRole('button', { name: 'Reset demo', exact: true }).click(); await expect(desk.locator('.check-queue li')).toHaveCount(8);
+    await desk.goto('/'); await desk.getByRole('button', { name: 'Reset demo', exact: true }).click(); await expect(desk.locator('.check-queue li')).toHaveCount(loadDemoCatalog().cases.length);
     await overlay.setViewportSize({ width: 1920, height: 1080 }); await overlay.goto('/overlay');
     await desk.getByRole('button', { name: 'Select message: The Sun is a star.', exact: true }).click(); await desk.getByRole('button', { name: 'Show', exact: true }).click();
     await expect(overlay.locator('.overlay-root')).toHaveAttribute('data-state', 'message');
@@ -57,3 +57,4 @@ test('dashboard, overlay and SQLite agree through voting and the approved reveal
     expect(errors).toEqual([]);
   } finally { db.close(); await context.close().catch(() => undefined); }
 });
+import { loadDemoCatalog } from '../src/demo/replay.js';

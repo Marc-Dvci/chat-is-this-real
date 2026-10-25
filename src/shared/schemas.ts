@@ -585,3 +585,16 @@ export type PublicLink = z.infer<typeof publicLinkSchema>;
 export const publicPagesStateSchema = z.object({ configured: z.boolean(), pending_removals: z.number().int().nonnegative(),
   links: z.array(z.object({ job_id: z.string(), url: z.string(), status: publicLinkSchema.shape.status })) });
 export const publishedLinkResponseSchema = z.object({ url: z.url(), simulated: z.boolean() });
+export const demoBridgeRequestSchema = z.object({ id: z.number().int().positive(), path: z.string().max(2048),
+  method: z.enum(['GET', 'POST', 'PATCH']), body: z.unknown().optional() }).strict();
+export const demoBridgeCloseSchema = z.object({ type: z.literal('close') }).strict();
+export const twitchVideosRecordingSchema = z.object({ response: twitchVideosSchema });
+export const showcaseReportSchema = z.object({ suite: z.literal('showcase'), split: z.literal('showcase-not-evaluation'), created_at: z.iso.datetime(),
+  git_commit: z.string(), working_tree_dirty: z.boolean(), planned_repetitions: z.number().int().positive(), discovery: z.string(),
+  rows: z.array(z.object({ key: z.string(), text: z.string(), language: z.string(), repetition: z.number().int().positive(),
+    outcome: z.object({ type: z.string(), final_verdict: z.string().optional(), found: z.boolean().optional(), failed: z.boolean(), elapsed_ms: z.number().nonnegative() }) })) });
+export const demoBridgeReplySchema = z.discriminatedUnion('type', [
+  z.object({ type: z.literal('response'), id: z.number().int().positive(), ok: z.boolean(), value: z.unknown(), error: z.string().optional() }),
+  z.object({ type: z.literal('snapshot'), path: z.enum(['/api/desk/events', '/api/overlay/events']), value: z.unknown() }),
+  z.object({ type: z.literal('failed'), error: z.string() })
+]);

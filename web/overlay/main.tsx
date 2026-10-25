@@ -7,16 +7,15 @@ import { overlayViewSchema, type OverlayView } from '../../src/shared/schemas.js
 import { clock, verdictLabel } from '../shared/ui.js';
 import '../shared/styles.css';
 import './overlay.css';
+import { subscribeSnapshots } from '../shared/events.js';
 
 function Overlay() {
   const [view, setView] = useState<OverlayView | null>(null);
   const [now, setNow] = useState(Date.now());
   useEffect(() => {
-    const events = new EventSource('/api/overlay/events');
-    events.addEventListener('snapshot', (event: MessageEvent<string>) => { try { setNow(Date.now()); setView(overlayViewSchema.parse(JSON.parse(event.data))); } catch { setView(null); } });
-    events.onerror = () => setView(null);
+    const close = subscribeSnapshots('/api/overlay/events', (value) => { try { setNow(Date.now()); setView(overlayViewSchema.parse(value)); } catch { setView(null); } }, () => setView(null));
     const timer = setInterval(() => setNow(Date.now()), 200);
-    return () => { events.close(); clearInterval(timer); };
+    return () => { close(); clearInterval(timer); };
   }, []);
   const phase = view?.enabled ? view.presentation.phase : 'hidden', result = view?.result;
   return <main className={`overlay-root ${view?.position ?? 'bottom-left'} ${view?.motion ? '' : 'no-motion'}`} data-state={phase ?? 'hidden'} data-job-id={view?.presentation.job_id ?? ''}>

@@ -1,9 +1,9 @@
-import type { DatabaseSync } from 'node:sqlite';
+import type { SqliteStore } from './sqlite.js';
 import { presentationSchema, type Presentation } from '../shared/schemas.js';
 
 export class PresentationStore {
   private timer: ReturnType<typeof setTimeout> | undefined;
-  constructor(private readonly db: DatabaseSync) { this.hide(); }
+  constructor(private readonly db: SqliteStore) { this.hide(); }
   get(): Presentation {
     const row = this.db.prepare("SELECT value_json FROM settings WHERE key='presentation'").get();
     return presentationSchema.parse(row ? JSON.parse(String(row.value_json)) : { phase: 'hidden', job_id: null, message_text: '', source_ids: [], updated_at: new Date().toISOString(), hide_at: null });
@@ -24,7 +24,7 @@ export class PresentationStore {
     this.save({ phase: 'checking', job_id: jobId, message_text: text, source_ids: [], updated_at: new Date().toISOString(), hide_at: null });
   }
   private phase(phase: Presentation['phase']): void { this.save({ ...this.get(), phase, updated_at: new Date().toISOString() }); }
-  private after(milliseconds: number, run: () => void): void { this.timer = setTimeout(run, milliseconds); this.timer.unref(); }
+  private after(milliseconds: number, run: () => void): void { this.timer = setTimeout(run, milliseconds); this.timer.unref?.(); }
   hide(): void {
     clearTimeout(this.timer); this.timer = undefined;
     this.save({ phase: 'hidden', job_id: null, message_text: '', source_ids: [], updated_at: new Date().toISOString(), hide_at: null });

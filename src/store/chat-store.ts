@@ -1,6 +1,6 @@
-import type { DatabaseSync, SQLInputValue } from 'node:sqlite';
+import type { SqliteStore, SQLInputValue } from './sqlite.js';
 import { chatDbRowSchema, storedMessageSchema, type StoredMessage } from '../shared/schemas.js';
-import { transaction } from './database.js';
+import { transaction } from './sqlite.js';
 
 function message(row: unknown): StoredMessage | undefined {
   if (!row) return undefined;
@@ -9,7 +9,7 @@ function message(row: unknown): StoredMessage | undefined {
 }
 
 export class ChatStore {
-  constructor(readonly db: DatabaseSync) {}
+  constructor(readonly db: SqliteStore) {}
 
   get(id: string): StoredMessage | undefined { return message(this.db.prepare('SELECT * FROM messages WHERE id=?').get(id)); }
 

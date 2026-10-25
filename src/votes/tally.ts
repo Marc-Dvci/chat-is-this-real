@@ -1,8 +1,8 @@
-import type { DatabaseSync } from 'node:sqlite';
+import type { SqliteStore } from '../store/sqlite.js';
 import { scoreSchema, voteSessionSchema, voteViewSchema, type RemovalScope, type StoredMessage, type Verdict } from '../shared/schemas.js';
 
 export class VoteTally {
-  constructor(private readonly db: DatabaseSync, private readonly now = Date.now) {
+  constructor(private readonly db: SqliteStore, private readonly now = Date.now) {
     db.exec(`CREATE TABLE IF NOT EXISTS vote_sessions (
       job_id TEXT PRIMARY KEY REFERENCES check_jobs(id) ON DELETE CASCADE,broadcast_id TEXT NOT NULL,
       opened_ms INTEGER NOT NULL,min_until_ms INTEGER NOT NULL,max_until_ms INTEGER NOT NULL,

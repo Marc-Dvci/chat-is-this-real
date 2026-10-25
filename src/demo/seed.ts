@@ -1,13 +1,13 @@
-import type { DatabaseSync } from 'node:sqlite';
+import type { SqliteStore } from '../store/sqlite.js';
 import { ChatStore } from '../store/chat-store.js';
 import { RequestStore } from '../store/request-store.js';
 import { CheckStore } from '../store/check-store.js';
 import { SettingsStore } from '../store/settings-store.js';
 import { SegmentStore } from '../store/segment-store.js';
 import { chatSettingsSchema, type DemoCatalog, type StoredMessage } from '../shared/schemas.js';
-import { recordedDemoOutcome } from './replay.js';
+import { recordedDemoOutcome } from './recorded-outcome.js';
 
-export function seedDemo(db: DatabaseSync, catalog: DemoCatalog): void {
+export function seedDemo(db: SqliteStore, catalog: DemoCatalog): void {
   const chat = new ChatStore(db), requests = new RequestStore(db), checks = new CheckStore(db), segments = new SegmentStore(db);
   new SettingsStore(db).set(chatSettingsSchema.parse({ history_enabled: true, overlay_enabled: true }));
   const ordered = [...catalog.cases].sort((left, right) => (left.key === 'claim-029' ? -1 : right.key === 'claim-029' ? 1 : 0));

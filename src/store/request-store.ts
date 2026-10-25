@@ -1,9 +1,9 @@
-import type { DatabaseSync } from 'node:sqlite';
+import type { SqliteStore } from './sqlite.js';
 import { checkRequestSchema, requestDbRowSchema, type CheckRequest } from '../shared/schemas.js';
-import { transaction } from './database.js';
+import { transaction } from './sqlite.js';
 
 export class RequestStore {
-  constructor(readonly db: DatabaseSync) {}
+  constructor(readonly db: SqliteStore) {}
   byCommand(id: string): CheckRequest | undefined {
     const row = this.db.prepare("SELECT id FROM requests WHERE command_message_id=? AND source='chat'").get(id);
     return row ? this.get(String(row.id)) : undefined;

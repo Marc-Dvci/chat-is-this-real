@@ -1,9 +1,9 @@
-import type { DatabaseSync } from 'node:sqlite';
+import type { SqliteStore } from './sqlite.js';
 import { checkJobRowSchema, checkJobSchema, checkOutcomeSchema, screeningSchema, vodOutcomeSchema, type CheckInput, type CheckJob, type CheckOutcome, type CheckState, type ClipResult, type VodOutcome, type Triage } from '../shared/schemas.js';
-import { transaction } from './database.js';
+import { transaction } from './sqlite.js';
 
 export class CheckStore {
-  constructor(readonly db: DatabaseSync) {
+  constructor(readonly db: SqliteStore) {
     db.exec(`
       CREATE TABLE IF NOT EXISTS check_jobs (
         id TEXT PRIMARY KEY, request_id TEXT REFERENCES requests(id) ON DELETE CASCADE,

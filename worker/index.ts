@@ -73,6 +73,13 @@ async function handle(request: Request, env: WorkerEnv): Promise<Response> {
   if (request.method === 'POST' && url.pathname === '/api/results' || request.method === 'DELETE' && /^\/api\/results\/[A-Za-z0-9]{10}$/u.test(url.pathname)) return signedWrite(request, env, url);
   if (!['GET', 'HEAD'].includes(request.method)) return json({ error: 'Method not allowed.' }, 405);
   if (url.pathname === '/favicon.ico') return new Response(null, { status: 204, headers });
+  if (url.pathname === '/demo') return new Response(null, { status: 308, headers: { ...headers, Location: '/demo/' } });
+  if (/^\/demo\/(?:|library|settings|overlay|r\/[A-Za-z0-9_-]{8,80})$/u.test(url.pathname)) {
+    const asset = await env.ASSETS.fetch(new Request(new URL(url.pathname === '/demo/overlay' ? '/overlay.html' : '/index.html', url)));
+    const policy = headers['Content-Security-Policy'].replace("script-src 'self'", "script-src 'self' 'wasm-unsafe-eval'") + "; worker-src 'self'";
+    return new Response(request.method === 'HEAD' ? null : asset.body, { status: asset.status, headers: { ...headers, 'Content-Security-Policy': policy, 'Content-Type': 'text/html; charset=utf-8' } });
+  }
+  if (url.pathname.startsWith('/demo/')) return json({ error: 'Demo page not found.' }, 404);
   const match = /^\/(api\/results|r)\/([A-Za-z0-9]{10})$/u.exec(url.pathname);
   if (match?.[2]) {
     const raw = await env.RESULTS.get(`result:${match[2]}`), stored = raw ? publicStoredSchema.safeParse(JSON.parse(raw)) : undefined;
@@ -85,7 +92,10 @@ async function handle(request: Request, env: WorkerEnv): Promise<Response> {
     return new Response(request.method === 'HEAD' ? null : html, { headers: { ...headers, 'Content-Type': 'text/html; charset=utf-8' } });
   }
   if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/r/')) return json({ error: 'Result not found.' }, 404);
-  if (url.pathname === '/') return new Response('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Chat Is This Real</title><body><main><h1>Chat, is this real?</h1><p>Sourced checks and stream memory for Twitch.</p><a href="/demo/">Open the recorded demo</a></main></body></html>', { headers: { ...headers, 'Content-Type': 'text/html; charset=utf-8' } });
+  if (url.pathname === '/') {
+    const home = await env.ASSETS.fetch(new Request(new URL('/home.html', url)));
+    return new Response(request.method === 'HEAD' ? null : home.body, { status: home.status, headers: { ...headers, 'Content-Type': 'text/html; charset=utf-8' } });
+  }
   return env.ASSETS.fetch(request);
 }
 export default { async fetch(request: Request, env: WorkerEnv): Promise<Response> { try { return await handle(request, env); } catch { return json({ error: 'Public results are temporarily unavailable.' }, 503); } } };

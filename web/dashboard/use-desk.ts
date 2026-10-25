@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { deskSnapshotSchema, type DeskSnapshot } from '../../src/shared/schemas.js';
 import { errorMessage, readApi } from '../shared/api.js';
+import { subscribeSnapshots } from '../shared/events.js';
 
 export function useDesk() {
   const [data, setData] = useState<DeskSnapshot | null>(null), [error, setError] = useState('');
@@ -12,13 +13,11 @@ export function useDesk() {
   }, []);
   useEffect(() => {
     const abort = new AbortController(); void refresh(abort.signal);
-    const events = new EventSource('/api/desk/events');
-    events.addEventListener('snapshot', (event: MessageEvent<string>) => {
-      try { const next = deskSnapshotSchema.parse(JSON.parse(event.data)); revision.current++; setData(next); setError(''); }
+    const close = subscribeSnapshots('/api/desk/events', (value) => {
+      try { const next = deskSnapshotSchema.parse(value); revision.current++; setData(next); setError(''); }
       catch { setError('The dashboard update could not be read. Reload the page.'); }
-    });
-    events.onerror = () => setError('Reconnecting to the local dashboard…');
-    return () => { abort.abort(); events.close(); };
+    }, () => setError('Reconnecting to the dashboard…'));
+    return () => { abort.abort(); close(); };
   }, [refresh]);
   return { data, error, refresh };
 }

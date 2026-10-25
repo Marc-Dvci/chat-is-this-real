@@ -1,9 +1,9 @@
-import type { DatabaseSync } from 'node:sqlite';
+import type { SqliteStore } from './sqlite.js';
 import { broadcastSchema, transcriptSegmentSchema, type Broadcast, type TranscriptCoverage, type TranscriptSegment } from '../shared/schemas.js';
 import { queryTerms } from '../vod/numbers.js';
 
 export class SegmentStore {
-  constructor(readonly db: DatabaseSync) {
+  constructor(readonly db: SqliteStore) {
     db.exec(`
       CREATE TABLE IF NOT EXISTS broadcasts (id TEXT PRIMARY KEY,vod_id TEXT,title TEXT NOT NULL,started_at TEXT NOT NULL,source TEXT NOT NULL,created_at TEXT NOT NULL) STRICT;
       CREATE TABLE IF NOT EXISTS segments (id TEXT PRIMARY KEY,broadcast_id TEXT NOT NULL REFERENCES broadcasts(id) ON DELETE CASCADE,offset_s REAL NOT NULL,duration_s REAL NOT NULL,text TEXT NOT NULL,data_json TEXT NOT NULL) STRICT;

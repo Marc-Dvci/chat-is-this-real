@@ -3,6 +3,7 @@ import { publicResultSchema, type PublicResult } from '../../src/shared/schemas.
 import { errorMessage, readApi } from '../shared/api.js';
 import { Badge, clock, Icon, shortDate, verdictLabel } from '../shared/ui.js';
 import { clipEmbedUrl, vodTimestampUrl } from '../../src/shared/vod-links.js';
+import { pagePath } from '../shared/paths.js';
 
 function ClipPlayer({ id }: { id: string }) {
   const [open, setOpen] = useState(false), [wide, setWide] = useState(false);
@@ -33,7 +34,7 @@ export function ResultEvidence({ result }: { result: PublicResult }) {
 export function ResultPage({ id }: { id: string }) {
   const [result, setResult] = useState<PublicResult | null>(null), [error, setError] = useState('');
   useEffect(() => { const abort = new AbortController(); void readApi(`/api/results/${encodeURIComponent(id)}`, publicResultSchema, abort.signal).then(setResult).catch((caught: unknown) => { if (!abort.signal.aborted) setError(errorMessage(caught)); }); return () => abort.abort(); }, [id]);
-  return <main className="public-page"><a href="/" className="wordmark">CHAT, IS THIS REAL?</a><div className="eyebrow">THE RECEIPTS</div>
+  return <main className="public-page"><a href={pagePath('/')} className="wordmark">CHAT, IS THIS REAL?</a><div className="eyebrow">THE RECEIPTS</div>
     {error && <p role="alert">{error}</p>}{result ? <><h1>{result.claim}</h1><div className={`result-stamp ${result.type === 'vod' ? 'vod' : result.verdict}`}>{result.type === 'vod' ? result.found ? "IT'S IN THE VOD" : 'NOT FOUND' : verdictLabel(result.verdict)}</div>{result.type === 'fact' && result.retrieval_mode === 'replay' && <p className="replay-disclosure">Recorded search discovery{result.evidence.length ? ' · Verified source excerpts' : ''}</p>}<ResultEvidence result={result}/><footer className="public-footer">Checked {new Date(result.checked_at).toISOString().replace('T', ' ').replace(/\.\d+Z$/u, ' UTC')} · Sources and quotes are rendered from stored evidence.</footer></> : !error && <p role="status">Loading the stored result…</p>}
   </main>;
 }

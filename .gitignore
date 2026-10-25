@@ -12,6 +12,10 @@ node_modules/
 dist/
 web-dist/
 public-dist/
+web/public/demo-data.json
+web/public/demo-videos.json
+web/public/demo-proof.json
+web/public/launch-preview.json
 e2e/screens/
 test-results/
 playwright-report/
