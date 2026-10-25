@@ -1,0 +1,80 @@
+{
+  "suite": "release-validation",
+  "created_at": "2026-10-25T13:07:57.256Z",
+  "engine_fingerprint": "eval/FREEZE.json",
+  "tested_commit": "5eef735d942d89b64e33da6e71df7a0fe8f00ed7",
+  "packaging_working_tree": "Release commands ran with packaging changes before their final commit; CI also validates the committed PR head.",
+  "units": {
+    "passed": 124,
+    "failed": 0,
+    "files": 30
+  },
+  "browser": {
+    "passed": 6,
+    "unexpected": 0,
+    "skipped": 0,
+    "flaky": 0
+  },
+  "commands": [
+    {
+      "name": "types",
+      "passed": true,
+      "elapsed_ms": 3027.8738
+    },
+    {
+      "name": "lint",
+      "passed": true,
+      "elapsed_ms": 1616.8469
+    },
+    {
+      "name": "units",
+      "passed": true,
+      "elapsed_ms": 3128.3896999999997
+    },
+    {
+      "name": "build-types",
+      "passed": true,
+      "elapsed_ms": 2048.2344999999996
+    },
+    {
+      "name": "build-demo",
+      "passed": true,
+      "elapsed_ms": 399.5095999999994
+    },
+    {
+      "name": "build-web",
+      "passed": true,
+      "elapsed_ms": 667.6615999999995
+    },
+    {
+      "name": "browser",
+      "passed": true,
+      "elapsed_ms": 81922.43950000001
+    },
+    {
+      "name": "worker",
+      "passed": true,
+      "elapsed_ms": 1186.468399999998
+    },
+    {
+      "name": "corpus-lock",
+      "passed": true,
+      "elapsed_ms": 732.5436000000045
+    },
+    {
+      "name": "film-media",
+      "passed": true,
+      "elapsed_ms": 59.16150000000198
+    }
+  ],
+  "manual_audit_findings_documented": 16,
+  "history_secret_findings": 0,
+  "coauthor_trailers": 0,
+  "film_sha256": "aeada15137c3ae08cdcb95462508990dc49fa10ad2cdfa48bfb3626785df5e13",
+  "gallery": {
+    "images": 12,
+    "width": 2400,
+    "height": 1600,
+    "caption_limit": 140
+  }
+}

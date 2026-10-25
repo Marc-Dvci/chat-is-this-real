@@ -1,0 +1,18 @@
+[
+  { "milestone": "M1", "finding": "Authorization state must be one-use and tied to the intended account.", "code": "src/twitch/oauth.ts", "evidence": "tests/oauth.test.ts" },
+  { "milestone": "M1", "finding": "Real app-token validation returns null scopes.", "code": "src/twitch/tokens.ts", "evidence": "tests/tokens.test.ts" },
+  { "milestone": "M4", "finding": "Moderation must remove copied context as well as stored chat text.", "code": "src/twitch/chat-core.ts", "evidence": "tests/chat-core.test.ts" },
+  { "milestone": "M5", "finding": "Source redirects must retain public-address and HTTPS checks.", "code": "src/check/source-network.ts", "evidence": "tests/source-network.test.ts" },
+  { "milestone": "M5", "finding": "Spliced or invented source passages must be rejected.", "code": "src/check/verify.ts", "evidence": "tests/evidence.test.ts" },
+  { "milestone": "M5", "finding": "Normalized text must not replace the original claim in the judgment.", "code": "src/check/engine.ts", "evidence": "eval/results/engine-probe-2026-10-24T14-28-01-868Z.json" },
+  { "milestone": "M6", "finding": "Word timestamps require alignment to stored transcript text.", "code": "src/vod/answer.ts", "evidence": "tests/vod.test.ts" },
+  { "milestone": "M8", "finding": "A ready result must remain held until voting and approval permit its reveal.", "code": "src/server/presentation-control.ts", "evidence": "tests/presentation-votes.test.ts" },
+  { "milestone": "M9", "finding": "Public rendering must recheck stored source hashes and literal excerpts.", "code": "src/server/public-result.ts", "evidence": "tests/public-projection-routes.test.ts" },
+  { "milestone": "M9", "finding": "A purge during a public upload must schedule removal of the completed upload.", "code": "src/server/public-publisher.ts", "evidence": "tests/public-pages.test.ts" },
+  { "milestone": "M9", "finding": "Replayed publication must not restore a revoked receipt.", "code": "worker/index.ts", "evidence": "tests/public-pages.test.ts" },
+  { "milestone": "M10", "finding": "Browser SQLite must avoid binding an empty parameter list to parameterless statements.", "code": "web/demo/sqlite.ts", "evidence": "e2e/static-demo.spec.ts" },
+  { "milestone": "M10", "finding": "Dropping short numeric and platform terms loses a relevant multilingual passage.", "code": "src/check/verify.ts", "evidence": "eval/results/hardening-mutation-2026-10-25T08-49-26-634Z.json" },
+  { "milestone": "M11", "finding": "Late result or clip publication must still require an active owned stream and eligible source.", "code": "src/twitch/publisher.ts", "evidence": "tests/publication-guards.test.ts" },
+  { "milestone": "M11", "finding": "Clip replies need their own once-only outbox kind.", "code": "src/twitch/publisher.ts", "evidence": "tests/publication-guards.test.ts" },
+  { "milestone": "M11", "finding": "The built container must include the source-tier configuration loaded by compiled code.", "code": "Dockerfile", "evidence": ".github/workflows/ci.yml" }
+]

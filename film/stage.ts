@@ -40,7 +40,9 @@ export async function stageRuntime(data: FilmStageData): Promise<void> {
   }
   function wrap(value: string, x: number, y: number, width: number, size: number, line = 1.4, color = palette.white, heading = false) {
     ctx.font = `${heading ? '700' : '400'} ${size}px ${heading ? 'Booth' : 'Inter'}, 'Segoe UI Emoji', sans-serif`; let current = '', row = 0;
-    for (const paragraph of value.split('\n')) { for (const word of paragraph.split(' ')) { const candidate = current ? `${current} ${word}` : word; if (current && ctx.measureText(candidate).width > width) { text(current, x, y + row++ * size * line, size, color, heading); current = word; } else current = candidate; } if (current) text(current, x, y + row++ * size * line, size, color, heading); current = ''; }
+    for (const paragraph of value.split('\n')) { const words = paragraph.split(' ');
+      if (words.length > 1 && /^(?:\p{Extended_Pictographic}|\uFE0F|\u200D)+$/u.test(words.at(-1)!)) words.splice(-2, 2, words.slice(-2).join('\u00A0'));
+      for (const word of words) { const candidate = current ? `${current} ${word}` : word; if (current && ctx.measureText(candidate).width > width) { text(current, x, y + row++ * size * line, size, color, heading); current = word; } else current = candidate; } if (current) text(current, x, y + row++ * size * line, size, color, heading); current = ''; }
     return y + row * size * line;
   }
   function rule(x: number, y: number, width: number, color = '#ffffff30') { ctx.fillStyle = color; ctx.fillRect(x, y, width, 1); }
@@ -97,7 +99,7 @@ export async function stageRuntime(data: FilmStageData): Promise<void> {
     } else if (scene.id === 'vod') {
       if (local < bar * 4) { head('YOU SAID\nWHAT?', 80, 235, 135); text(data.vod.time, 80, 575, 74, palette.cyan, true); wrap(`“${data.vod.quote}”`, 765, 250, 1030, 38, 1.55); text("IT'S IN THE VOD", 765, 175, 65, palette.cyan, true); }
       else if (local < bar * 8) { text('ROLL THE ACTUAL MOMENT.', 80, 175, 88, palette.purple, true); await video('twitch', 3 + local - bar * 4, 360, 295, 1200, 675); frame(360, 295, 1200, 675); tag('ACTUAL TWITCH CLIP · ORIGINAL PRERECORDED TEST · SYSTEM NARRATION', 360, 265, palette.cyan); }
-      else if (local < bar * 12) { head('QUOTE.\nTIME.\nCLIP.', 80, 180, 126); image('overlay-vod', 760, 225, 1060, 620); tag('QUOTE AND TIMECODE RESOLVED FROM STORED SEGMENTS', 760, 875); }
+      else if (local < bar * 12) { head('BACK\nIN\nCHAT.', 80, 180, 126); image('twitch-reply', 760, 190, 1060, 650); tag('TWITCH.TV VOD CHAT · ACTUAL REPLY · ACCOUNT LABELS HIDDEN', 760, 885); }
       else { head('NOT\nFOUND.', 80, 230, 148, palette.muted); text('IN THE INDEXED TRANSCRIPT.', 760, 220, 55, palette.cyan, true); data.vod.coverage.slice(0, 4).forEach((line, index) => { rule(760, 330 + index * 105, 1050); text(line, 760, 355 + index * 105, 25, palette.white); }); wrap('A miss applies to this coverage. It does not mean something was never said.', 760, 820, 990, 24, 1.5, palette.muted); }
     } else if (scene.id === 'languages') {
       text('CHAT SPEAKS. RECEIPTS ANSWER.', 80, 145, 76, palette.purple, true); tag('FRANÇAIS', 80, 255); tag('ESPAÑOL', 1000, 255); receipt(data.receipts.fr, 80, 300, 840, true); receipt(data.receipts.es, 1000, 300, 840, true);

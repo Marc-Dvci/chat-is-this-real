@@ -7,7 +7,7 @@ import { resolve, join } from 'node:path';
 import { createHash } from 'node:crypto';
 import Fastify from 'fastify';
 import { chromium } from '@playwright/test';
-import { filmBuildOutputSchema, filmCaptureLocatorSchema, filmCaptureSchema, filmTimelineSchema, filmVoteProofSchema, claimRunSummarySchema, publicBaseSchema, loudnessMeasurementSchema } from '../src/shared/schemas.js';
+import { filmBuildOutputSchema, filmCaptureLocatorSchema, filmCaptureSchema, filmTimelineSchema, filmVoteProofSchema, claimRunSummarySchema, publicBaseSchema } from '../src/shared/schemas.js';
 import { loadDemoCatalog } from '../src/demo/replay.js';
 import { openDatabase } from '../src/store/database.js';
 import { seedDemo } from '../src/demo/seed.js';
@@ -18,6 +18,7 @@ import { excerptPreview } from '../src/shared/excerpt-preview.js';
 import { ffmpegBinary, ffprobeBinary } from '../src/shared/ffmpeg.js';
 import { stageHTML, type FilmReceipt, type FilmStageData } from '../film/stage.js';
 import { writeOriginalScore } from '../film/score.js';
+import { masterFilmAudio } from '../film/audio.js';
 
 const execute = promisify(execFile), preview = process.argv.includes('--preview');
 const option = (name: string) => { const index = process.argv.indexOf(name); return index < 0 ? undefined : process.argv[index + 1]; };
@@ -49,7 +50,7 @@ const add = (name: string, path: string, mime = 'image/png') => { files.set(name
 const data: FilmStageData = { timeline, images: {
   desk: add('desk', `${locator.directory}/desk.png`), history: add('history', `${locator.directory}/history.png`),
   'overlay-fact': add('overlay-fact', `${locator.directory}/overlay-fact.png`), 'overlay-vod': add('overlay-vod', `${locator.directory}/overlay-vod.png`),
-  'twitch-proof': add('twitch-proof', 'data/probe/1792871642852/overlay-revealed.png'), dock: add('dock', 'e2e/screens/desk-dock-checks.png') },
+  'twitch-proof': add('twitch-proof', 'data/probe/1792871642852/overlay-revealed.png'), 'twitch-reply': add('twitch-reply', 'data/film/twitch-site/twitch-reply.png'), dock: add('dock', 'e2e/screens/desk-dock-checks.png') },
   videos: { desk: add('desk-video', capture.video, 'video/webm'), twitch: add('twitch-video', 'data/probe/1792855780317/alignment-clip.mp4', 'video/mp4'), codex: add('codex-video', `${directory}/codex.mp4`, 'video/mp4') },
   receipts: { en: receipt('showcase-en'), fr: receipt('showcase-fr'), es: receipt('showcase-es') },
   vod: { quote: excerptPreview(vod.quote), time: clockText(vod.offset_s), coverage: negative.coverage.map((item, index) => `Stream ${index + 1}  ·  ${clockText(item.start_s)} to ${clockText(item.end_s)}  ·  ${item.segment_count} segments`) },
@@ -76,7 +77,12 @@ try {
   const stageError = await page.locator('body').getAttribute('data-error'); if (stageError) throw new Error(stageError);
   const frames = Math.round(duration * fps);
   for (let index = 0; index < frames; index++) {
-    await page.evaluate((time) => window.film.seek(time), index / fps); const bytes = await page.screenshot({ type: 'png' });
+    const frame = await page.evaluate(async (time) => {
+      await window.film.seek(time);
+      const canvas = document.getElementById('film-stage'); if (!(canvas instanceof HTMLCanvasElement)) throw new Error('Missing film canvas.');
+      return canvas.toDataURL('image/png').split(',')[1]!;
+    }, index / fps);
+    const bytes = Buffer.from(frame, 'base64');
     if (!encoder.stdin.write(bytes)) await once(encoder.stdin, 'drain');
     if (index % (fps * 10) === 0) console.info(`Film frames: ${Math.round(index / fps)} / ${duration} seconds.`);
   }
@@ -87,17 +93,7 @@ await writeOriginalScore(`${directory}/score.wav`, duration, timeline.bpm);
 const stamp = (value: number) => { const ms = Math.round(value * 1000); return `${String(Math.floor(ms / 3600000)).padStart(2, '0')}:${String(Math.floor(ms / 60000) % 60).padStart(2, '0')}:${String(Math.floor(ms / 1000) % 60).padStart(2, '0')},${String(ms % 1000).padStart(3, '0')}`; };
 const captions = timeline.captions.map((item, index) => `${index + 1}\n${stamp(item.start_bar * secondsPerBar)} --> ${stamp(item.end_bar * secondsPerBar)}\n${item.text}\n`).join('\n');
 await writeFile(`${directory}/captions.srt`, captions);
-const audioStart = 44 * secondsPerBar, audioEnd = 48 * secondsPerBar, mix = `[0:a]volume='if(between(t,${audioStart},${audioEnd}),0.26,0.85)':eval=frame[bed];[1:a]atrim=start=3:end=10.5,asetpts=PTS-STARTPTS,aresample=48000,aformat=channel_layouts=stereo,adelay=${audioStart * 1000}|${audioStart * 1000},apad[voice];[bed][voice]amix=inputs=2:normalize=0:duration=first,lowpass=f=17000[audio]`;
-await command(['-y', '-i', `${directory}/score.wav`, '-i', 'data/probe/1792855780317/alignment-clip.mp4', '-filter_complex', mix, '-map', '[audio]', '-c:a', 'pcm_f32le', '-t', String(duration), `${directory}/mix.wav`]);
-async function measure(path: string) {
-  const result = await execute(ffmpeg, ['-hide_banner', '-nostats', '-i', path, '-vn', '-af', 'loudnorm=I=-14:TP=-2.5:LRA=7:print_format=json', '-f', 'null', '-'], { windowsHide: true, maxBuffer: 2_000_000 });
-  const match = /\{\s*"input_i"[\s\S]*?\}/u.exec(result.stderr); if (!match) throw new Error('Missing measured film loudness.'); return loudnessMeasurementSchema.parse(JSON.parse(match[0]));
-}
-const loudness = await measure(`${directory}/mix.wav`), normalization = `loudnorm=I=-14:TP=-2.5:LRA=7:measured_I=${loudness.input_i}:measured_TP=${loudness.input_tp}:measured_LRA=${loudness.input_lra}:measured_thresh=${loudness.input_thresh}:offset=${loudness.target_offset}:linear=true,alimiter=limit=0.749894:level=false`;
-const output = `${directory}/chat-is-this-real-${preview ? 'preview' : 'launch'}.mp4`;
-await command(['-y', '-i', silent, '-i', `${directory}/mix.wav`, '-i', `${directory}/captions.srt`, '-map', '0:v:0', '-map', '1:a:0', '-map', '2:s:0', '-af', normalization, '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-c:s', 'mov_text', '-metadata:s:s:0', 'language=eng', '-t', String(duration), '-movflags', '+faststart', output]);
-const mastered = await measure(output); await writeFile(`${directory}/audio-audit.json`, JSON.stringify({ input: loudness, mastered }, null, 2));
-if (mastered.input_tp > -1 || Math.abs(mastered.input_i + 14) > .6) throw new Error('The film audio master needs another level pass.');
+const output = await masterFilmAudio(directory, duration, secondsPerBar);
 const info = await execute(probe, ['-v', 'error', '-show_entries', 'format=duration:stream=codec_type,width,height,r_frame_rate', '-of', 'json', output], { windowsHide: true });
 const target = `${outputDirectory}/chat-is-this-real-${preview ? 'preview' : 'launch'}.mp4`;
 await copyFile(output, target); await copyFile(`${directory}/captions.srt`, `${outputDirectory}/chat-is-this-real-en.srt`); await copyFile(`${directory}/thumbnail.png`, `${outputDirectory}/chat-is-this-real-thumbnail.png`);

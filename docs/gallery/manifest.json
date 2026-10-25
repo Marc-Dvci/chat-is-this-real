@@ -1,0 +1,68 @@
+{
+  "width": 2400,
+  "height": 1600,
+  "source": "Actual 2× browser captures, measured reports, original source diagrams and owned recordings.",
+  "twitch_adjustments": "Owned account labels hidden. The actual reply’s long text is wrapped to the chat width for legibility.",
+  "sheets": [
+    {
+      "file": "01-cover.png",
+      "caption": "A streamer review desk for sourced chat checks, audience votes and earlier-moment clips.",
+      "characters": 88
+    },
+    {
+      "file": "02-earlier-moment.png",
+      "caption": "The real Twitch test found a promise made 5.2 minutes earlier in the same broadcast.",
+      "characters": 84
+    },
+    {
+      "file": "03-overlay.png",
+      "caption": "The recorded demo overlay, composited over the original test scene, reveals a reviewed verdict.",
+      "characters": 95
+    },
+    {
+      "file": "04-source-detail.png",
+      "caption": "The actual review desk keeps the original claim, source links and verified excerpt together.",
+      "characters": 92
+    },
+    {
+      "file": "05-vod.png",
+      "caption": "The VOD result shows stored words, their stream time, transcript coverage and the confirmed clip.",
+      "characters": 97
+    },
+    {
+      "file": "06-history.png",
+      "caption": "Viewer History lets the streamer select several messages as context for a check.",
+      "characters": 80
+    },
+    {
+      "file": "07-evaluation.png",
+      "caption": "Final dev and single heldout measurements, generated from the complete frozen-engine reports.",
+      "characters": 93
+    },
+    {
+      "file": "08-architecture.png",
+      "caption": "The model proposes, code verifies the result, and the streamer controls publication.",
+      "characters": 84
+    },
+    {
+      "file": "09-twitch-reply.png",
+      "caption": "An actual twitch.tv VOD reply contains the stored quote, timestamp and clip; account labels are hidden.",
+      "characters": 103
+    },
+    {
+      "file": "10-codex.png",
+      "caption": "Actual Codex instruction-reading footage beside the project’s agent rules.",
+      "characters": 74
+    },
+    {
+      "file": "11-french-spanish.png",
+      "caption": "French and Spanish chat examples use recorded model results and the same verified-source review.",
+      "characters": 96
+    },
+    {
+      "file": "12-latency.png",
+      "caption": "Final dev and heldout latency percentiles include every input and exclude paid search discovery.",
+      "characters": 96
+    }
+  ]
+}

@@ -39,7 +39,7 @@ built for Twitch, with the project name on the opening and closing cards.
 - Build an editable timeline and reusable motion scenes before the final render.
 - Capture the finished interface and Twitch flow after the UI walkthrough passes.
 - Use original audio or audio with a recorded licence. Mix the narration clearly above the bed.
-- Export a 1080p master, an upload-ready MP4, English captions and a clean thumbnail.
+- Export a 2560×1440 master, an upload-ready MP4, English captions and a clean thumbnail.
 - Review the full film at normal speed for pacing, text legibility, audio and factual claims.
 - Keep recordings, rendered frames and video files outside version control.
 
