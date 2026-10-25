@@ -6,7 +6,7 @@
   "type": "module",
   "license": "MIT",
   "overrides": {
-    "miniflare": { "undici": "7.30.1" }
+    "undici": "7.30.1"
   },
   "engines": {
     "node": "^22.13.0 || ^24.0.0"
