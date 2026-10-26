@@ -27,7 +27,7 @@ function Overlay() {
           {result.type === 'fact' ? <><p className="broadcast-explanation">{result.explanation}</p><div className="broadcast-source">{result.evidence[0] ? result.sources.find((source) => source.id === result.evidence[0]?.source_id)?.domain : 'No verified source'}</div></> : <><p className="broadcast-quote">{result.found ? `“${result.quote}”` : 'No matching moment in the indexed transcript.'}</p>{result.found && <div className="broadcast-time">{clock(result.offset_s ?? 0)} <span>{result.timing === 'word' ? 'IN THE STREAM' : 'APPROXIMATE TIME'}</span></div>}</>}
         </>}
         {view.votes?.revealed && <div className="chat-call-summary">{view.votes.no_call ? 'NO CALL · NO POINTS AWARDED' : view.votes.real + view.votes.not_real ? `CHAT SAID ${Math.round(view.votes.real / (view.votes.real + view.votes.not_real) * 100)}% REAL` : 'NO VOTES CAST'}</div>}
-      </div><div className="broadcast-footer"><span>CHAT, IS THIS REAL?</span><span>{view.demo ? 'RECORDED DEMO' : 'THE REPLAY BOOTH'}</span></div>
+      </div><div className="broadcast-footer"><span>CHAT, IS THIS REAL?</span><span>THE REPLAY BOOTH</span></div>
     </section>}
     {view && view.enabled && !!view.leaders.length && <aside className="broadcast-leaders"><h2>CHAT CALLED IT</h2>{view.leaders.map((leader) => <div key={leader.rank}><span>CALLER {String(leader.rank).padStart(2, '0')}</span><strong>{leader.points} PT{leader.points === 1 ? '' : 'S'}</strong></div>)}</aside>}
   </main>;

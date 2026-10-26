@@ -28,7 +28,7 @@ test('walkthrough: the review desk, every route and the 380 px OBS dock', async 
     await page.getByRole('button', { name: 'Show on stream', exact: true }).click();
     const overlay = await context.newPage(); await overlay.setViewportSize({ width: 1920, height: 1080 }); await overlay.goto('/overlay'); await expect(overlay.locator('.overlay-root')).toHaveAttribute('data-state', 'dwell');
     await expect(overlay.locator('.broadcast-stamp')).toHaveText('REAL'); await overlay.screenshot({ path: 'e2e/screens/overlay-fact.png', omitBackground: true }); await axe(overlay);
-    await page.getByRole('button', { name: 'Post to chat', exact: true }).click(); await expect(page.getByRole('status')).toContainText('Scripted reply');
+    await page.getByRole('button', { name: 'Post to chat', exact: true }).click(); await expect(page.getByRole('status')).toContainText('Reply added');
     await page.getByRole('button', { name: 'Copy link', exact: true }).click(); await expect(page.getByRole('status')).toContainText('copied');
     await page.getByRole('button', { name: 'Check details', exact: true }).or(page.locator('.check-diagnostics summary')).click(); await capture('desk-evidence');
     await page.getByRole('button', { name: 'Preview overlay', exact: true }).click(); await expect(page.getByTitle('Overlay preview')).toBeVisible(); await page.getByRole('button', { name: 'Close overlay preview' }).click();
