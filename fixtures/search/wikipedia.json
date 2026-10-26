@@ -1,0 +1,156 @@
+{
+  "recorded_at": "2026-10-26T23:29:09.560Z",
+  "responses": [
+    {
+      "url": "https://en.wikipedia.org/w/rest.php/v1/search/page?q=Great+Wall+naked+eye+low+Earth+orbit&limit=2",
+      "status": 200,
+      "body": {
+        "pages": [
+          {
+            "id": 5094570,
+            "key": "Great_Wall_of_China",
+            "title": "Great Wall of China",
+            "excerpt": "camouflage effect as well. The Great <span class=\"searchmatch\">Wall</span> of China cannot be seen by the <span class=\"searchmatch\">naked</span> human <span class=\"searchmatch\">eye</span> from the Moon which <span class=\"searchmatch\">orbits</span> around <span class=\"searchmatch\">Earth</span> at an average distance of 384",
+            "matched_title": null,
+            "anchor": null,
+            "description": "Series of fortifications in northern China",
+            "thumbnail": {
+              "mimetype": "image/jpeg",
+              "width": 60,
+              "height": 40,
+              "duration": null,
+              "url": "//thumb.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/60px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg?utm_source=en.wikipedia.org&utm_campaign=rest&utm_content=thumbnail"
+            }
+          },
+          {
+            "id": 19331,
+            "key": "Moon",
+            "title": "Moon",
+            "excerpt": "The Moon is the only natural satellite of <span class=\"searchmatch\">Earth</span>. It <span class=\"searchmatch\">orbits</span> <span class=\"searchmatch\">Earth</span> in an elliptical path, at a distance that varies over the year, averaging around 378,000",
+            "matched_title": null,
+            "anchor": null,
+            "description": "Natural satellite orbiting Earth",
+            "thumbnail": {
+              "mimetype": "image/jpeg",
+              "width": 60,
+              "height": 57,
+              "duration": null,
+              "url": "//thumb.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/60px-FullMoon2010.jpg?utm_source=en.wikipedia.org&utm_campaign=rest&utm_content=thumbnail"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://en.wikipedia.org/w/rest.php/v1/search/page?q=Great+Wall+of+China+visible+from+space&limit=2",
+      "status": 200,
+      "body": {
+        "pages": [
+          {
+            "id": 27319586,
+            "key": "Artificial_structures_visible_from_space",
+            "title": "Artificial structures visible from space",
+            "excerpt": "Archived <span class=\"searchmatch\">from</span> the original on March 4, 2016. Retrieved 6 March 2016. Hvistendahl, Mara (February 21, 2008). &quot;Is <span class=\"searchmatch\">China&#039;s</span> <span class=\"searchmatch\">Great</span> <span class=\"searchmatch\">Wall</span> <span class=\"searchmatch\">Visible</span> <span class=\"searchmatch\">from</span> <span class=\"searchmatch\">Space</span>?&quot;. Scientific",
+            "matched_title": null,
+            "anchor": null,
+            "description": "Human-made things that can be seen from space",
+            "thumbnail": null
+          },
+          {
+            "id": 5094570,
+            "key": "Great_Wall_of_China",
+            "title": "Great Wall of China",
+            "excerpt": "The <span class=\"searchmatch\">Great</span> <span class=\"searchmatch\">Wall</span> <span class=\"searchmatch\">of</span> <span class=\"searchmatch\">China</span> is a series <span class=\"searchmatch\">of</span> fortifications in <span class=\"searchmatch\">China</span>. They were built across the historical northern borders <span class=\"searchmatch\">of</span> ancient <span class=\"searchmatch\">Chinese</span> states and Imperial",
+            "matched_title": null,
+            "anchor": null,
+            "description": "Series of fortifications in northern China",
+            "thumbnail": {
+              "mimetype": "image/jpeg",
+              "width": 60,
+              "height": 40,
+              "duration": null,
+              "url": "//thumb.wikimedia.org/wikipedia/commons/thumb/2/23/The_Great_Wall_of_China_at_Jinshanling-edit.jpg/60px-The_Great_Wall_of_China_at_Jinshanling-edit.jpg?utm_source=en.wikipedia.org&utm_campaign=rest&utm_content=thumbnail"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://en.wikipedia.org/w/rest.php/v1/search/page?q=octopus+number+of+hearts&limit=2",
+      "status": 200,
+      "body": {
+        "pages": [
+          {
+            "id": 10129055,
+            "key": "Common_octopus",
+            "title": "Common octopus",
+            "excerpt": "common <span class=\"searchmatch\">octopus</span> (<span class=\"searchmatch\">Octopus</span> vulgaris) is a mollusk belonging to the class Cephalopoda. <span class=\"searchmatch\">Octopus</span> vulgaris is one <span class=\"searchmatch\">of</span> the most studied <span class=\"searchmatch\">of</span> all the <span class=\"searchmatch\">octopus</span> species",
+            "matched_title": null,
+            "anchor": null,
+            "description": "Species of cephalopod",
+            "thumbnail": {
+              "mimetype": "image/jpeg",
+              "width": 60,
+              "height": 46,
+              "duration": null,
+              "url": "//thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Octopus2.jpg/60px-Octopus2.jpg?utm_source=en.wikipedia.org&utm_campaign=rest&utm_content=thumbnail"
+            }
+          },
+          {
+            "id": 194068,
+            "key": "Blue-ringed_octopus",
+            "title": "Blue-ringed octopus",
+            "excerpt": "Blue-ringed <span class=\"searchmatch\">octopuses</span>, comprising the genus Hapalochlaena, are four extremely venomous species <span class=\"searchmatch\">of</span> <span class=\"searchmatch\">octopus</span> that can be found in shells between rocks and",
+            "matched_title": null,
+            "anchor": null,
+            "description": "Four species of mollusk",
+            "thumbnail": {
+              "mimetype": "image/jpeg",
+              "width": 60,
+              "height": 75,
+              "duration": null,
+              "url": "//thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Hapalochlaena_lunulata2.JPG/60px-Hapalochlaena_lunulata2.JPG?utm_source=en.wikipedia.org&utm_campaign=rest&utm_content=thumbnail"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "results": [
+    {
+      "queries": [
+        "Great Wall of China visible from space",
+        "Great Wall naked eye low Earth orbit"
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Artificial_structures_visible_from_space",
+          "title": "Artificial structures visible from space"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Great_Wall_of_China",
+          "title": "Great Wall of China"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Moon",
+          "title": "Moon"
+        }
+      ]
+    },
+    {
+      "queries": [
+        "octopus number of hearts"
+      ],
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Common_octopus",
+          "title": "Common octopus"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Blue-ringed_octopus",
+          "title": "Blue-ringed octopus"
+        }
+      ]
+    }
+  ]
+}

@@ -12,6 +12,7 @@ import { fetchSource } from './fetch-source.js';
 import { isInstructionAttack, needsSensitiveReview } from './input-guards.js';
 import { evaluateProposal } from './proposal.js';
 import { replaySearch } from './search-replay.js';
+import { wikipediaSearch } from './search-wikipedia.js';
 import { sourceWindow } from './verify.js';
 
 export type OutcomeCache = { get: (key: string) => CheckOutcome | undefined; put: (key: string, outcome: CheckOutcome) => void };
@@ -63,7 +64,9 @@ export class CheckEngine {
       options.onState?.('searching');
       const replay = config.SEARCH_MODE === 'replay' ? await replaySearch(value.claim, config.SEARCH_REPLAY_PATH) : undefined;
       if (replay && !replay.matched) { options.onState?.('failed'); return finish({ reason: 'search_replay_miss', failed: true }); }
-      const search = replay ?? await this.model.search(this.model.config.MODEL_SEARCH, { original_claim: value.claim, normalized_claim: normalized, queries: triage.search_queries }, signal);
+      const search = replay ?? (config.SEARCH_MODE === 'wikipedia'
+        ? await wikipediaSearch(triage.search_queries.length ? triage.search_queries : [normalized], signal)
+        : await this.model.search(this.model.config.MODEL_SEARCH, { original_claim: value.claim, normalized_claim: normalized, queries: triage.search_queries }, signal));
       if (search.searchCalls > 1) throw new ModelProviderError('quota', 'search_budget_limit');
       options.onState?.('reading');
       const selected = selectSearchSources(search.sources);

@@ -212,7 +212,7 @@ export const twitchChannelInfoSchema = z.object({ data: z.array(z.object({
   title: z.string(), game_name: z.string(), broadcaster_language: z.string()
 })) });
 export const engineConfigSchema = z.object({
-  SEARCH_MODE: z.enum(['replay', 'provider']).default('replay'), SEARCH_REPLAY_PATH: z.string().default('fixtures/search/probe.json'),
+  SEARCH_MODE: z.enum(['replay', 'wikipedia', 'provider']).default('replay'), SEARCH_REPLAY_PATH: z.string().default('fixtures/search/probe.json'),
   MODELSTUDIO_TOKEN_LIMIT: z.coerce.number().int().min(1000).max(1_000_000).default(900_000),
   MODELSTUDIO_ASR_SECONDS_LIMIT: z.coerce.number().min(16).max(36_000).default(30_000)
 });
@@ -282,6 +282,7 @@ export const modelRoleSchema = z.enum(['triage', 'search', 'judge', 'vod', 'asr'
 export type ModelRole = z.infer<typeof modelRoleSchema>;
 export const verdictSchema = z.enum(['real', 'not_real', 'missing_context', 'unconfirmed']);
 export type Verdict = z.infer<typeof verdictSchema>;
+export const wikipediaSearchSchema = z.object({ pages: z.array(z.object({ key: z.string().min(1).max(512), title: z.string().max(512) })) });
 export const triageSchema = z.object({
   kind: z.enum(['fact', 'stream_memory', 'opinion', 'joke', 'question', 'other']),
   checkable: z.boolean(), normalized_claim: z.string().max(1000),
@@ -466,7 +467,7 @@ export const checkOutcomeSchema = z.object({
   explanation: z.string(), evidence: z.array(evidenceSchema), sources: z.array(sourceDocumentSchema),
   returned_excerpts: z.number().int().nonnegative(), dropped_excerpts: z.number().int().nonnegative(),
   sensitive: z.boolean(), reason: z.string().nullable(), created_at: z.iso.datetime(), elapsed_ms: z.number().nonnegative(),
-  cache_hit: z.boolean(), retrieval_mode: z.enum(['replay', 'provider']), calls: z.array(modelUsageSchema), failed: z.boolean().default(false)
+  cache_hit: z.boolean(), retrieval_mode: z.enum(['replay', 'wikipedia', 'provider']), calls: z.array(modelUsageSchema), failed: z.boolean().default(false)
 });
 export type CheckOutcome = z.infer<typeof checkOutcomeSchema>;
 export const checkJobSchema = z.object({
@@ -484,7 +485,7 @@ export const checkJobRowSchema = z.object({
 });
 export const claimRunSummarySchema = z.object({
   suite: z.literal('claims'), split: z.enum(['dev', 'heldout']), sample_count: z.number(), attempted_items: z.number(),
-  git_commit: z.string(), working_tree_dirty: z.boolean(), models: z.object({ judge: z.string() }), retrieval_mode: z.enum(['replay', 'provider']),
+  git_commit: z.string(), working_tree_dirty: z.boolean(), models: z.object({ judge: z.string() }), retrieval_mode: z.enum(['replay', 'wikipedia', 'provider']),
   metrics: z.object({
     verdict_agreement: z.object({ matched: z.number(), total: z.number() }),
     by_category: z.record(z.string(), z.object({ matched: z.number(), total: z.number(), attempted: z.number() })),
@@ -521,7 +522,7 @@ export const checkViewSchema = checkJobSchema.extend({ outcome: z.union([
 ]).nullable() });
 export type CheckView = z.infer<typeof checkViewSchema>;
 export const publicFactSchema = z.object({ id: z.string(), type: z.literal('fact'), claim: z.string(), verdict: verdictSchema,
-  explanation: z.string(), evidence: z.array(evidenceSchema), sources: z.array(sourceSummarySchema), checked_at: z.iso.datetime(), retrieval_mode: z.enum(['replay', 'provider']) });
+  explanation: z.string(), evidence: z.array(evidenceSchema), sources: z.array(sourceSummarySchema), checked_at: z.iso.datetime(), retrieval_mode: z.enum(['replay', 'wikipedia', 'provider']) });
 export const publicVodSchema = z.object({ id: z.string(), type: z.literal('vod'), claim: z.string(), found: z.boolean(), quote: z.string(),
   offset_s: z.number().nullable(), end_s: z.number().nullable(), relation: vodProposalSchema.shape.relation, timing: vodOutcomeSchema.shape.timing,
   clip: clipResultSchema.nullable(), vod_id: z.string().nullable(), broadcast_started_at: z.string().nullable(), coverage: z.array(transcriptCoverageSchema), checked_at: z.iso.datetime() });
@@ -594,19 +595,6 @@ export const showcaseReportSchema = z.object({ suite: z.literal('showcase'), spl
   git_commit: z.string(), working_tree_dirty: z.boolean(), planned_repetitions: z.number().int().positive(), discovery: z.string(),
   rows: z.array(z.object({ key: z.string(), text: z.string(), language: z.string(), repetition: z.number().int().positive(),
     outcome: z.object({ type: z.string(), final_verdict: z.string().optional(), found: z.boolean().optional(), failed: z.boolean(), elapsed_ms: z.number().nonnegative() }) })) });
-export const filmCaptureLocatorSchema = z.object({ directory: z.string().min(1) });
-export const filmCaptureSchema = z.object({ mode: z.string(), source: z.string(), video: z.string().min(1),
-  events: z.array(z.object({ name: z.string(), at_s: z.number().nonnegative() })), errors: z.array(z.string()).max(0)
-}).refine((value) => value.events.some((event) => event.name === 'end'), 'The product capture must complete.');
-export const filmVoteProofSchema = z.object({ source: z.string(), votes: voteViewSchema, result: publicResultSchema,
-  scores: z.array(z.object({ user_id: z.string(), display_name: z.string(), points: z.number().int().positive() })) });
-export const filmTimelineSchema = z.object({ title: z.string(), bpm: z.number().positive(), beats_per_bar: z.literal(4), total_bars: z.number().int().positive(),
-  scenes: z.array(z.object({ id: z.enum(['hook', 'intro', 'claim', 'votes', 'vod', 'languages', 'control', 'codex', 'outro']),
-    start_bar: z.number().nonnegative(), end_bar: z.number().positive(), headline: z.string(), label: z.string() })),
-  captions: z.array(z.object({ start_bar: z.number().nonnegative(), end_bar: z.number().positive(), text: z.string().min(1) })) });
-export type FilmTimeline = z.infer<typeof filmTimelineSchema>;
-export const filmBuildOutputSchema = z.object({ source: z.string(), recorded_at: z.iso.datetime(), output: z.string(), diff: z.string(), events: z.array(z.object({ at_s: z.number(), text: z.string() })) });
-export const loudnessMeasurementSchema = z.object({ input_i: z.coerce.number(), input_tp: z.coerce.number(), input_lra: z.coerce.number(), input_thresh: z.coerce.number(), target_offset: z.coerce.number() });
 export const engineFreezeSchema = z.object({ version: z.literal(1), created_at: z.iso.datetime(), git_commit: z.string().regex(/^[a-f0-9]{40}$/u),
   files: z.array(z.object({ path: z.string().min(1), sha256: z.string().regex(/^[a-f0-9]{64}$/u) })).min(1),
   configuration: z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])) });
