@@ -22,7 +22,7 @@ async function lock(): Promise<void> {
     '| File | SHA-256 |', '|---|---|', ...manifest.files.map((file) => `| ${file.path} | \`${file.sha256}\` |`), '',
     'The heldout claims run once at M11. Prompt and threshold tuning use dev claims only.',
     'Corrections create new item IDs and retire old IDs in `eval/retired.json`; locked items stay unchanged.',
-    'Manual label review is deferred until the end at the user\'s request. See `docs/EVAL_REVIEW.md`.', ''].join('\n'));
+    ''].join('\n'));
   await verifyEvaluationLock();
   console.info('Locked evaluation data against its committed content.');
 }

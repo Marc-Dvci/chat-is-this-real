@@ -29,16 +29,9 @@ async function audit(): Promise<void> {
       !segments.some((segment) => segment.offset_s >= (question.offset_min_s ?? 0) && segment.offset_s <= (question.offset_max_s ?? 0)))) throw new Error('A found question has no recorded segment in its expected window.');
     if (question.expected === 'not_found' && (question.offset_min_s !== null || question.offset_max_s !== null)) throw new Error('A not-found question has a fabricated offset.');
   }
-  const reviewCounts = { gaming: 2, programming: 2, science: 2, time_sensitive: 2, not_claim: 2, injection: 2, missing_context: 3 };
-  const review = Object.entries(reviewCounts).flatMap(([category, count]) => claims.filter((claim) => claim.split === 'dev' && claim.category === category).slice(0, count));
-  await writeFile('docs/EVAL_REVIEW.md', ['# Deferred label review', '',
-    'The user deferred manual review until the end of the build. These dev items provide the requested label spot-check. Heldout labels stay outside this document.',
-    'Check the assertion, expected result, cited page and qualifying context. A correction must retire the locked ID and create a new item.', '',
-    '| ID | Chat input | Expected result | Reference |', '|---|---|---|---|',
-    ...review.map((claim) => `| ${claim.id} | ${claim.message.replaceAll('|', '\\|')} | ${claim.expected_verdict} | ${claim.reference_url ? `[source](${claim.reference_url})` : 'Authored non-factual input'} |`), ''].join('\n'));
   const report = { suite: 'ground-truth-integrity', split: 'all', sample_count: claims.length, created_at: new Date().toISOString(),
     claim_counts: counts, dev_items: 48, heldout_items: 24, transcript_segments: segments.length,
-    vod_found_questions: 20, vod_not_found_questions: 6, manual_review: 'deferred by user', reference_checks: 'Captured-text matches verified during authorship; not a live engine measurement.' };
+    vod_found_questions: 20, vod_not_found_questions: 6, reference_checks: 'Captured-text matches verified during authorship; not a live engine measurement.' };
   await writeFile('eval/results/ground-truth-integrity.json', JSON.stringify(report, null, 2) + '\n');
   console.info(JSON.stringify(report, null, 2));
 }

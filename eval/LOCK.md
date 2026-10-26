@@ -11,4 +11,3 @@ Data commit: `a8cf609a180a2ecdccb1af2dc31a2960e88de15c`
 
 The heldout claims run once at M11. Prompt and threshold tuning use dev claims only.
 Corrections create new item IDs and retire old IDs in `eval/retired.json`; locked items stay unchanged.
-Manual label review is deferred until the end at the user's request. See `docs/EVAL_REVIEW.md`.

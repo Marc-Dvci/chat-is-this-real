@@ -63,26 +63,22 @@ Play the returned clip and VOD timestamp link. Find the clap's time in the VOD, 
 the finalize command printed by the probe with that time. The two confirmation flags mean
 that the clip played and the timestamp link worked in your browser.
 
-Finalization records the observed correction in `.env`, `.env.example` and `docs/probe.md`.
+Finalization records the observed correction in `.env` and `.env.example`.
 It exports the recorded protocol frames with account identifiers pseudonymized. Private raw
 capture files remain under `data/probe/`. Inspect the export before committing it.
 
-## Automate with a prerecorded test
+## Automated test broadcast
 
-On Windows, generate the original test recording with `npm run record:test`. It uses local
-system speech and FFmpeg. It contains no camera, microphone or desktop capture.
-Authorize the extra broadcaster permissions with `npm run setup:twitch -- --automation`.
-They allow reading the stream key, setting a development title and posting the scripted command.
-After the broadcaster approves the public test, run:
+On Windows, `npm run record:test` renders a test recording with local speech and FFmpeg.
+Authorize the extra broadcaster permissions with `npm run setup:twitch -- --automation`:
+they read the stream key, set the test title and post the test command. Then:
 
 ```sh
 npm run broadcast:test -- --live
 npm run probe:twitch -- --live --automated
 ```
 
-The encoder runs in its own terminal until the recording ends. The probe sends a scripted
-bot claim, a broadcaster command and a threaded acknowledgement. The bot acts as the test
-message author; these messages do not represent independent viewers or community votes.
-Use the printed `--finalize <run> --auto-align` command to decode a clip, match its source
-timecode, check the VOD page and export the scrubbed frames. This calibration applies to
-that encoder path. Recalibrate after switching to another capture source.
+The encoder streams the recording to your channel. The probe posts a claim and a threaded
+command, captures the EventSub frames, creates a clip and matches its decoded timecode to
+the recording. Finalize with the printed `--finalize <run> --auto-align` command, which
+saves the offset correction and exports the frames with account IDs replaced by aliases.

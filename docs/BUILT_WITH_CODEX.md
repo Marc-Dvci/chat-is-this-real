@@ -1,35 +1,78 @@
 # Built with OpenAI Codex
 
-The build follows `../02_BUILD_PLAN.md`. Each completed milestone links its checks and review evidence here.
+I built Chat Is This Real in one OpenAI Codex thread in VS Code, session
+**`01a16cc3-1a5e-7d23-81c2-c9de487cc7fd`**, from 24 to 25 October 2026.
 
-| Milestone | What was built | Tests added | Review findings fixed | Live check result |
-|---|---|---|---|---|
-| M0 | Repository layout, local server, strict tooling and CI | Fastify health and private-path checks; compiled-process and environment regression checks; mutation check | TypeScript peer range, CI runtimes, npm cache, scanner permission, local environment loading | Local checks and CI tracked in [PR 1](https://github.com/Marc-Dvci/chat-is-this-real/pull/1); manual review deferred to the end at the user's request |
-| M1 | Twitch authorization, real-frame capture, clip probes and automated prerecorded test stream | Callback security, recorded token validation, recorded-frame WebSocket entry point, watchdog and chat boundary | Null app scopes, mention-prefixed replies, badge preservation, cancellation and credential-safe encoder output | Real EventSub exchange, threaded reply, current archive and clips; observed alignment in [probe report](probe.md) |
-| M2 | SDK model adapter, source fetching, evidence verification, candidate probes and recorded search | Public-address boundary, real response envelopes, source passage selection, reporting denominators and paid-search guard | Missing source passages, date interpretation, invalid excerpts, native response shape and default search billing | Repeated live free-allowance inference; candidate results in [models](models.md), simulated-search timing in [replay results](models-replay.md); paid search deferred at the user's request |
-| M3 | Authored claim corpus, real prerecorded-stream transcript, VOD questions and commit-bound evaluation lock | Actual data-commit verification and refusal of tampered data | Wrong source redirects, lost archive lists, block spacing and initial archive alignment | Free-allowance ASR of the original streamed recording; [integrity audit](../eval/results/ground-truth-integrity.json); manual dev-label spot-check deferred to final review |
-| M4 | Chat command routing, SQLite history, moderation, protected API and guarded publisher | Real reply/deletion through WebSocket; Fastify history/settings/purge; roles, cooldowns, sanitization and replay guards | Copied request text after deletion, partial-setting defaults, app-only fallback field and source-time tombstones | Scripted live request, acknowledgement and deletion passed; observed values in [core probe](probe-core.md) |
-| M5 | Check engine, evidence rules, source tiers, cache, serial queue and protected check API | Verdict table, fabricated excerpts, injection guards, full reply secret boundary, recorded deletion of check/cache and partial-run metrics | Changed claim dates, model-written quote formatting, queue restart/race handling, shutdown ordering and replay misses | Repeated fixed-claim probe and full dev comparisons in [engine measurements](check-engine.md); paid search remains deferred and final manual review is pending |
-| M6 | Stored transcript search, word alignment, audio companion, guarded clips and caption/media Library imports | Recorded VOD reply through WebSocket; foreign/discontinuous IDs, numeric FTS, caption parsing, protected imports and real clip/fallback response envelopes | Windows manifest locks, Twitch account-path clip URLs, absent live-archive timing fields, seconds-based fallback allowance and quote timing | Full prerecorded live command, decoded timecode match and formatted reply passed; repeated retrieval and real media/fallback probes in [VOD measurements](vod-engine.md) |
-| M7 | React review desk, Viewer history, Library, Settings, OBS dock and verified local result/overlay previews | Protected presentation, purge and sensitive confirmation; recorded ephemeral-chat regression; headless browser walkthrough with axe and screenshots | Purged text returning from memory, later messages entering earlier context, inactive capture settings, dismiss-state copy, encoding and browser-test races | Recorded M5/M6 results replay without keys or external calls; [dashboard workflow](dashboard.md); final manual review remains deferred |
-| M8 | SSE updates, screened voting, approved reveal, per-stream points and anonymous overlay leaderboard | Vote timing, first-vote rules, purge/restart, recorded Twitch votes and dashboard/overlay/SQLite agreement | Early result exposure, stale HTTP updates, unfinished rounds after restart, offline round cancellation and probe catalogue/timing | Real Twitch path passed with one eligible voter; [all live attempts](overlay.md); three-viewer OBS acceptance remains for final review |
-| M9 | Signed public receipts, expiring KV storage, publisher integration, VOD links and clip controls | Worker fetch and Fastify publication/removal; upload-purge race, signed replay, outage, unsafe data and three actual-runtime browser receipts | Upload cancellation cleanup, revoked receipt replay, contextual source selection, stale copy links, generated bundle linting and delayed clip replies | 116 unit tests and five browser checks passed; Worker dry-run passed; [public setup](public-pages.md); deployment and production embed acceptance await account approval |
-| M10 | Keyless static demo, shared browser SQLite and domain code, launch page and recorded multilingual gallery | Actual Workers/browser entry point with two views, voting, receipt verification, responsive layouts and no backend/external requests; real-source multilingual passage regression | Lost count/platform search terms, SQLite binding differences, captured-response envelope, static routing and phone headline clipping | 117 unit tests and six browser checks passed; new English/French/Spanish/VOD showcase ran three times; [recorded outcomes](showcase.md); public deployment remains for final approval |
-| M11 | Pinned container, frozen final evaluation, publication red team, launch film and submission package | Public projection tampering, offline/source publication guards, meaningful mutation and actual container CI | Missing runtime config, public boundary coverage, encoded-audio peaks and gallery capture artifacts | 124 unit tests and 6 browser checks passed; [final evaluation](final-evaluation.md); [PR 12](https://github.com/Marc-Dvci/chat-is-this-real/pull/12); publication and narration choices in [the handoff](../HANDOFF.md) |
+| Measure | Count |
+|---|---|
+| Milestone pull requests, each merged after green CI | 13 |
+| Commits | 46 |
+| File patches applied by Codex | 310 |
+| Shell commands run by Codex (tests, probes, builds, `gh`) | 769 |
+| Unit tests / browser tests at the final milestone | 124 / 6 |
 
-## Build audit totals
+## What Codex worked from
 
-The log records 12 milestone implementations. The final acceptance has 124 passing unit tests and 6 passing browser checks. [The manual audit register](review-findings.json) documents 16 addressed findings with code and regression or probe evidence. [The final audit](final-audit.md) links the mutation, frozen evaluation, asset validation and repository checks.
+I wrote the plan and the rules before the first prompt. Codex read them at the start of
+the thread and loaded the skills at each milestone.
 
-Main build session: `01a16cc3-1a5e-7d23-81c2-c9de487cc7fd`. The separately recorded CLI session supplements this main thread. GitHub review requests are recorded on the PRs; a request does not establish that a bot review completed.
+| File | Role |
+|---|---|
+| Build plan (12 milestones, M0 to M11) | Scope, architecture, exact Twitch and Model Studio calls, acceptance checks per milestone |
+| [AGENTS.md](../AGENTS.md) | Architecture rules, testing rules and review rules loaded in every Codex turn |
+| [`milestone-close`](../.agents/skills/milestone-close/SKILL.md) | The closing routine: checks, log row, branch, PR, CI, merge |
+| [`twitch-api`](../.agents/skills/twitch-api/SKILL.md) | Verified Helix endpoints, scopes and EventSub WebSocket rules |
+| [`model-provider`](../.agents/skills/model-provider/SKILL.md) | Verified Model Studio calls for structured output, search and speech |
+| [`eval-discipline`](../.agents/skills/eval-discipline/SKILL.md) | How the evaluation data is locked, run once and reported |
+| [`ui-walkthrough`](../.agents/skills/ui-walkthrough/SKILL.md) | The Playwright pass over every screen, with screenshot review |
+| [`writing-rules`](../.agents/skills/writing-rules/SKILL.md) | Rules for docs, captions and on-screen text |
 
-## Static deployment
+The rules that shaped the code most:
 
-The user approved deployment with a zero-cost constraint. The
-[public demo](https://chat-is-this-real.pages.dev/demo/) uses static Cloudflare Pages,
-with no Functions, storage bindings or inference credentials. The actual Pages runtime
-and production browser checks cover voting, both views, multilingual results, mobile
-receipts and accessibility. Screenshot review caught a canonical redirect in receipt
-links; the corrected probe requires the retained URL and visible receipt page.
-[The deployment report](../eval/results/deployment-static.json) preserves the acceptance
-and the upload mutation that rejects an added Worker entry point before cloud access.
+- **The model proposes; the code decides.** Final verdicts come from a four-row table in
+  [`verdict-rules.ts`](../src/check/verdict-rules.ts).
+- **No model-written quote, timestamp, link or username reaches a viewer.** Quotes come
+  from fetched source text or stored transcript segments.
+- **Test the caller's entry point.** EventSub tests feed recorded Twitch frames into the
+  WebSocket class; HTTP tests go through Fastify `inject`.
+- **Fixtures are recorded from real services,** never written to match the code.
+
+## Milestones
+
+| Milestone | What Codex built | Proof at merge |
+|---|---|---|
+| [M0 Repository](https://github.com/Marc-Dvci/chat-is-this-real/pull/1) | Strict TypeScript, ESLint, Vitest, CI with a gitleaks scan | Typecheck, lint and tests in CI |
+| [M1 Twitch probe](https://github.com/Marc-Dvci/chat-is-this-real/pull/2) | OAuth setup, EventSub capture, threaded reply, Clip From VOD, live clip | Real frames in `fixtures/twitch/`, playable clip, VOD offset measured at -3.4 s |
+| [M2 Model probe](https://github.com/Marc-Dvci/chat-is-this-real/pull/3) | Model Studio adapter, guarded source fetching, excerpt verification | 4 text models and 1 speech model measured over 3 runs ([models](models.md)) |
+| [M3 Ground truth](https://github.com/Marc-Dvci/chat-is-this-real/pull/4) | 72 labelled claims, a stream transcript and 26 stream-memory questions | Hash lock committed before the engine existed ([lock](../eval/LOCK.md)) |
+| [M4 Twitch core](https://github.com/Marc-Dvci/chat-is-this-real/pull/5) | Commands, permissions, cooldowns, SQLite history, moderation, guarded publisher | Live `!real` reply stored, acknowledged in 593 ms, deleted text removed |
+| [M5 Check engine](https://github.com/Marc-Dvci/chat-is-this-real/pull/6) | Triage, fetching, evidence proposal, verification, verdict rules, cache, queue | 44/48 dev verdicts, 0 reversed |
+| [M6 Stream memory](https://github.com/Marc-Dvci/chat-is-this-real/pull/7) | Audio companion, transcript search, word timing, clips, caption and media imports | 20/20 moments found; live clip 0.09 s from the spoken word |
+| [M7 Review desk](https://github.com/Marc-Dvci/chat-is-this-real/pull/8) | Desk, Viewer History, Library, Settings, 380 px OBS dock | Playwright walkthrough of every screen with axe-core |
+| [M8 Overlay and votes](https://github.com/Marc-Dvci/chat-is-this-real/pull/9) | SSE overlay, vote tally, approval before reveal, points, anonymous leaderboard | Desk, overlay DOM and SQLite agree at every step |
+| [M9 Public receipts](https://github.com/Marc-Dvci/chat-is-this-real/pull/10) | Signed Cloudflare Worker, KV storage, removal queue | 116 unit tests and 5 browser tests |
+| [M10 Browser demo](https://github.com/Marc-Dvci/chat-is-this-real/pull/11) | SQLite WebAssembly in a SharedWorker running the same domain code | Two views, votes and receipts checked in the Workers runtime |
+| [M11 Hardening](https://github.com/Marc-Dvci/chat-is-this-real/pull/12) | Container, red-team suite, engine freeze, single heldout run | 23/24 heldout verdicts ([evaluation](evaluation.md)) |
+| [Deployment](https://github.com/Marc-Dvci/chat-is-this-real/pull/13) | Static Cloudflare Pages build of the demo | Production checks of voting, both views and mobile receipts |
+
+## How Codex checked its own work
+
+**Recorded Twitch traffic.** Codex captured EventSub frames from my channel during M1 and
+replayed them through `EventSubWs` in every later test, so the parser, router and
+moderation paths run on bytes Twitch actually sent.
+
+**Locked data, frozen engine.** The claim set was hashed and committed in M3, two
+milestones before the checker. The engine was fingerprinted at
+[`c5f6bdc`](../eval/FREEZE.json) before the heldout messages were opened, and the heldout
+split ran once.
+
+**A bug caught by a recorded source.** A French chat message, *"stardew sur PC c'est
+jusqu'à 8 joueurs maintenant"*, came back UNCONFIRMED. Codex traced it to passage
+selection: tokens shorter than three characters were dropped, so "PC" and "8" never
+matched the changelog line *"You can now have up to 8 players on PC"*. It kept short
+platform names and counts, added a regression on the recorded changelog, then ran a
+[mutation probe](../eval/results/hardening-mutation-2026-10-25T08-49-26-634Z.json): it
+restored the old selector, watched the regression fail, and restored the fix.
+
+**The real UI, looked at.** Each UI milestone ended with a headless Playwright pass over
+every screen and button, screenshots saved per state, and axe-core on every route.

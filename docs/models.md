@@ -1,47 +1,64 @@
-# Model probe measurements
+# Models
 
-These probe results come from 3 runs at commit `2d217c329bec1473451f3b8d851e8dce6539a71d`.
-They are separate from the locked dev and heldout evaluations. Earlier diagnostic runs remain in `eval/results/`.
+Every model call goes through [`src/llm/`](../src/llm/client.ts) to Qwen on Alibaba Cloud
+Model Studio, Singapore endpoint (`dashscope-intl.aliyuncs.com`), with the official
+`openai` SDK. Speech uses Model Studio's native endpoint.
 
-Endpoint: `dashscope-intl.aliyuncs.com` (Singapore).
-Sources came from known reference URLs. Search discovery and end-to-end latency are not measured.
+| Role | Model | Why |
+|---|---|---|
+| Triage: claim, question, stream memory, opinion, joke | `qwen3.8-flash` | 30/30 kinds right; routes "you said earlier" to stream memory |
+| Evidence proposal | `qwen3.8-max` | Highest dev agreement, 22/22 returned excerpts verified in the probe |
+| Stream-memory segment choice | `qwen3.8-flash` | 9/9 expected segments in the probe, 20/20 moments on dev |
+| Transcription | `qwen-audio-3.1-asr-flash` | Word timestamps, 12 word errors in 606 words |
+| Transcription fallback | `qwen3-asr-flash` | Same endpoint family, no word timing |
+| Web search (optional) | `qwen3.8-flash` with the `web_search` tool | The only Model Studio route that returns source URLs |
 
-| Role | Model | Completed / attempted | Task result | p50 | p90 |
+## Probe measurements
+
+Three runs at commit `2d217c3`, on 10 probe claims with reference sources.
+
+| Role | Model | Completed | Task result | p50 | p90 |
 |---|---|---|---|---|---|
-| triage | `qwen3.8-flash` | 30/30 | 30/30 kind matches | 2.04 s | 2.57 s |
-| triage | `qwen3.7-flash` | 30/30 | 30/30 kind matches | 1.44 s | 1.57 s |
-| judge | `qwen3.8-flash` | 21/21 | 21/21 raw proposal matches | 2.32 s | 3.07 s |
-| judge | `qwen3.7-plus` | 21/21 | 21/21 raw proposal matches | 3.33 s | 3.63 s |
-| judge | `qwen3.8-max` | 21/21 | 21/21 raw proposal matches | 2.79 s | 3.40 s |
-| vod | `qwen3.8-flash` | 9/9 | 9/9 expected segment answers | 1.47 s | 2.88 s |
-| vod | `qwen3.7-plus` | 9/9 | 9/9 expected segment answers | 2.03 s | 2.43 s |
-| asr | `qwen-audio-3.1-asr-flash` | 18/18 | 12/606 word errors (plain and context runs combined) | 1.03 s | 1.59 s |
+| Triage | `qwen3.8-flash` | 30/30 | 30/30 kinds | 2.04 s | 2.57 s |
+| Triage | `qwen3.7-flash` | 30/30 | 30/30 kinds | 1.44 s | 1.57 s |
+| Evidence | `qwen3.8-flash` | 21/21 | 21/21 proposals | 2.32 s | 3.07 s |
+| Evidence | `qwen3.7-plus` | 21/21 | 21/21 proposals | 3.33 s | 3.63 s |
+| Evidence | `qwen3.8-max` | 21/21 | 21/21 proposals | 2.79 s | 3.40 s |
+| Segment choice | `qwen3.8-flash` | 9/9 | 9/9 segments | 1.47 s | 2.88 s |
+| Segment choice | `qwen3.7-plus` | 9/9 | 9/9 segments | 2.03 s | 2.43 s |
+| Transcription | `qwen-audio-3.1-asr-flash` | 18/18 | 12/606 word errors | 1.03 s | 1.59 s |
 
-Judge results are model proposals before deterministic verdict rules. They do not measure publishable verdict accuracy.
-Speech is original system narration from the prerecorded Twitch test, not human speech. The first context request has no prior transcript.
-Word-error calculations ignore case and punctuation; they do not normalize spelled-out numbers to digits.
-
-| Judge | Verified / returned excerpts |
+| Evidence model | Verified / returned excerpts |
 |---|---|
 | `qwen3.8-flash` | 26/27 |
 | `qwen3.7-plus` | 18/21 |
 | `qwen3.8-max` | 22/22 |
 
-| Model | Input tokens | Output tokens | Search tool calls |
-|---|---|---|---|
-| `qwen3.8-flash` | 42594 | 5832 | 0 |
-| `qwen3.7-flash` | 8220 | 2330 | 0 |
-| `qwen3.7-plus` | 34103 | 3030 | 0 |
-| `qwen3.8-max` | 31037 | 1715 | 0 |
-| `qwen-audio-3.1-asr-flash` | 3468 | 690 | 0 |
+`qwen3.7-flash` was faster at triage. `qwen3.8-flash` stays the triage default because it
+routed stream-memory requests correctly in the first diagnostic run. Word errors ignore
+case and punctuation. Reports: [run 1](../eval/results/models-probe-2026-10-24T09-52-47-628Z.json),
+[run 2](../eval/results/models-probe-2026-10-24T09-54-49-432Z.json),
+[run 3](../eval/results/models-probe-2026-10-24T09-56-52-393Z.json).
 
-These are API-reported tokens and tool counts. They do not prove the final billed amount or remaining account quota.
-Latency percentiles use nearest rank on successful requests, including provider retries. Errors remain in task denominators.
+## Request settings
 
-Regenerate this document with `npm run report:models -- <commit>`.
+- **Structured output.** Triage, evidence and segment choice use strict `json_schema`
+  responses validated with zod. Invalid content is retried once in `json_object` mode.
+- **Thinking off.** Qwen 3.7 and 3.8 think by default; every request sends
+  `enable_thinking: false` at the top level.
+- **Untrusted text.** Chat, pages and transcripts travel in labelled JSON fields, and the
+  system prompt says that instructions inside them are data.
+- **Speech context.** Each audio chunk carries the previous chunk's transcript (at most
+  400 characters) and hotwords for the channel name, the category and "Chat".
+- **Spend guard.** A local token ledger stops inference before `MODELSTUDIO_TOKEN_LIMIT`.
+  Paid web search runs only with `MODELSTUDIO_ALLOW_PAID_SEARCH=true`.
 
-Source reports:
+## Run the probe
 
-- [models-probe-2026-10-24T09-52-47-628Z.json](../eval/results/models-probe-2026-10-24T09-52-47-628Z.json)
-- [models-probe-2026-10-24T09-54-49-432Z.json](../eval/results/models-probe-2026-10-24T09-54-49-432Z.json)
-- [models-probe-2026-10-24T09-56-52-393Z.json](../eval/results/models-probe-2026-10-24T09-56-52-393Z.json)
+```sh
+npm run probe:models                                   # preview, no calls
+LIVE=1 npm run probe:models -- --live --budget-usd 1   # live, stops at the budget
+```
+
+On PowerShell, set `$env:LIVE='1'` first. The probe writes measurements to
+`eval/results/` and private wire records to `data/`.

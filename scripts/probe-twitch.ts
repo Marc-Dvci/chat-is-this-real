@@ -60,7 +60,7 @@ async function finalize(run: string, observed: string | undefined, tokens: Twitc
     await response.body?.cancel();
     if (response.status !== 200) throw new Error('The VOD timestamp page did not answer successfully. Check it before finalizing.');
   }
-  const frames = await exportProbeFixtures(report, tokens.loadedSecrets());
+  await exportProbeFixtures(report, tokens.loadedSecrets());
   await writeFile(path, JSON.stringify(report, null, 2), { mode: 0o600 });
   for (const envPath of ['.env', '.env.example']) {
     const text = await readFile(envPath, 'utf8');
@@ -69,30 +69,8 @@ async function finalize(run: string, observed: string | undefined, tokens: Twitc
       ? text.replace(/^VOD_OFFSET_CORRECTION_S=.*$/m, line) : `${text.trimEnd()}\n${line}\n`;
     await writeFile(envPath, envPath === '.env.example'
       ? updated.replace(/^# (?:M1 measures this correction with the clap test before VOD alignment is used\.|Clap correction measured in probe .*|VOD offset correction measured in probe .*)$/m,
-        `# VOD offset correction measured in probe ${run}; see docs/probe.md.`) : updated);
+        `# VOD offset correction measured in probe ${run}; see docs/twitch.md.`) : updated);
   }
-  const clip = report.vod_clip_playable ? report.vod_clip_id : report.live_clip_id;
-  const doc = [
-    '# Twitch probe', '', `Recorded ${report.recorded_at}. Run: \`${run}\`.`, '',
-    '| Check | Observed result |', '|---|---|',
-    '| Normal message and reply | Received through EventSub |',
-    '| Threaded bot reply | Sent with the app token; Twitch confirmed is_sent |',
-    `| In-progress archive | ${report.in_progress_vod_listed ? 'Returned by Get Videos and matched by stream_id' : 'Archive became available after the live capture; use the VOD link when available'} |`,
-    `| Clip From VOD | ${report.vod_clip_playable ? 'Playable clip returned' : 'Use a VOD timestamp link by default; see the private run report for the API outcome'} |`,
-    `| Live clip | ${report.live_clip_playable ? 'Playable clip returned' : 'See the private run report'} |`,
-    `| ${report.source === 'recording' ? 'Source timecode' : 'Clap'} correction | ${report.correction_s} seconds |`,
-    `| Recorded fixtures | ${frames} captured frames, with account identifiers pseudonymized |`, '',
-    `Playable test clip: https://clips.twitch.tv/${clip}`, '',
-    'Reproduce with `npm run probe:twitch -- --live` during an explicitly started test stream.',
-    'Capture files and account mappings stay under the ignored data directory.', '',
-    'The fixture export retains the scripted claim and reply. Usernames and identifiers are pseudonymized.',
-    'Protocol frames originate from Twitch; the exporter does not synthesize events.', '',
-    ...(report.source === 'recording' ? ['This probe uses the original prerecorded test video and system speech.',
-      'Alignment matches a decoded Twitch clip timecode against the source video. Recalibrate for a different encoder or audio capture path.', ''] : []),
-    'API references: [EventSub](https://dev.twitch.tv/docs/eventsub/handling-websocket-events/) and',
-    '[Clip From VOD](https://dev.twitch.tv/docs/api/reference/#create-clip-from-vod).', ''
-  ].join('\n');
-  await writeFile('docs/probe.md', doc);
   console.info(`Probe finalized. Offset correction: ${report.correction_s} s. Review the exported fixtures before committing.`);
 }
 

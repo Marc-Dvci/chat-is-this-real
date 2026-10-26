@@ -26,11 +26,8 @@ command. The mounted directory must be writable by the container's `node` user. 
 `npm run companion` on the host against the published loopback address. Keys are passed
 at runtime and are excluded from the build context.
 
-CI builds the actual image, starts its recorded demo, checks the health endpoint, web
+CI builds the image on every push, starts its demo, checks the health endpoint, web
 asset references and multilingual desk data, and verifies that FFmpeg is available.
-The local Docker daemon was not running during packaging, so the image acceptance runs
-on the CI Linux runner. The CLI resolved the pinned upstream manifest without starting
-Docker Desktop.
 
 The image health check polls the local health endpoint. SIGINT and SIGTERM close the app,
 event streams and active work. Persistent connected runs should mount `/app/data`.

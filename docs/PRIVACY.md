@@ -14,7 +14,6 @@ that stream's buffer. Tombstones prevent a late replay from restoring removed te
 
 Use Settings to purge a viewer, or run `npm run purge -- --user <login>` locally. The operation
 clears stored text and copied request text. It does not delete messages from Twitch itself.
-The optional live-test deletion permission is used only for messages sent by that test.
 
 Voting stores a viewer identifier and one choice per check to prevent duplicate calls.
 Points are derived from those choices. Purging a viewer removes their votes and points.
@@ -31,9 +30,9 @@ are local diagnostic artifacts. Committed Twitch fixtures contain demo account a
 Runtime inference uses Qwen on Alibaba Cloud Model Studio. The [provider policy](https://www.alibabacloud.com/help/en/model-studio/data-retention-policy)
 sets ordinary inference retention at up to 30 days, with legal and security exceptions.
 Stateful features can retain data until deleted. Text checks send the
-claim, selected context and retrieved source text. Transcription sends audio chunks. Paid
-provider search is disabled unless explicitly enabled after approval; replay mode uses
-recorded source URLs and labels simulated discovery.
+claim, selected context and retrieved source text. Transcription sends audio chunks.
+Wikipedia discovery sends the search queries to the Wikimedia API. Model Studio web search,
+when enabled, sends the normalized claim and its queries.
 
 Publishing a receipt sends its reviewed claim, verdict, verified excerpts and source links
 to Cloudflare KV for 30 days. VOD receipts contain the stored quote, time and coverage.
@@ -41,4 +40,4 @@ Public pages omit chat account identifiers and redact handles in claim text. Any
 a public receipt link can read it. Source removal queues remote deletion and persists
 retries locally; the dashboard shows pending removals. Regional KV propagation can take
 up to 60 seconds. Already loaded pages and third-party copies cannot be recalled.
-The [public receipt setup](public-pages.md) describes signing and deployment status.
+[Public receipts](public-pages.md) describes signing and removal.
