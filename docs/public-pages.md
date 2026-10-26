@@ -1,77 +1,61 @@
 # Public receipts
 
-I publish a reviewed check to a small Cloudflare Worker. Chat receives a link only after
-the local server has fetched that page successfully. The public page contains the claim,
-the stored verdict, verified excerpts, source links and a UTC check time. A VOD receipt
-contains the stored quote, its time, indexed coverage and links to Twitch.
+A reviewed check can be published as a receipt page that chat can open. The bot's reply
+links to it: `NOT REAL: <explanation>. Source: <domain>. Details: <receipt link>`.
 
-## Local setup
+Receipts are served by a Cloudflare Worker at
+[receipts.chatisthisreal.workers.dev](https://receipts.chatisthisreal.workers.dev/), on the
+Workers Free plan, with Cloudflare KV for storage.
 
-1. Run `npm run setup:public`. This generates a random signing key in the ignored `.env`
-   and `worker/.dev.vars` files. It does not upload the key or create cloud resources.
-2. Run `npm run build`, then `npm run worker:check`. The latter bundles the Worker without
-   deploying it. `npm run worker:dev` serves a local Workers runtime.
-3. Before a first deployment, approve the Cloudflare account and deployment. Sign in with
-   `npx wrangler login` in your own terminal. This opens a browser.
-4. After approval, deploy with `npm run worker:deploy`. Wrangler creates the `RESULTS` KV
-   binding. The required secret is `RESULTS_SIGNING_KEY`; load the generated value through
-   Wrangler's secret input without putting it in command history or chat.
-5. Set `RESULTS_BASE_URL` to the site's HTTPS origin, then restart the local server.
-   The same signing key must be configured on both sides.
+## What a receipt shows
 
-The dashboard enables **Publish link** when both settings are valid. A sensitive claim
-requires a second confirmation. Publishing a link makes the displayed claim public.
-Copying an existing link checks its availability again. Demo mode uses local recorded
-results and never publishes to Cloudflare.
+- **Claim check:** the claim with handles redacted, the verdict, the explanation, each
+  verified excerpt with its source title, domain, tier and date, and the UTC check time.
+- **Stream memory:** the stored quote, its stream time, the indexed coverage and links to
+  the Twitch clip and VOD.
 
-## Storage and removal
+## Publishing
 
-The Worker stores each receipt for 30 days with a KV expiration. It stores no chat account
-identifiers, model credentials or complete fetched pages. Public claims redact handles.
-An unpredictable identifier is an address, not an access control: anyone with its link
-can read the page. Public URLs should be shared only after review.
+The local server projects the result through `PublicResults`: it re-checks the stored
+source hashes and literal excerpts and re-applies the verdict table. It signs the upload,
+and chat receives the link only after the server has fetched the page successfully.
 
-Deleting source messages or purging their viewer's stored text queues removal of their
-public receipts. The queue persists across local restarts. It clears the queued result
-body immediately and retries failed removals. The dashboard shows pending removals.
-Only the receipt identifier and transport metadata remain while removal is pending.
-After removal, KV retains a text-free revocation marker for 30 days. Replaying the same
-signed upload cannot restore that receipt.
+- HMAC-SHA-256 over the method, path, request time, nonce and exact UTF-8 body. Signatures
+  expire after five minutes.
+- The Worker accepts signed writes only, validates the public schema and the verdict table
+  again, and rejects unsafe source addresses. Uploads are limited to 256 KiB.
+- Receipts expire after 30 days. Pages and JSON responses use `Cache-Control: no-store`.
 
-Cloudflare KV is eventually consistent. A remote write or removal can take up to 60
-seconds to appear in another region. Already loaded pages, third-party copies and browser
-history cannot be recalled. The page and JSON responses use `Cache-Control: no-store`.
+## Removal
 
-## Trust boundary
+Deleting a source message, or purging its viewer, queues removal of every receipt built on
+it. The queue persists across restarts and retries until the Worker confirms. A removed
+receipt leaves a text-free revocation marker for 30 days, so replaying the same signed
+upload cannot restore it. KV changes can take up to 60 seconds to reach every region.
 
-The local server projects a result through `PublicResults`: source body hashes and literal
-excerpts are checked again, and the deterministic verdict table is applied. VOD quotes
-and offsets are resolved from stored transcript segments. The Worker accepts only signed
-writes, checks the public schema and verdict table, and rejects unsafe source addresses.
-It does not infer or rewrite evidence.
+## Live check
 
-HMAC-SHA-256 binds the method, path, request time, nonce and exact UTF-8 body. Signatures
-expire after five minutes. Result identifiers derive from a random nonce and the signed
-body. Retries preserve the same identifier. The upload limit is 256 KiB. Reads expose only
-the public result schema. Third-party clip players load only after a visitor opens them;
-small screens retain the direct Twitch links.
+[`scripts/probe-receipts.ts`](../scripts/probe-receipts.ts) publishes three recorded checks
+to the deployed Worker through the production publisher, reads each page back, removes one
+and polls until it is gone. On 27 October 2026: 3 of 3 receipts answered 200, and the
+removed receipt answered 404 ([report](../eval/results/receipts-live-1793056519980.json)).
 
-## Checks and current status
+## Setup
 
-`tests/public-pages.test.ts` drives the Worker fetch entry point and Fastify routes. It
-covers signature tampering, expiry, secret fragments, unsafe addresses, metadata escaping,
-storage failure, repeated uploads and source removal during an upload.
-`e2e/public-pages.spec.ts` uses Wrangler's actual local runtime with KV and built assets.
-It checks desktop and 380 px layouts, accessibility and browser errors.
+1. `npm run setup:public` writes a random signing key to the ignored `.env` and
+   `worker/.dev.vars` files.
+2. `npm run build`, then `npm run worker:check` bundles the Worker without deploying.
+   `npm run worker:dev` serves it locally.
+3. `npx wrangler login`, then deploy with the key as a Worker secret:
+   `npx wrangler deploy --config worker/wrangler.toml --secrets-file worker/.dev.vars`.
+   Wrangler creates the KV namespace on the first deploy.
+4. Set `RESULTS_BASE_URL` to the Worker's HTTPS origin and restart the local server. The
+   desk enables **Publish link**.
 
-The local runtime and deployment bundle have passed. The [keyless public demo](https://chat-is-this-real.pages.dev/demo/)
-uses static Pages hosting with no Functions or storage bindings. Its demo receipt views
-run in the browser. This signed Worker remains a separate optional deployment: verify
-Workers Free and KV limits before enabling it. [Free hosting](free-hosting.md) explains
-the deployed demo’s cost boundary and production acceptance.
+## Tests
 
-References: [Wrangler configuration](https://developers.cloudflare.com/workers/wrangler/configuration/),
-[KV writes and propagation](https://developers.cloudflare.com/kv/api/write-key-value-pairs/),
-[Workers limits](https://developers.cloudflare.com/workers/platform/limits/),
-[local test harness](https://developers.cloudflare.com/workers/testing/test-harness/get-started/),
-[Twitch clip embeds](https://dev.twitch.tv/docs/embed/video-and-clips/).
+[`tests/public-pages.test.ts`](../tests/public-pages.test.ts) drives the Worker's fetch
+handler and the Fastify routes: signature tampering, expiry, secret fragments, unsafe
+addresses, metadata escaping, storage failure, repeated uploads and source removal during
+an upload. [`e2e/public-pages.spec.ts`](../e2e/public-pages.spec.ts) runs the Worker in
+Wrangler's local runtime with KV and checks desktop and 380 px layouts and accessibility.

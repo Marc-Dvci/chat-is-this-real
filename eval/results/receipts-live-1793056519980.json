@@ -1,0 +1,29 @@
+{
+  "suite": "receipts-live",
+  "created_at": "2026-10-26T23:15:19.980Z",
+  "base": "https://receipts.chatisthisreal.workers.dev",
+  "published": [
+    {
+      "job": "demo-check-showcase-en",
+      "url": "https://receipts.chatisthisreal.workers.dev/r/nSPYIJJe6w",
+      "status": 200,
+      "ms": 985
+    },
+    {
+      "job": "demo-check-showcase-fr",
+      "url": "https://receipts.chatisthisreal.workers.dev/r/oj4KQfIoo9",
+      "status": 200,
+      "ms": 1228
+    },
+    {
+      "job": "demo-check-vod-promise",
+      "url": "https://receipts.chatisthisreal.workers.dev/r/EJ0sQ8CT3V",
+      "status": 200,
+      "ms": 2070
+    }
+  ],
+  "removal": {
+    "job": "demo-check-showcase-en",
+    "status_after": 404
+  }
+}
