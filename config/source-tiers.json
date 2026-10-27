@@ -1,5 +1,5 @@
 {
-  "official_domains": ["nasa.gov", "esa.int", "python.org", "developer.mozilla.org", "nomanssky.com", "minecraft.net", "godotengine.org", "stardewvalley.net", "fallguys.com", "terraria.org", "rfc-editor.org", "typescriptlang.org", "twitch.tv", "nodejs.org", "alibabacloud.com"],
+  "official_domains": ["nasa.gov", "noaa.gov", "esa.int", "python.org", "developer.mozilla.org", "nomanssky.com", "minecraft.net", "godotengine.org", "stardewvalley.net", "fallguys.com", "terraria.org", "rfc-editor.org", "typescriptlang.org", "twitch.tv", "nodejs.org", "alibabacloud.com"],
   "institutional_domains": ["wikipedia.org", "wiki.stardewvalley.net"],
   "institutional_suffixes": [".edu", ".ac.uk"],
   "press_domains": ["reuters.com", "apnews.com", "bbc.com", "theverge.com", "arstechnica.com"]

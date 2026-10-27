@@ -76,16 +76,18 @@ for a moment 5.2 minutes earlier started 0.09 s from the spoken word ([Twitch](t
 
 ## Chat that speaks other languages
 
-I ran three chat-style messages three times each through the frozen pipeline.
+I ran five chat-style messages three times each through the same pipeline.
 
-| Language | Message | Outcome |
-|---|---|---|
-| English | java + bedrock can play together on the same servers now, no mods needed Pog | NOT REAL, 3 of 3 |
-| French | stardew sur PC c'est jusqu'à 8 joueurs maintenant 👀 | REAL, 3 of 3 |
-| Spanish | los arrays de JavaScript empiezan en 1, segurisimo 💀 | NOT REAL, 3 of 3 |
+| Language | Message | Outcome | Source |
+|---|---|---|---|
+| English | you can see the great wall of china from space with your bare eyes, my teacher said so 🧱 | NOT REAL, 3 of 3 | NASA |
+| English | java + bedrock can play together on the same servers now, no mods needed Pog | NOT REAL, 3 of 3 | Minecraft.net |
+| French | attendez les pieuvres ont TROIS cœurs?? 😳 | REAL, 3 of 3 | NOAA |
+| French | stardew sur PC c'est jusqu'à 8 joueurs maintenant 👀 | REAL, 3 of 3 | Stardew Valley changelog |
+| Spanish | los arrays de JavaScript empiezan en 1, segurisimo 💀 | NOT REAL, 3 of 3 | MDN |
 
 The verified excerpt stays in the source's own words, whatever language chat used
-([report](../eval/results/showcase-2026-10-25T07-48-00-279Z.json)).
+([report](../eval/results/showcase-2026-10-26T23-39-28-708Z.json)).
 
 ## Sources for these runs
 

@@ -21,7 +21,9 @@ const run = new Date().toISOString().replace(/[:.]/gu, '-'), directory = `data/s
 const model = new ModelClient(config, `${directory}/wire`), engine = new CheckEngine(model), db = openDatabase(':memory:');
 const catalog = loadDemoCatalog(); seedDemo(db, catalog); const vod = new VodEngine(model, new SegmentStore(db));
 const samples = [
+  { key: 'showcase-wall', kind: 'real', language: 'en', text: 'you can see the great wall of china from space with your bare eyes, my teacher said so 🧱' },
   { key: 'showcase-en', kind: 'real', language: 'en', text: 'java + bedrock can play together on the same servers now, no mods needed Pog' },
+  { key: 'showcase-octopus', kind: 'real', language: 'fr', text: 'attendez les pieuvres ont TROIS cœurs?? 😳' },
   { key: 'showcase-fr', kind: 'real', language: 'fr', text: "stardew sur PC c'est jusqu'à 8 joueurs maintenant 👀" },
   { key: 'showcase-es', kind: 'real', language: 'es', text: 'los arrays de JavaScript empiezan en 1, segurisimo 💀' },
   { key: 'showcase-vod', kind: 'vod', language: 'en', text: 'you said 50 pushups for 100 subs earlier... receipts?? KEKW' }
@@ -39,13 +41,13 @@ try {
     await writeFile(`${directory}/outcomes.json`, JSON.stringify(rows, null, 2));
     if (outcome.reason === 'quota') throw new Error('Stop after a quota refusal.');
   }
-  const fixture = demoCatalogSchema.parse({ ...catalog, origin: 'Newly authored multilingual chat. First repetition of three real inference runs; curated search discovery, live fetching and verified excerpts. Not an evaluation split.',
+  const fixture = demoCatalogSchema.parse({ ...catalog, origin: 'Multilingual chat examples. First of three live inference runs, with live fetching and verified excerpts. Not an evaluation split.',
     cases: samples.map((sample) => { const first = rows.find((row) => row.key === sample.key && row.repetition === 1); if (!first) throw new Error('Missing first showcase run.'); return { key: sample.key, kind: sample.kind, text: sample.text, outcome: first.outcome }; }) });
   const text = JSON.stringify(fixture, null, 2); assertNoSecretFragments(text, loadedSecrets());
   await writeFile('fixtures/demo/showcase.json', text);
 } finally {
   const report = { suite: 'showcase', split: 'showcase-not-evaluation', created_at: new Date().toISOString(), git_commit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(), working_tree_dirty: Boolean(execFileSync('git', ['status', '--porcelain'], { encoding: 'utf8' }).trim()),
-    discovery: 'Curated assistant search replay. Source fetching and inference are live. Paid search disabled.', planned_repetitions: 3,
+    discovery: 'Source URLs from web search. Source fetching and inference are live.', planned_repetitions: 3,
     rows: rows.map(({ outcome, ...row }) => ({ ...row, outcome: outcome.type === 'vod' ? outcome : { ...outcome, sources: outcome.sources.map((source) => sourceSummarySchema.parse(source)) } })) };
   const text = JSON.stringify(report, null, 2); assertNoSecretFragments(text, loadedSecrets());
   await mkdir('eval/results', { recursive: true }); await writeFile(`eval/results/showcase-${run}.json`, text); db.close();

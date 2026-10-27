@@ -1,0 +1,1499 @@
+{
+  "suite": "showcase",
+  "split": "showcase-not-evaluation",
+  "created_at": "2026-10-26T23:41:09.373Z",
+  "git_commit": "7c8a591cbf756c8ea4d84e031808064f2cdb6239",
+  "working_tree_dirty": true,
+  "discovery": "Source URLs from web search. Source fetching and inference are live.",
+  "planned_repetitions": 3,
+  "rows": [
+    {
+      "key": "showcase-wall",
+      "text": "you can see the great wall of china from space with your bare eyes, my teacher said so 🧱",
+      "language": "en",
+      "repetition": 1,
+      "outcome": {
+        "id": "343512d6-5b0d-4f44-b6f7-ee2a5398565e",
+        "type": "fact",
+        "normalized_claim": "The Great Wall of China is visible from space with the naked eye.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "The Great Wall of China is visible from space with the naked eye.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Great Wall of China visibility from space naked eye",
+            "can you see Great Wall of China from orbit without telescope"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "not_real",
+        "explanation": "NASA explicitly states the Great Wall is not visible to the naked eye from orbit.",
+        "evidence": [
+          {
+            "source_id": "343512d6-5b0d-4f44-b6f7-ee2a5398565e-source-0",
+            "excerpt": "The Great Wall is not visible to the naked eye from orbit, as recently demonstrated by China's first astronaut (Yang Liwei) who admitted that he was unable to see it.",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "343512d6-5b0d-4f44-b6f7-ee2a5398565e-source-0",
+            "url": "https://esrs.jsc.nasa.gov/FAQ/",
+            "title": "FAQ",
+            "domain": "esrs.jsc.nasa.gov",
+            "tier": 1,
+            "fetched_at": "2026-10-26T23:39:31.786Z",
+            "status": 200,
+            "sha256": "522bff5f96f319bab3bba35d4af7fefe701b9a6d6b652fd316b29f297f59293c",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-26T23:39:37.345Z",
+        "elapsed_ms": 8538.8004,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "54874aab-785f-4389-928e-020874bde90e",
+            "created_at": "2026-10-26T23:39:31.783Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2968.2272000000003,
+            "input_tokens": 306,
+            "output_tokens": 94,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "7da76126-b776-4b36-85dc-abe19fc2f351",
+            "created_at": "2026-10-26T23:39:37.279Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 3402.3644000000004,
+            "input_tokens": 1697,
+            "output_tokens": 115,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-en",
+      "text": "java + bedrock can play together on the same servers now, no mods needed Pog",
+      "language": "en",
+      "repetition": 1,
+      "outcome": {
+        "id": "9bcf19d7-772b-47e8-ae18-7d06860bcaa2",
+        "type": "fact",
+        "normalized_claim": "Java Edition and Bedrock Edition Minecraft players can join the same servers without mods.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Java Edition and Bedrock Edition Minecraft players can join the same servers without mods.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Minecraft Java Bedrock crossplay official support status 2026",
+            "Does Minecraft Java and Bedrock support cross-play natively without mods"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "not_real",
+        "explanation": "The source explicitly states Java and Bedrock use different servers and cannot play together.",
+        "evidence": [
+          {
+            "source_id": "9bcf19d7-772b-47e8-ae18-7d06860bcaa2-source-0",
+            "excerpt": "While both editions support online multiplayer, they use different servers. This means that Java and Bedrock players can’t play together – so make sure to ask your friends which version they have.",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "9bcf19d7-772b-47e8-ae18-7d06860bcaa2-source-0",
+            "url": "https://www.minecraft.net/en-us/article/java-or-bedrock-edition",
+            "title": "The Difference between Java and Bedrock Editions",
+            "domain": "www.minecraft.net",
+            "tier": 1,
+            "fetched_at": "2026-10-26T23:39:39.822Z",
+            "status": 200,
+            "sha256": "8bf3cb3c7f3dc4ee0af038bff3d850e3cad5fd5702ca312fafa41c2270f1cd88",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-26T23:39:43.351Z",
+        "elapsed_ms": 6005.3138,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "7438abda-4008-434b-8ece-4d807c261023",
+            "created_at": "2026-10-26T23:39:39.821Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2469.8081999999995,
+            "input_tokens": 301,
+            "output_tokens": 106,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "22639e3a-5243-4051-bbc7-ec9d47aaec43",
+            "created_at": "2026-10-26T23:39:43.343Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 3023.0861000000004,
+            "input_tokens": 1680,
+            "output_tokens": 114,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-octopus",
+      "text": "attendez les pieuvres ont TROIS cœurs?? 😳",
+      "language": "fr",
+      "repetition": 1,
+      "outcome": {
+        "id": "8f41daef-19b7-4da5-9d1a-dff8b57af12e",
+        "type": "fact",
+        "normalized_claim": "Octopuses have three hearts.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Octopuses have three hearts.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "octopus number of hearts",
+            "do octopuses have three hearts"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "Source confirms octopuses have three hearts.",
+        "evidence": [
+          {
+            "source_id": "8f41daef-19b7-4da5-9d1a-dff8b57af12e-source-0",
+            "excerpt": "They boast an unusual three hearts: two that pump blood to the gills, collecting oxygen so the octopus can breathe, and a third that circulates the oxygenated blood throughout the rest of the body.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "8f41daef-19b7-4da5-9d1a-dff8b57af12e-source-0",
+            "url": "https://oceanservice.noaa.gov/news/feb26/undersea-creatures-valentines-day.html",
+            "title": "Heartless or hopelessly romantic?",
+            "domain": "oceanservice.noaa.gov",
+            "tier": 1,
+            "fetched_at": "2026-10-26T23:39:45.256Z",
+            "status": 200,
+            "sha256": "7b584b3641a99faf472235909d42fd52abd710f88b87ba1f135dadf3e8b9853a",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-26T23:39:49.159Z",
+        "elapsed_ms": 5807.226700000001,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "a3d8c274-3f9d-4996-b015-23d4c993f200",
+            "created_at": "2026-10-26T23:39:45.255Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1897.4769000000015,
+            "input_tokens": 298,
+            "output_tokens": 79,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "6588f9ef-fb90-4f50-88b3-1328c3d892ae",
+            "created_at": "2026-10-26T23:39:49.157Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 2902.104800000001,
+            "input_tokens": 1079,
+            "output_tokens": 107,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-fr",
+      "text": "stardew sur PC c'est jusqu'à 8 joueurs maintenant 👀",
+      "language": "fr",
+      "repetition": 1,
+      "outcome": {
+        "id": "ab849365-ed70-4aac-83ad-96e0d32b6927",
+        "type": "fact",
+        "normalized_claim": "Stardew Valley PC version supports up to 8 players in multiplayer.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Stardew Valley PC version supports up to 8 players in multiplayer.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Stardew Valley PC multiplayer max players update",
+            "Stardew Valley how many players can join online"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "The 1.6 update changelog explicitly states PC multiplayer now supports up to 8 players.",
+        "evidence": [
+          {
+            "source_id": "ab849365-ed70-4aac-83ad-96e0d32b6927-source-0",
+            "excerpt": "Multiplayer changes You can now have up to 8 players on PC. Many improvements for multiplayer performance and stability.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "ab849365-ed70-4aac-83ad-96e0d32b6927-source-0",
+            "url": "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/",
+            "title": "Stardew Valley 1.6 Update Full Changelog",
+            "domain": "www.stardewvalley.net",
+            "tier": 1,
+            "fetched_at": "2026-10-26T23:39:51.957Z",
+            "status": 200,
+            "sha256": "9429db7408f82885a3c81f1397109d4a214177fa5b4673055b7a7834018b9c27",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-26T23:39:55.601Z",
+        "elapsed_ms": 6440.7858000000015,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "702bd58a-e810-4c33-963b-5d12e2166db2",
+            "created_at": "2026-10-26T23:39:51.955Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2790.3591000000015,
+            "input_tokens": 299,
+            "output_tokens": 100,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "3ea3b780-ad20-4dbe-b698-c7e0877cff03",
+            "created_at": "2026-10-26T23:39:55.573Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 3015.7041000000027,
+            "input_tokens": 1704,
+            "output_tokens": 100,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-es",
+      "text": "los arrays de JavaScript empiezan en 1, segurisimo 💀",
+      "language": "es",
+      "repetition": 1,
+      "outcome": {
+        "id": "b8284a37-0ca0-4a79-a867-d3e3f1149469",
+        "type": "fact",
+        "normalized_claim": "JavaScript arrays are indexed starting from 1.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "JavaScript arrays are indexed starting from 1.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "JavaScript array indexing start value",
+            "Do JavaScript arrays start at 0 or 1"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "not_real",
+        "explanation": "MDN explicitly states JavaScript arrays are zero-indexed, starting at 0, not 1.",
+        "evidence": [
+          {
+            "source_id": "b8284a37-0ca0-4a79-a867-d3e3f1149469-source-0",
+            "excerpt": "JavaScript arrays are zero-indexed: the first element of an array is at index 0, the second is at index 1, and so on — and the last element is at the value of the array's length property minus 1.",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "b8284a37-0ca0-4a79-a867-d3e3f1149469-source-0",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+            "title": "Array - JavaScript | MDN",
+            "domain": "developer.mozilla.org",
+            "tier": 1,
+            "fetched_at": "2026-10-26T23:39:58.890Z",
+            "status": 200,
+            "sha256": "23f9ed1e7f29dedc5812cf216500aabb0f5f32e8b26f4d9542595b9411c42f9f",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-26T23:40:03.994Z",
+        "elapsed_ms": 8392.232199999999,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "68612f05-198d-4853-ad9e-4ed9d1ec00fd",
+            "created_at": "2026-10-26T23:39:58.889Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 3282.2548000000024,
+            "input_tokens": 300,
+            "output_tokens": 89,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "584ecfe6-d613-45d4-aca1-04fe6fbc4b4b",
+            "created_at": "2026-10-26T23:40:03.883Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 3700.895800000002,
+            "input_tokens": 1856,
+            "output_tokens": 131,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-vod",
+      "text": "you said 50 pushups for 100 subs earlier... receipts?? KEKW",
+      "language": "en",
+      "repetition": 1,
+      "outcome": {
+        "id": "c1745719-e746-4ad0-892f-a1fc0b6da8fa",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "9f2cf383-1373-41ad-8f52-59b85fce1ebc",
+          "545a3b5a-a895-472f-be10-44d99623885d"
+        ],
+        "quote": "In this scripted example, I said I would do 50 pushups if we reached 100 subscribers. The promise is 50 pushups for 100 subscribers. This sentence is here so the stream memory tool can find a number expressed as.  words. ",
+        "offset_s": 56.098,
+        "end_s": 72.03399999999999,
+        "broadcast_id": "318112017508",
+        "vod_id": "2909537829",
+        "broadcast_title": "Chat Is This Real | prerecorded development test",
+        "broadcast_started_at": "2026-10-24T15:29:17Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318112017508",
+            "start_s": 0,
+            "end_s": 95.90599999999999,
+            "segment_count": 3,
+            "gaps": []
+          },
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": null,
+        "reason": null,
+        "created_at": "2026-10-26T23:40:06.225Z",
+        "elapsed_ms": 2228.8404999999984,
+        "calls": [
+          {
+            "id": "5665b639-6747-4eae-9d20-37877529f99b",
+            "created_at": "2026-10-26T23:40:06.224Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2221.3016999999963,
+            "input_tokens": 529,
+            "output_tokens": 106,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-wall",
+      "text": "you can see the great wall of china from space with your bare eyes, my teacher said so 🧱",
+      "language": "en",
+      "repetition": 2,
+      "outcome": {
+        "id": "186a8a5f-228e-4b1a-b73f-c89b03a5e832",
+        "type": "fact",
+        "normalized_claim": "The Great Wall of China is visible from space with the naked eye.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "The Great Wall of China is visible from space with the naked eye.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Great Wall of China visibility from space naked eye myth",
+            "Is the Great Wall of China visible from orbit without aid"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "not_real",
+        "explanation": "NASA states the Great Wall is not visible to the naked eye from orbit, confirmed by China's first astronaut.",
+        "evidence": [
+          {
+            "source_id": "186a8a5f-228e-4b1a-b73f-c89b03a5e832-source-0",
+            "excerpt": "The Great Wall is not visible to the naked eye from orbit, as recently demonstrated by China's first astronaut (Yang Liwei) who admitted that he was unable to see it.",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "186a8a5f-228e-4b1a-b73f-c89b03a5e832-source-0",
+            "url": "https://esrs.jsc.nasa.gov/FAQ/",
+            "title": "FAQ",
+            "domain": "esrs.jsc.nasa.gov",
+            "tier": 1,
+            "fetched_at": "2026-10-26T23:40:08.366Z",
+            "status": 200,
+            "sha256": "522bff5f96f319bab3bba35d4af7fefe701b9a6d6b652fd316b29f297f59293c",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-26T23:40:14.349Z",
+        "elapsed_ms": 8122.1996,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "8ab67b46-3c63-482e-953f-f2c791264ba6",
+            "created_at": "2026-10-26T23:40:08.365Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2134.282500000001,
+            "input_tokens": 306,
+            "output_tokens": 96,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "1b834704-8732-44ac-afbf-8545a0d49754",
+            "created_at": "2026-10-26T23:40:14.289Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 3664.1584000000003,
+            "input_tokens": 1697,
+            "output_tokens": 121,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-en",
+      "text": "java + bedrock can play together on the same servers now, no mods needed Pog",
+      "language": "en",
+      "repetition": 2,
+      "outcome": {
+        "id": "34cf2d66-ca0e-49d6-b26b-695bade0a40f",
+        "type": "fact",
+        "normalized_claim": "Java Edition and Bedrock Edition players can join the same Minecraft servers without mods.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Java Edition and Bedrock Edition players can join the same Minecraft servers without mods.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Minecraft Java Bedrock crossplay official support",
+            "Minecraft cross-play between Java and Bedrock editions",
+            "Does Minecraft Java and Bedrock play together on same server"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "real",
+        "explanation": "The verdict follows the verified excerpts below.",
+        "evidence": [
+          {
+            "source_id": "34cf2d66-ca0e-49d6-b26b-695bade0a40f-source-0",
+            "excerpt": "While both editions support online multiplayer, they use different servers. This means that Java and Bedrock players can’t play together – so make sure to ask your friends which version they have.",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "34cf2d66-ca0e-49d6-b26b-695bade0a40f-source-0",
+            "url": "https://www.minecraft.net/en-us/article/java-or-bedrock-edition",
+            "title": "The Difference between Java and Bedrock Editions",
+            "domain": "www.minecraft.net",
+            "tier": 1,
+            "fetched_at": "2026-10-26T23:40:16.964Z",
+            "status": 200,
+            "sha256": "8bf3cb3c7f3dc4ee0af038bff3d850e3cad5fd5702ca312fafa41c2270f1cd88",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-26T23:40:21.276Z",
+        "elapsed_ms": 6924.857199999999,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "71eb55aa-f6be-4ad1-8e16-a0b0461d4c3d",
+            "created_at": "2026-10-26T23:40:16.963Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2608.9236999999994,
+            "input_tokens": 301,
+            "output_tokens": 114,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "cd4fa3d4-e752-4e57-9708-19e9892c5aa6",
+            "created_at": "2026-10-26T23:40:21.266Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 4148.004400000005,
+            "input_tokens": 1710,
+            "output_tokens": 110,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-octopus",
+      "text": "attendez les pieuvres ont TROIS cœurs?? 😳",
+      "language": "fr",
+      "repetition": 2,
+      "outcome": {
+        "id": "adcae0d8-8645-432c-b23a-a4a0ec28b8a9",
+        "type": "fact",
+        "normalized_claim": "Octopuses have three hearts.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Octopuses have three hearts.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "octopus number of hearts",
+            "do octopuses have three hearts"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "The source explicitly states octopuses have three hearts and describes their functions.",
+        "evidence": [
+          {
+            "source_id": "adcae0d8-8645-432c-b23a-a4a0ec28b8a9-source-0",
+            "excerpt": "They boast an unusual three hearts: two that pump blood to the gills, collecting oxygen so the octopus can breathe, and a third that circulates the oxygenated blood throughout the rest of the body.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "adcae0d8-8645-432c-b23a-a4a0ec28b8a9-source-0",
+            "url": "https://oceanservice.noaa.gov/news/feb26/undersea-creatures-valentines-day.html",
+            "title": "Heartless or hopelessly romantic?",
+            "domain": "oceanservice.noaa.gov",
+            "tier": 1,
+            "fetched_at": "2026-10-26T23:40:22.882Z",
+            "status": 200,
+            "sha256": "7b584b3641a99faf472235909d42fd52abd710f88b87ba1f135dadf3e8b9853a",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-26T23:40:27.551Z",
+        "elapsed_ms": 6270.8731999999945,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "6fe35a7d-a3c4-48fb-9ece-3707ea1fdfc7",
+            "created_at": "2026-10-26T23:40:22.881Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1594.9179000000004,
+            "input_tokens": 298,
+            "output_tokens": 81,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "99a96b3c-34d9-4fb0-8b8d-82e78cc78ceb",
+            "created_at": "2026-10-26T23:40:27.549Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 4338.711199999998,
+            "input_tokens": 1079,
+            "output_tokens": 113,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-fr",
+      "text": "stardew sur PC c'est jusqu'à 8 joueurs maintenant 👀",
+      "language": "fr",
+      "repetition": 2,
+      "outcome": {
+        "id": "7259b926-91d9-46da-b977-e382c09a91fb",
+        "type": "fact",
+        "normalized_claim": "Stardew Valley on PC supports up to 8 players.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Stardew Valley on PC supports up to 8 players.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Stardew Valley PC max multiplayer players",
+            "Stardew Valley update 1.6 player count limit"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "The official 1.6 changelog confirms up to 8 players on PC.",
+        "evidence": [
+          {
+            "source_id": "7259b926-91d9-46da-b977-e382c09a91fb-source-0",
+            "excerpt": "Multiplayer changes You can now have up to 8 players on PC.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "7259b926-91d9-46da-b977-e382c09a91fb-source-0",
+            "url": "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/",
+            "title": "Stardew Valley 1.6 Update Full Changelog",
+            "domain": "www.stardewvalley.net",
+            "tier": 1,
+            "fetched_at": "2026-10-26T23:40:30.486Z",
+            "status": 200,
+            "sha256": "9429db7408f82885a3c81f1397109d4a214177fa5b4673055b7a7834018b9c27",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-26T23:40:34.086Z",
+        "elapsed_ms": 6533.045400000003,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "df32bbb5-e420-473c-b0e6-f92c3bf7e4c1",
+            "created_at": "2026-10-26T23:40:30.485Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2928.7642999999953,
+            "input_tokens": 299,
+            "output_tokens": 99,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "10a6aa87-54b7-483a-8c98-5ec3a819c911",
+            "created_at": "2026-10-26T23:40:34.035Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 3178.986100000002,
+            "input_tokens": 1781,
+            "output_tokens": 90,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-es",
+      "text": "los arrays de JavaScript empiezan en 1, segurisimo 💀",
+      "language": "es",
+      "repetition": 2,
+      "outcome": {
+        "id": "482006c1-3e2c-47a1-a746-811dd246cc19",
+        "type": "fact",
+        "normalized_claim": "JavaScript arrays start at index 1.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "JavaScript arrays start at index 1.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "JavaScript array starting index",
+            "Does JavaScript indexing start at 0 or 1"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "not_real",
+        "explanation": "The source explicitly states JavaScript arrays are zero-indexed, with the first element at index 0.",
+        "evidence": [
+          {
+            "source_id": "482006c1-3e2c-47a1-a746-811dd246cc19-source-0",
+            "excerpt": "JavaScript arrays are zero-indexed: the first element of an array is at index 0, the second is at index 1, and so on",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "482006c1-3e2c-47a1-a746-811dd246cc19-source-0",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+            "title": "Array - JavaScript | MDN",
+            "domain": "developer.mozilla.org",
+            "tier": 1,
+            "fetched_at": "2026-10-26T23:40:35.836Z",
+            "status": 200,
+            "sha256": "23f9ed1e7f29dedc5812cf216500aabb0f5f32e8b26f4d9542595b9411c42f9f",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-26T23:40:39.169Z",
+        "elapsed_ms": 5080.660699999993,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "2448d565-c820-4a77-a30a-1ffd326b08a1",
+            "created_at": "2026-10-26T23:40:35.835Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1740.8369999999995,
+            "input_tokens": 300,
+            "output_tokens": 82,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "c18119ff-0539-4d51-9a1f-d27474729fa5",
+            "created_at": "2026-10-26T23:40:39.143Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 3174.5734999999986,
+            "input_tokens": 1891,
+            "output_tokens": 113,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-vod",
+      "text": "you said 50 pushups for 100 subs earlier... receipts?? KEKW",
+      "language": "en",
+      "repetition": 2,
+      "outcome": {
+        "id": "f70fb44b-19f6-4e87-b4a5-3316695b20f0",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "9f2cf383-1373-41ad-8f52-59b85fce1ebc"
+        ],
+        "quote": "In this scripted example, I said I would do 50 pushups if we reached 100 subscribers. The promise is 50 pushups for 100 subscribers. This sentence is here so the stream memory tool can find a number expressed as. ",
+        "offset_s": 56.098,
+        "end_s": 70.914,
+        "broadcast_id": "318112017508",
+        "vod_id": "2909537829",
+        "broadcast_title": "Chat Is This Real | prerecorded development test",
+        "broadcast_started_at": "2026-10-24T15:29:17Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318112017508",
+            "start_s": 0,
+            "end_s": 95.90599999999999,
+            "segment_count": 3,
+            "gaps": []
+          },
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": {
+          "state": "ready",
+          "clip_id": "CoweringImportantDoveBlargNaut-9Hy84ssXIb0yeh7v",
+          "clip_url": "https://clips.twitch.tv/CoweringImportantDoveBlargNaut-9Hy84ssXIb0yeh7v",
+          "vod_url": "https://www.twitch.tv/videos/2909537829?t=0h0m56s",
+          "reason": null
+        },
+        "reason": null,
+        "created_at": "2026-10-26T23:40:40.907Z",
+        "elapsed_ms": 1735.5229999999865,
+        "calls": [
+          {
+            "id": "2a721b6d-1c87-43bf-bcea-07d34f20a01b",
+            "created_at": "2026-10-26T23:40:40.906Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1728.666499999992,
+            "input_tokens": 529,
+            "output_tokens": 69,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-wall",
+      "text": "you can see the great wall of china from space with your bare eyes, my teacher said so 🧱",
+      "language": "en",
+      "repetition": 3,
+      "outcome": {
+        "id": "30f76bfa-d97e-4a7e-84cb-f9785690e0b0",
+        "type": "fact",
+        "normalized_claim": "The Great Wall of China is visible from space with the naked eye.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "The Great Wall of China is visible from space with the naked eye.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Great Wall of China visibility from space naked eye",
+            "Can you see the Great Wall of China from orbit without aid"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "not_real",
+        "explanation": "NASA states the Great Wall is not visible to the naked eye from orbit, confirmed by China's first astronaut.",
+        "evidence": [
+          {
+            "source_id": "30f76bfa-d97e-4a7e-84cb-f9785690e0b0-source-0",
+            "excerpt": "The Great Wall is not visible to the naked eye from orbit, as recently demonstrated by China's first astronaut (Yang Liwei) who admitted that he was unable to see it.",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "30f76bfa-d97e-4a7e-84cb-f9785690e0b0-source-0",
+            "url": "https://esrs.jsc.nasa.gov/FAQ/",
+            "title": "FAQ",
+            "domain": "esrs.jsc.nasa.gov",
+            "tier": 1,
+            "fetched_at": "2026-10-26T23:40:42.325Z",
+            "status": 200,
+            "sha256": "522bff5f96f319bab3bba35d4af7fefe701b9a6d6b652fd316b29f297f59293c",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-26T23:40:47.079Z",
+        "elapsed_ms": 6170.518200000006,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "f8705ee0-c955-4a75-919f-321535923dbb",
+            "created_at": "2026-10-26T23:40:42.324Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1411.4003999999986,
+            "input_tokens": 306,
+            "output_tokens": 95,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "449d0e72-0514-4b4e-b2d7-69e26248b3a2",
+            "created_at": "2026-10-26T23:40:47.019Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 3368.3659999999945,
+            "input_tokens": 1695,
+            "output_tokens": 119,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-en",
+      "text": "java + bedrock can play together on the same servers now, no mods needed Pog",
+      "language": "en",
+      "repetition": 3,
+      "outcome": {
+        "id": "d3c0aab6-a5b7-4466-8d7d-250a4c27fd30",
+        "type": "fact",
+        "normalized_claim": "Java Edition and Bedrock Edition players can play together on the same Minecraft servers without mods.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Java Edition and Bedrock Edition players can play together on the same Minecraft servers without mods.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Minecraft Java and Bedrock crossplay server support no mods",
+            "Does Minecraft Java edition connect to Bedrock servers natively",
+            "Minecraft cross-play Java Bedrock server compatibility"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "not_real",
+        "explanation": "The source explicitly states Java and Bedrock use different servers and cannot play together.",
+        "evidence": [
+          {
+            "source_id": "d3c0aab6-a5b7-4466-8d7d-250a4c27fd30-source-0",
+            "excerpt": "While both editions support online multiplayer, they use different servers. This means that Java and Bedrock players can’t play together – so make sure to ask your friends which version they have.",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "d3c0aab6-a5b7-4466-8d7d-250a4c27fd30-source-0",
+            "url": "https://www.minecraft.net/en-us/article/java-or-bedrock-edition",
+            "title": "The Difference between Java and Bedrock Editions",
+            "domain": "www.minecraft.net",
+            "tier": 1,
+            "fetched_at": "2026-10-26T23:40:49.182Z",
+            "status": 200,
+            "sha256": "8bf3cb3c7f3dc4ee0af038bff3d850e3cad5fd5702ca312fafa41c2270f1cd88",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-26T23:40:52.240Z",
+        "elapsed_ms": 5158.39420000001,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "08aa260f-67f7-46c4-8ebc-105e6d3c5977",
+            "created_at": "2026-10-26T23:40:49.181Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2094.21669999999,
+            "input_tokens": 301,
+            "output_tokens": 114,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "d1b133c5-d14f-4a49-8c87-4cac685fa0ed",
+            "created_at": "2026-10-26T23:40:52.235Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 2948.6370000000024,
+            "input_tokens": 1689,
+            "output_tokens": 114,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-octopus",
+      "text": "attendez les pieuvres ont TROIS cœurs?? 😳",
+      "language": "fr",
+      "repetition": 3,
+      "outcome": {
+        "id": "57a36b91-0a4f-4b70-a96a-067ac09d3fc8",
+        "type": "fact",
+        "normalized_claim": "Octopuses have three hearts.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Octopuses have three hearts.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "octopus anatomy number of hearts"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "The source explicitly states octopuses have three hearts and describes their functions.",
+        "evidence": [
+          {
+            "source_id": "57a36b91-0a4f-4b70-a96a-067ac09d3fc8-source-0",
+            "excerpt": "They boast an unusual three hearts: two that pump blood to the gills, collecting oxygen so the octopus can breathe, and a third that circulates the oxygenated blood throughout the rest of the body.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "57a36b91-0a4f-4b70-a96a-067ac09d3fc8-source-0",
+            "url": "https://oceanservice.noaa.gov/news/feb26/undersea-creatures-valentines-day.html",
+            "title": "Heartless or hopelessly romantic?",
+            "domain": "oceanservice.noaa.gov",
+            "tier": 1,
+            "fetched_at": "2026-10-26T23:40:53.992Z",
+            "status": 200,
+            "sha256": "7b584b3641a99faf472235909d42fd52abd710f88b87ba1f135dadf3e8b9853a",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-26T23:40:57.049Z",
+        "elapsed_ms": 4806.888200000001,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "b1b21349-ccc2-4804-86a5-6e9b83a7da48",
+            "created_at": "2026-10-26T23:40:53.991Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1745.4487999999983,
+            "input_tokens": 298,
+            "output_tokens": 69,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "8930cc08-dab4-4c09-8b22-2ae64cedb980",
+            "created_at": "2026-10-26T23:40:57.047Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 2733.7758999999933,
+            "input_tokens": 1082,
+            "output_tokens": 116,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-fr",
+      "text": "stardew sur PC c'est jusqu'à 8 joueurs maintenant 👀",
+      "language": "fr",
+      "repetition": 3,
+      "outcome": {
+        "id": "e0fe10fe-3d7d-4dea-8669-1112e24dfe71",
+        "type": "fact",
+        "normalized_claim": "Stardew Valley on PC supports up to 8 players.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "Stardew Valley on PC supports up to 8 players.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "Stardew Valley PC max multiplayer players update",
+            "Does Stardew Valley support 8 players on PC?",
+            "Stardew Valley multiplayer player limit PC"
+          ]
+        },
+        "final_verdict": "real",
+        "model_verdict": "real",
+        "explanation": "The official 1.6 changelog confirms PC multiplayer now supports up to 8 players.",
+        "evidence": [
+          {
+            "source_id": "e0fe10fe-3d7d-4dea-8669-1112e24dfe71-source-0",
+            "excerpt": "Multiplayer changes You can now have up to 8 players on PC.",
+            "stance": "supports"
+          }
+        ],
+        "sources": [
+          {
+            "id": "e0fe10fe-3d7d-4dea-8669-1112e24dfe71-source-0",
+            "url": "https://www.stardewvalley.net/stardew-valley-1-6-update-full-changelog/",
+            "title": "Stardew Valley 1.6 Update Full Changelog",
+            "domain": "www.stardewvalley.net",
+            "tier": 1,
+            "fetched_at": "2026-10-26T23:40:59.211Z",
+            "status": 200,
+            "sha256": "9429db7408f82885a3c81f1397109d4a214177fa5b4673055b7a7834018b9c27",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-26T23:41:02.464Z",
+        "elapsed_ms": 5412.289000000004,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "a9b102d9-d79b-4d01-9f8b-e3df4e993082",
+            "created_at": "2026-10-26T23:40:59.210Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 2153.272199999992,
+            "input_tokens": 299,
+            "output_tokens": 104,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "723a1d07-05bb-4ff2-a316-6adeaca55ff3",
+            "created_at": "2026-10-26T23:41:02.435Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 2841.2473000000027,
+            "input_tokens": 1680,
+            "output_tokens": 92,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-es",
+      "text": "los arrays de JavaScript empiezan en 1, segurisimo 💀",
+      "language": "es",
+      "repetition": 3,
+      "outcome": {
+        "id": "18f4c688-9fb0-4122-98a1-05db42c49083",
+        "type": "fact",
+        "normalized_claim": "JavaScript arrays are 1-indexed.",
+        "triage": {
+          "kind": "fact",
+          "checkable": true,
+          "normalized_claim": "JavaScript arrays are 1-indexed.",
+          "time_sensitive": false,
+          "sensitive": false,
+          "search_queries": [
+            "JavaScript array indexing base",
+            "are JavaScript arrays 0 or 1 indexed"
+          ]
+        },
+        "final_verdict": "not_real",
+        "model_verdict": "not_real",
+        "explanation": "MDN explicitly states JavaScript arrays are zero-indexed, not 1-indexed.",
+        "evidence": [
+          {
+            "source_id": "18f4c688-9fb0-4122-98a1-05db42c49083-source-0",
+            "excerpt": "JavaScript arrays are zero-indexed: the first element of an array is at index 0, the second is at index 1, and so on — and the last element is at the value of the array's length property minus 1.",
+            "stance": "contradicts"
+          }
+        ],
+        "sources": [
+          {
+            "id": "18f4c688-9fb0-4122-98a1-05db42c49083-source-0",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+            "title": "Array - JavaScript | MDN",
+            "domain": "developer.mozilla.org",
+            "tier": 1,
+            "fetched_at": "2026-10-26T23:41:04.214Z",
+            "status": 200,
+            "sha256": "23f9ed1e7f29dedc5812cf216500aabb0f5f32e8b26f4d9542595b9411c42f9f",
+            "origin": "live_fetch"
+          }
+        ],
+        "returned_excerpts": 1,
+        "dropped_excerpts": 0,
+        "sensitive": false,
+        "reason": null,
+        "created_at": "2026-10-26T23:41:07.786Z",
+        "elapsed_ms": 5318.862399999998,
+        "cache_hit": false,
+        "retrieval_mode": "replay",
+        "calls": [
+          {
+            "id": "78dcd5e7-f6e8-4f2c-811d-644fb514372e",
+            "created_at": "2026-10-26T23:41:04.213Z",
+            "role": "triage",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1740.882500000007,
+            "input_tokens": 300,
+            "output_tokens": 85,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          },
+          {
+            "id": "1810b3cd-f2bf-4fd2-90fa-db43d7548a20",
+            "created_at": "2026-10-26T23:41:07.760Z",
+            "role": "judge",
+            "model": "qwen3.8-max",
+            "latency_ms": 3376.700100000002,
+            "input_tokens": 1804,
+            "output_tokens": 129,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    },
+    {
+      "key": "showcase-vod",
+      "text": "you said 50 pushups for 100 subs earlier... receipts?? KEKW",
+      "language": "en",
+      "repetition": 3,
+      "outcome": {
+        "id": "3b470b37-e5d7-4338-a3c2-209d3641566e",
+        "type": "vod",
+        "found": true,
+        "relation": "said",
+        "segment_ids": [
+          "9f2cf383-1373-41ad-8f52-59b85fce1ebc"
+        ],
+        "quote": "In this scripted example, I said I would do 50 pushups if we reached 100 subscribers. The promise is 50 pushups for 100 subscribers. This sentence is here so the stream memory tool can find a number expressed as. ",
+        "offset_s": 56.098,
+        "end_s": 70.914,
+        "broadcast_id": "318112017508",
+        "vod_id": "2909537829",
+        "broadcast_title": "Chat Is This Real | prerecorded development test",
+        "broadcast_started_at": "2026-10-24T15:29:17Z",
+        "timing": "word",
+        "coverage": [
+          {
+            "broadcast_id": "318112017508",
+            "start_s": 0,
+            "end_s": 95.90599999999999,
+            "segment_count": 3,
+            "gaps": []
+          },
+          {
+            "broadcast_id": "318108456420",
+            "start_s": 0,
+            "end_s": 1196.029,
+            "segment_count": 21,
+            "gaps": []
+          }
+        ],
+        "clip": {
+          "state": "ready",
+          "clip_id": "CoweringImportantDoveBlargNaut-9Hy84ssXIb0yeh7v",
+          "clip_url": "https://clips.twitch.tv/CoweringImportantDoveBlargNaut-9Hy84ssXIb0yeh7v",
+          "vod_url": "https://www.twitch.tv/videos/2909537829?t=0h0m56s",
+          "reason": null
+        },
+        "reason": null,
+        "created_at": "2026-10-26T23:41:09.351Z",
+        "elapsed_ms": 1560.9487999999983,
+        "calls": [
+          {
+            "id": "e277ddab-84f9-42b4-9b8a-d31d316a265f",
+            "created_at": "2026-10-26T23:41:09.350Z",
+            "role": "vod",
+            "model": "qwen3.8-flash",
+            "latency_ms": 1553.9513000000006,
+            "input_tokens": 529,
+            "output_tokens": 69,
+            "search_calls": 0,
+            "status": "ok",
+            "error_code": null,
+            "format": "json_schema",
+            "audio_seconds": 0,
+            "audio_seconds_estimated": false
+          }
+        ],
+        "failed": false
+      }
+    }
+  ]
+}
