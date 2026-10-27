@@ -1,132 +1,121 @@
 # Chat Is This Real
 
-![The Chat Is This Real review desk and source receipt](docs/gallery/01-cover.png)
+![Chat Is This Real on a Twitch stream: chat votes, then the NOT REAL stamp lands with its NASA source](docs/gallery/02-stream.png)
 
-![Passing tests](docs/figures/tests.svg) ![Dev verdict agreement](docs/figures/dev.svg) ![Heldout verdict agreement](docs/figures/heldout.svg) ![Heldout excerpt verification](docs/figures/excerpts.svg)
+![Tests](docs/figures/tests.svg) ![Dev verdict agreement](docs/figures/dev.svg) ![Heldout verdict agreement](docs/figures/heldout.svg) ![Heldout excerpt verification](docs/figures/excerpts.svg)
 
-**Sourced checks and stream memory for Twitch streamers and their communities.**
+**A Twitch bot, OBS overlay and review desk that turns "chat, is this real?" into a sourced verdict on stream, and "you said that earlier" into a clip.**
 
-I turn chat's claims and “you said that earlier” moments into evidence the streamer can review, reveal and replay.
+I audit bank systems for a living. Nothing goes in my report without evidence in the file. Chat Is This Real holds chat to the same rule.
 
-| Open it | Where |
+| | |
 |---|---|
-| Recorded demo, no keys | [Play online](https://chat-is-this-real.pages.dev/demo/) · [Project site](https://chat-is-this-real.pages.dev/) · [Local quickstart](#quickstart) |
-| Launch film and submission assets | [Submission package](docs/SUBMISSION.md) |
-| Built with OpenAI Codex | [Session, milestones and PRs](docs/BUILT_WITH_CODEX.md) |
-| Final measurement | 23/24 heldout verdicts; 0 reversed verdicts; [full reports](docs/final-evaluation.md) |
+| Try it, no account | [chat-is-this-real.pages.dev/demo](https://chat-is-this-real.pages.dev/demo/) |
+| Built with | [OpenAI Codex](docs/BUILT_WITH_CODEX.md), session `01a16cc3-1a5e-7d23-81c2-c9de487cc7fd` |
+| Runs on | Twitch EventSub, Send Chat Message, Clip From VOD, OBS, Qwen on Alibaba Cloud Model Studio |
+| Headline | 23/24 heldout verdicts, 0 REAL/NOT REAL swaps ([evaluation](docs/evaluation.md)) |
 
 ## For judges
 
-| Criterion | Evidence | Film |
+| Criterion | Where to look | Film |
 |---|---|---|
-| Innovation / Idea | A sourced verdict, a chat vote and a retrievable stream promise share one review flow. [Design](docs/dashboard.md). | 0:00–0:53 |
-| Potential Impact | Viewer context, an approval hold and a real earlier-moment clip. [Twitch evidence](docs/vod-engine.md). | 0:53–1:49 |
-| Technological implementation | [Verification](src/check/verify.ts), [verdict rules](src/check/verdict-rules.ts), [locked evaluation](eval/LOCK.md), [Codex build](docs/BUILT_WITH_CODEX.md). | 2:17–2:41 |
-| Design | [Responsive desk and dock](docs/dashboard.md), [overlay and votes](docs/overlay.md), [multilingual examples](docs/showcase.md). | 1:49–2:17 |
+| Innovation | Chat's two catchphrases become commands: `!real` for a sourced verdict while chat votes, `!vod` for the clip of what the streamer said. [Overlay and votes](docs/overlay.md), [stream memory](docs/stream-memory.md) | 0:00–0:19, 1:08–1:31 |
+| Potential impact | One reply from a mod, one click from the streamer, no tab switching. Works on any claim with free Wikipedia discovery. [Check engine](docs/check-engine.md) | 0:19–0:51 |
+| Technological implementation | Verified excerpts and a four-row verdict table, a locked and frozen evaluation, recorded Twitch traffic in every test, 13 Codex PRs. [Evaluation](docs/evaluation.md), [Built with Codex](docs/BUILT_WITH_CODEX.md) | 0:36–0:51, 1:45–2:23 |
+| Design | Replay-booth overlay, review desk in a 380 px OBS dock, receipts chat can open. [Review desk](docs/dashboard.md), [receipts](docs/public-pages.md) | 0:51–1:08 |
 
 ## See it work
 
-![Reviewed overlay reveal with scripted demo votes](docs/gallery/03-overlay.png)
-![VOD quote and timestamp on the actual review desk](docs/gallery/05-vod.png)
-![Viewer History with selected conversation context](docs/gallery/06-history.png)
+![The review desk docked in OBS, with the verified NASA excerpt](docs/gallery/03-desk.png)
+![The public receipt page the bot links in chat](docs/gallery/05-receipt.png)
+![IT'S IN THE VOD: the stored quote and its time in the stream](docs/gallery/06-vod.png)
 
 ## The problem
 
-A streamer is playing, talking and reading chat at once. A confident claim needs a source.
-A promise from earlier needs a timestamp. Searching breaks the pace, and a bare model answer
-gives chat little to inspect. I keep the conversation on stream: check the claim, let chat
-vote, review the receipt, then reveal it. For stream memory, I return the stored words and
-the moment they came from. The [recorded Twitch test](docs/vod-engine.md) found a promise
-from earlier in the same broadcast and produced a playable clip.
+Twitch chat sent 45 billion messages in 2025 ([Twitch 2025 Recap](https://www.tubefilter.com/2025/12/03/twitch-year-end-recap-2025-900-million-hours-watch-time/)).
+Some of them are confident claims, and the whole room wants to know if they are true. Checking
+one live means leaving the stream for a search bar while chat waits. The other classic moment,
+"you said that earlier", means scrubbing the VOD by hand.
 
 ## How it works
 
-![Architecture and trust boundaries](docs/architecture.svg)
+![Architecture: Twitch chat, local queue, claim check, code decides, streamer review, chat and OBS, public receipts](docs/architecture.svg)
 
-**The model proposes. The code decides. The streamer approves.**
-
-EventSub messages enter a bounded local queue. Triage routes claims, questions and stream-memory
-requests. A claim check fetches sources, asks Qwen for structured evidence, verifies each
-excerpt against the fetched text and applies the table below. The private desk controls
-publication. Stream memory resolves model-selected IDs against stored transcript segments;
-code renders their quote, time and Twitch links.
+**The model proposes. The code decides. The streamer approves.** The model classifies a message,
+writes search queries and proposes a verdict with excerpts. Code fetches every source, keeps only
+excerpts found word for word on the page, derives the final verdict from the verified evidence,
+and renders every quote, timestamp, link and clip from stored data.
 
 | Verified evidence | Final verdict |
 |---|---|
-| Support, with no contradiction | REAL |
-| Contradiction, with no support | NOT REAL |
-| Both directions, or a proposed qualification supported by context | MISSING CONTEXT |
-| No usable evidence | UNCONFIRMED |
+| Supports, with no contradiction | REAL |
+| Contradicts, with no support | NOT REAL |
+| Both directions, or a qualification the model proposed with supporting context | MISSING CONTEXT |
+| Nothing verified | UNCONFIRMED |
 
-The proposal cannot authorize a directional verdict without eligible verified evidence.
-Verbatim verification establishes literal presence; interpreting the passage remains a model task.
+1. A mod replies `!real` to a chat message. EventSub delivers it; the queue checks roles,
+   cooldowns and context from the same viewer.
+2. Triage, discovery, fetching, the evidence proposal, verification and the verdict table run in
+   about 5 seconds (p50).
+3. The overlay opens a vote, **CHAT, IS THIS REAL? 1 = REAL · 2 = NOT REAL**, for 20 to 60 seconds.
+4. The streamer reviews the source on the desk and clicks **Show on stream**. The stamp lands with
+   chat's split, the bot replies in the thread with a receipt link, and correct callers score.
+5. `!vod` searches the stream's stored transcript, returns the quote and its time, and cuts a
+   clip with Create Clip From VOD.
 
 ## Built with OpenAI Codex
 
-Main build session: **`01a16cc3-1a5e-7d23-81c2-c9de487cc7fd`**.
-
-I gave Codex the milestone plan, [AGENTS.md](AGENTS.md), project skills and explicit review
-rules. It implemented the Twitch adapters, checking pipeline, stream memory, UI, browser
-demo, tests and submission tools in successive PRs. [The milestone table](docs/BUILT_WITH_CODEX.md)
-links the code, manual audit findings and observed checks. Each milestone requested a GitHub
-Codex review; the table distinguishes those requests from observed review evidence.
-
-The film includes actual footage of the supplementary CLI session reading the project
-instructions, followed by the real retrieval diff and recorded build output. A source
-regression caught a short-token bug: dropping “PC” and “8” lost the relevant Stardew passage.
-The [mutation probe](eval/results/hardening-mutation-2026-10-25T08-49-26-634Z.json) restored
-the earlier implementation, observed that regression fail and restored the passing bytes.
+I built the project in one Codex thread in VS Code, session **`01a16cc3-1a5e-7d23-81c2-c9de487cc7fd`**:
+13 milestone pull requests, 46 commits, 769 commands and 124 tests at the final milestone.
+Codex worked from my 12-milestone plan, [AGENTS.md](AGENTS.md) and six project skills in
+[`.agents/skills/`](.agents/skills). [The milestone log](docs/BUILT_WITH_CODEX.md) links every PR
+and the proof each one merged with.
 
 ## Runtime services
 
-| Purpose | Model or service | Measurement |
+| Purpose | Service | Measurement |
 |---|---|---|
-| Claim triage | Qwen `qwen3.8-flash`, Alibaba Cloud Model Studio | [Repeated probe timings](docs/models.md) |
-| Source discovery | Curated URL replay by default; optional Model Studio search | [Discovery scope](docs/check-engine.md) |
-| Evidence proposal | Qwen `qwen3.8-max` | [Final end-to-end measurements](docs/final-evaluation.md) |
-| VOD segment selection | Qwen `qwen3.8-flash` | [Repeated VOD measurements](docs/vod-engine.md) |
-| Primary transcription | `qwen-audio-3.1-asr-flash` | [Original system-speech probe](docs/models.md) |
-| Speech fallback | `qwen3-asr-flash` | [Fallback and timing scope](docs/vod-engine.md) |
-| Private state | SQLite; Node locally, SQLite WASM in the static demo | [Browser architecture](docs/demo.md) |
-| Public pages | Cloudflare Workers and KV, signed publication and expiring receipts | [Setup and removal](docs/public-pages.md) |
+| Triage | `qwen3.8-flash`, Alibaba Cloud Model Studio (Singapore) | 30/30 kinds, p50 2.04 s ([models](docs/models.md)) |
+| Evidence proposal | `qwen3.8-max` | 22/22 returned excerpts verified in the probe |
+| Source discovery | Wikipedia search (free) or Model Studio web search (`SEARCH_MODE`) | [Check engine](docs/check-engine.md) |
+| Stream memory | `qwen3.8-flash` picks segment IDs; code renders the quote | 20/20 moments within ±15 s |
+| Transcription | `qwen-audio-3.1-asr-flash`, word timestamps | 12 word errors in 606 words |
+| Public receipts | Cloudflare Workers and KV, [receipts.chatisthisreal.workers.dev](https://receipts.chatisthisreal.workers.dev/) | 3/3 published, removal verified ([receipts](docs/public-pages.md)) |
+| Demo | Static Cloudflare Pages, SQLite WebAssembly in the browser | [Demo](docs/demo.md) |
 
-| Twitch surface | Implementation |
+| Twitch surface | Use |
 |---|---|
-| EventSub over WebSocket | Chat, replies, votes, message/user/stream clears; reconnect and watchdog. |
-| Send Chat Message | Code-formatted, threaded replies with an outbox and live-stream checks. |
-| Clip From VOD | A confirmed earlier moment in the broadcaster’s archive. |
-| Live clip fallback | A bounded eligible recent moment, with explicit fallback handling. |
-| Get Videos | Match the archive to its broadcast and import owned VOD transcripts. |
-| Get Channel Information | Channel context for the private session. |
-| OBS browser source | Transparent overlay at `/overlay`. |
-| OBS custom browser dock | The same review desk in a narrow responsive layout. |
+| EventSub over WebSocket | Chat, replies, deletions, user and chat clears, stream online/offline |
+| Send Chat Message | Threaded replies with the app token and the Chat Bot badge |
+| Create Clip From VOD | The clip of the earlier moment, from the in-progress archive |
+| Get Videos, Get Streams, Get Channel Information | Archive matching, stream time, category for triage |
+| OBS Browser Source and Custom Browser Dock | The overlay at `/overlay` and the desk at 380 px |
 
 ## Safety
 
-The streamer reviews results before publishing. There are no automatic penalties.
-Moderation clears source text and cancels dependent checks; published receipts enter a
-persistent removal queue. Chat, transcripts and pages enter labelled JSON as untrusted data.
-Public projections verify stored source hashes and excerpts again, redact account handles,
-and apply the loaded-secret guard. Every outgoing chat message passes the shared formatter.
-The local dashboard uses loopback, origin checks and a session header for mutations.
+- The streamer approves every reveal. Sensitive claims need a second confirmation.
+- Instruction attacks end as "not a claim" before any model call: 0 directional verdicts on 10 injections.
+- Deleting a message cancels every check and receipt built on it.
+- Chat, pages and transcripts reach the model as labelled data. No model-written link, username
+  or command reaches chat, and every message passes a formatter that blocks secret fragments.
+- No automatic bans or penalties. Usernames stay off the overlay and the receipts.
 
 ## Evidence
 
-| Final frozen run | Verdict agreement | Reversed verdicts | Verified / proposed excerpts | p50 / p90 |
+| Run | Verdict agreement | Swapped REAL / NOT REAL | Verified / returned excerpts | p50 / p90 |
 |---|---|---|---|---|
 | Dev, 48 inputs | 45/48 | 0 | 43/43 | 5.67 s / 7.65 s |
 | Heldout, 24 inputs, run once | 23/24 | 0 | 19/20 | 5.26 s / 6.02 s |
+| Dev with free Wikipedia discovery | 32/48, every miss UNCONFIRMED | 0 | 27/32 | 6.69 s / 11.64 s |
 
-These small authored splits share related source pages. Search discovery is simulated with
-curated URLs; fetching and model inference are live. Timings include non-claims and guards,
-and exclude paid discovery. [Final reports and provenance](docs/final-evaluation.md) retain
-every output, including the rejected heldout excerpt. [The latency chart](docs/figures/latency.svg)
-and [evaluation tiles](docs/figures/evaluation.svg) regenerate from those reports.
+The claim set was locked and hashed before the checker existed; the engine was frozen before the
+heldout messages were opened. Source URLs for the locked runs came from web search; fetching,
+inference and verification ran live. [Evaluation](docs/evaluation.md) has every report.
 
-`npm run eval:verify` checks the locked corpus. `npm run eval:freeze -- --verify` checks the
-final engine in the configured environment. The heldout reservation is permanent. Use a
-new development run for later experiments; retain the original result. Live-path repetitions,
-speech, VOD retrieval and actual Twitch probes are linked in the milestone log.
+```sh
+npm run eval:verify                                  # data matches its lock
+LIVE=1 npm run eval -- --suite claims --split dev    # needs a Model Studio key
+```
 
 ### Claims a reviewer can trace
 
@@ -134,62 +123,43 @@ speech, VOD retrieval and actual Twitch probes are linked in the milestone log.
 |---|---|---|
 | Public excerpts come from verified source text. | [verify](src/check/verify.ts), [projection](src/server/public-result.ts) | [evidence](tests/evidence.test.ts), [projection routes](tests/public-projection-routes.test.ts) |
 | Final verdicts follow verified evidence. | [rules](src/check/verdict-rules.ts), [proposal](src/check/proposal.ts) | [verdict rules](tests/verdict-rules.test.ts) |
-| The model cannot invent a public VOD timestamp or quote. | [answer](src/vod/answer.ts) | [VOD](tests/vod.test.ts) |
-| Replies require the active owned stream and an eligible source. | [publisher](src/twitch/publisher.ts) | [publication guards](tests/publication-guards.test.ts) |
-| Commands, mentions and loaded secret fragments are guarded. | [formatter](src/shared/format-chat.ts) | [formatting](tests/format-chat.test.ts), [red team](tests/red-team-routes.test.ts) |
-| Deletion clears copied source text and dependent publication. | [chat core](src/twitch/chat-core.ts), [public publisher](src/server/public-publisher.ts) | [chat core](tests/chat-core.test.ts), [public pages](tests/public-pages.test.ts) |
-| The first eligible vote counts once; scores follow the revealed verdict. | [tally](src/votes/tally.ts) | [votes](tests/votes.test.ts), [recorded votes](tests/recorded-votes.test.ts) |
-| Desk, overlay and SQLite agree. | [presentation](src/server/presentation-control.ts) | [real-browser walkthrough](e2e/walkthrough.spec.ts) |
-| Public receipt replay and purge races are guarded. | [Worker](worker/index.ts), [publisher](src/server/public-publisher.ts) | [public pages](tests/public-pages.test.ts), [Worker browser](e2e/public-pages.spec.ts) |
-| The static demo shares the production domain code. | [browser worker](web/demo/host.ts) | [static demo](e2e/static-demo.spec.ts) |
+| The model cannot invent a public VOD quote or timestamp. | [answer](src/vod/answer.ts) | [VOD](tests/vod.test.ts) |
+| Replies need the live owned stream and a verified source. | [publisher](src/twitch/publisher.ts) | [publication guards](tests/publication-guards.test.ts) |
+| Commands, mentions and secret fragments are guarded. | [formatter](src/shared/format-chat.ts) | [formatting](tests/format-chat.test.ts), [red team](tests/red-team-routes.test.ts) |
+| Deletion clears copied text and dependent receipts. | [chat core](src/twitch/chat-core.ts), [publisher](src/server/public-publisher.ts) | [chat core](tests/chat-core.test.ts), [public pages](tests/public-pages.test.ts) |
+| One vote per viewer; points follow the revealed verdict. | [tally](src/votes/tally.ts) | [votes](tests/votes.test.ts), [recorded votes](tests/recorded-votes.test.ts) |
+| Desk, overlay and SQLite agree. | [presentation](src/server/presentation-control.ts) | [walkthrough](e2e/walkthrough.spec.ts), [overlay votes](e2e/overlay-votes.spec.ts) |
+| Free discovery finds Wikipedia articles from triage queries. | [discovery](src/check/search-wikipedia.ts) | [Wikipedia](tests/search-wikipedia.test.ts) |
+| The browser demo runs the shipped domain code. | [demo host](web/demo/host.ts) | [static demo](e2e/static-demo.spec.ts) |
 
-Real Twitch frames, model responses and source captures were recorded from the services;
-the keyless demo replays verified outcomes with fictional chat accounts and scripted voters.
-
-### Limits
-
-Qualification and stance interpretation can still be wrong, so approval is essential.
-Default free search replay covers its catalogue; other claims fail privately until live
-discovery is configured. Speech measurements use the original prerecorded system narration.
-The live vote probe observed one eligible real voter; the three-viewer flow uses scripted
-browser voters. The [public demo](https://chat-is-this-real.pages.dev/demo/) uses free static
-Pages hosting. Signed receipt hosting requires separately verified Free-plan configuration.
-Video upload and repository access are recorded in [the handoff](HANDOFF.md).
+Twitch frames, model responses and source pages in `fixtures/` were recorded from the live
+services; the demo plays recorded engine results with demo viewers.
 
 ## Quickstart
 
-Use Node.js 24 LTS, then:
+Node.js 24 LTS:
 
 ```sh
 npm ci
 npm run demo
 ```
 
-Open [localhost:4747](http://localhost:4747/). Choose a recorded example, inspect its evidence,
-start a check, cast the scripted votes and approve the reveal. Open `/overlay` beside it.
-The demo runs in memory and needs no keys. On Windows, use `npm.cmd` if PowerShell blocks
-`npm.ps1`. [Docker instructions](docs/container.md) provide the same recorded demo.
+Open `http://localhost:4747/` and `http://localhost:4747/overlay`. The demo needs no keys.
+[Docker](docs/container.md) serves the same demo.
 
-For the connected app, copy `.env.example` to `.env`, complete [Twitch setup](docs/setup-twitch.md),
-configure Model Studio and start `npm run dev`. Keep paid search disabled unless you choose
-to enable its billing. Use `npm run companion -- --list` to select host audio, then run the
-companion during your stream. Add `http://localhost:4747/overlay` as an OBS browser source
-and the root URL as a custom browser dock. [Public receipt setup](docs/public-pages.md)
-connects reviewed links after deployment.
+Connected to your channel: copy `.env.example` to `.env`, follow [Twitch setup](docs/setup-twitch.md),
+add a Model Studio key, then `npm run dev`. Add `http://localhost:4747/overlay` as an OBS Browser
+Source and `http://localhost:4747/` as a Custom Browser Dock. Run `npm run companion` for stream
+memory, and [connect receipts](docs/public-pages.md) to give chat a link.
 
 ```sh
-npm run typecheck
-npm run lint
-npm test
-npm run test:e2e
-npm run worker:check
+npm run typecheck && npm run lint && npm test && npm run test:e2e
 ```
 
-### Layout and licence
+## Layout
 
-`src/` holds Twitch, checking, stream memory, voting, storage and the local server.
-`web/` holds the desk, overlay, launch page and shared browser demo. `companion/` captures
-host audio. `worker/` serves public receipts. `eval/` holds locked data and measurements.
-`fixtures/` holds recorded service data. `film/` and `scripts/` contain editable production tools.
+`src/twitch` EventSub, commands, publisher · `src/check` the check engine · `src/vod` stream memory ·
+`src/votes` tally · `src/server` local app · `web/` desk, overlay, demo · `worker/` receipts ·
+`companion/` audio capture · `eval/` locked data and reports · `fixtures/` recorded traffic.
 
 [MIT licence](LICENSE) · [Privacy and removal](docs/PRIVACY.md) · [Gallery captions](CAPTIONS.md)
