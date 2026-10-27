@@ -88,7 +88,7 @@
 - App-token validation returns `scopes: null` and omits `login` and `user_id`. Treat null scopes as an empty list for app tokens; continue enforcing all required scopes for user tokens.
 - The scripted reply sent through Send Chat Message arrived with a leading parent mention in EventSub, including when the API input was just `!real`.
 - Get Streams returned `id` and `started_at`. Get Videos returned the in-progress archive and its matching `stream_id`.
-- Both Clip From VOD and live clip creation succeeded. The observed source alignment and recorded fixture provenance are in `docs/probe.md`.
+- Both Clip From VOD and live clip creation succeeded. The observed source alignment and recorded fixture provenance are in `docs/twitch.md`.
 - Clip-download URLs from `GET /helix/clips/downloads` use CloudFront. The authorized clip was downloaded and decoded for source-timecode alignment. Source: https://dev.twitch.tv/docs/api/reference/#get-clips-download
 - `https://ingest.twitch.tv/ingests` returns `url_template_secure` with an RTMPS endpoint. The optional prerecorded test-stream tool validates TLS with a CA bundle and never logs the stream key.
 - Optional test automation additionally requests `channel:read:stream_key`, `channel:manage:broadcast` and `user:write:chat` from the broadcaster. These are not needed for normal bot operation.
@@ -96,6 +96,6 @@
 - A blank extra redirect field can trigger the console's HTTPS error. Keep a single populated localhost callback field. Source: https://discuss.dev.twitch.com/t/unable-to-use-localhost-are-redirect-url-for-oauth-implicit-grant-flow/61951
 ## Observed in M4 (24 Oct 2026)
 - The optional broadcaster test scope `moderator:manage:chat_messages` permits deleting the scripted test message with `DELETE /helix/moderation/chat` (`broadcaster_id`, `moderator_id`, `message_id`). The helper restricts deletion to IDs it sent itself.
-- A real `channel.chat.message_delete` event removed the stored source and cancelled the copied request. The scrubbed recording and observed acknowledgement timing are in `docs/probe-core.md`.
+- A real `channel.chat.message_delete` event removed the stored source and cancelled the copied request. The scrubbed recording and observed acknowledgement timing are in `docs/twitch.md`.
 - `for_source_only` is app-token-only; including it with a user access token returns HTTP 400. The user-token fallback omits it and is blocked during Shared Chat. Verified source: https://dev.twitch.tv/docs/api/reference/#send-chat-message
 - Get Shared Chat Session accepts app or user access tokens. The fallback queries it with the bot user token, so an invalid app grant does not prevent the safety check. Source: https://dev.twitch.tv/docs/api/reference/#get-shared-chat-session

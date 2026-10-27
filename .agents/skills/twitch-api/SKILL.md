@@ -9,5 +9,5 @@ Read `references/twitch-api.md` before writing Twitch code. It holds the endpoin
 
 Rules:
 - When the reference and the live docs disagree, the live docs win. Fetch the page, follow it, and update the reference in the same commit.
-- Items marked "verify in M1" are not documented. Build on them only after the M1 probe has observed them on a real stream, and record the result in `docs/probe.md`.
+- Items marked "verify in M1" are not documented. Build on them only after the M1 probe has observed them on a real stream, and record the result in `docs/twitch.md`.
 - Tests use frames recorded from Twitch in M1 (`fixtures/twitch/`), never hand-written payloads.
