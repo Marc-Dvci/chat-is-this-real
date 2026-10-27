@@ -534,7 +534,7 @@
         "offset_s": 56.098,
         "end_s": 70.914,
         "broadcast_id": "318112017508",
-        "vod_id": "2909537829",
+        "vod_id": "2912199670",
         "broadcast_title": "Chat Is This Real | prerecorded development test",
         "broadcast_started_at": "2026-10-24T15:29:17Z",
         "timing": "word",
@@ -572,7 +572,7 @@
           "state": "ready",
           "clip_id": "CoweringImportantDoveBlargNaut-9Hy84ssXIb0yeh7v",
           "clip_url": "https://clips.twitch.tv/CoweringImportantDoveBlargNaut-9Hy84ssXIb0yeh7v",
-          "vod_url": "https://www.twitch.tv/videos/2909537829?t=0h0m56s",
+          "vod_url": "https://www.twitch.tv/videos/2912199670?t=0h0m56s",
           "reason": null
         },
         "reason": null,
@@ -5114,7 +5114,7 @@
     {
       "id": "d5e8b1d7-4dc0-40e1-b7c6-94b995e2dfdf",
       "broadcast_id": "318112017508",
-      "vod_id": "2909537829",
+      "vod_id": "2912199670",
       "offset_s": 0,
       "duration_s": 10.946,
       "text": "The recording contains scripted examples for checking stream memory. It uses system speech. The test does not need a camera or a live microphone. ",
@@ -5308,7 +5308,7 @@
     {
       "id": "9f2cf383-1373-41ad-8f52-59b85fce1ebc",
       "broadcast_id": "318112017508",
-      "vod_id": "2909537829",
+      "vod_id": "2912199670",
       "offset_s": 55.938,
       "duration_s": 14.976,
       "text": "In this scripted example, I said I would do 50 pushups if we reached 100 subscribers. The promise is 50 pushups for 100 subscribers. This sentence is here so the stream memory tool can find a number expressed as. ",
@@ -5705,7 +5705,7 @@
     {
       "id": "545a3b5a-a895-472f-be10-44d99623885d",
       "broadcast_id": "318112017508",
-      "vod_id": "2909537829",
+      "vod_id": "2912199670",
       "offset_s": 70.91399999999999,
       "duration_s": 15.04,
       "text": "words. ",
@@ -5733,7 +5733,7 @@
     },
     {
       "id": "318112017508",
-      "vod_id": "2909537829",
+      "vod_id": "2912199670",
       "title": "Chat Is This Real | prerecorded development test",
       "started_at": "2026-10-24T15:29:17Z",
       "source": "live",
